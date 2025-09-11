@@ -1,0 +1,4 @@
+attrs
+python-dotenv
+web3
+xrpl-py

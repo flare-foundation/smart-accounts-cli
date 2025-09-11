@@ -1,0 +1,3 @@
+# lint & format
+ruff
+pre-commit
