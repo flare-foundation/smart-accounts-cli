@@ -1,0 +1,443 @@
+import json
+import os
+import time
+from collections.abc import Iterator, Sequence
+from typing import Callable
+
+import dotenv
+from attrs import field, frozen
+from eth_typing import ABI, ABIEvent, ABIFunction, ChecksumAddress
+from eth_utils.address import to_checksum_address
+from web3 import Web3
+from web3._utils.events import get_event_data
+from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
+from web3.types import EventData, LogReceipt
+from xrpl.account import get_next_valid_seq_number
+from xrpl.clients import JsonRpcClient
+from xrpl.ledger import get_latest_validated_ledger_sequence
+from xrpl.models import Memo, Payment, Response, Tx
+from xrpl.transaction import sign, submit_and_wait
+from xrpl.utils import ripple_time_to_posix
+from xrpl.wallet import Wallet
+
+
+def abi_from_file_location(file_location: str):
+    return json.load(open(file_location))["abi"]
+
+
+def event_signature(event_abi: ABIEvent) -> str:
+    assert "inputs" in event_abi
+    params = ""
+    for index, input in enumerate(event_abi["inputs"]):
+        if index > 0:
+            params += ","
+
+        if input["type"] == "tuple[]":
+            params += "("
+            assert "components" in input
+            for index2, tuple_component in enumerate(input["components"]):
+                if index2 > 0:
+                    params += ","
+
+                params += tuple_component["type"]
+
+            params += ")[]"
+
+        elif input["type"] == "tuple":
+            params += "("
+            assert "components" in input
+            for index2, tuple_component in enumerate(input["components"]):
+                if index2 > 0:
+                    params += ","
+
+                params += tuple_component["type"]
+
+            params += ")"
+
+        else:
+            params += input["type"]
+
+    return Web3.keccak(text=event_abi["name"] + "(" + params + ")").hex()
+
+
+def function_signature(function_name: str) -> str:
+    return Web3.keccak(text=function_name).hex()[:8]
+
+
+@frozen
+class Event:
+    name: str
+    abi: ABIEvent
+    contract: "Contract"
+    signature: str = field(init=False)
+
+    def __attrs_post_init__(self):
+        object.__setattr__(self, "signature", event_signature(self.abi))
+
+
+@frozen
+class Function:
+    name: str
+    abi: ABIFunction
+    contract: "Contract"
+    signature: str = field(init=False)
+
+    def to_full_name(self):
+        assert "inputs" in self.abi
+        inputs = [i["type"] for i in self.abi["inputs"]]
+        return f"{self.name}({','.join(inputs)})"
+
+    def __attrs_post_init__(self):
+        object.__setattr__(self, "signature", function_signature(self.to_full_name()))
+
+
+@frozen
+class Contract:
+    name: str
+    address: ChecksumAddress
+    abi: ABI = field(converter=abi_from_file_location)
+    events: dict[str, Event] = field(init=False)
+    functions: dict[str, Function] = field(init=False)
+
+    def __attrs_post_init__(self):
+        events = {}
+        functions = {}
+        for entry in self.abi:
+            assert "type" in entry
+            if entry["type"] == "event":
+                assert "name" in entry
+                events[entry["name"]] = Event(entry["name"], entry, self)
+            elif entry["type"] == "function":
+                assert "name" in entry
+                functions[entry["name"]] = Function(entry["name"], entry, self)
+        object.__setattr__(self, "events", events)
+        object.__setattr__(self, "functions", functions)
+
+
+class MessageType:
+    Deposit = "01"
+    Withdraw = "02"
+    Approve = "03"
+    Redeem = "04"
+    ReserveCollateral = "05"
+    ClaimWithdraw = "06"
+
+
+def send_xpr_tx(
+    amount: str,
+    destination: str,
+    memos: list[Memo] | None,
+    last_ledger_sequence: int | None,
+) -> Response:
+    client = JsonRpcClient(os.getenv("XRP_RPC_URL", ""))
+
+    seed = os.getenv("SEED")
+    assert seed
+
+    if last_ledger_sequence is None:
+        last_ledger_sequence = get_latest_validated_ledger_sequence(client) + 20
+
+    wallet_from_seed = Wallet.from_seed(seed)
+
+    payment_tx = Payment(
+        account=wallet_from_seed.address,
+        amount=amount,
+        destination=destination,
+        memos=memos,
+        last_ledger_sequence=last_ledger_sequence,
+        sequence=get_next_valid_seq_number(wallet_from_seed.address, client),
+        fee="10",
+    )
+
+    payment_response = submit_and_wait(sign(payment_tx, wallet_from_seed), client)
+    return get_xrp_tx(payment_response.result["hash"])
+
+
+def bridge_tx(memos: list[Memo] | None) -> Response:
+    op_addr = os.getenv("OPERATOR_ADDRESS")
+    assert op_addr
+    return send_xpr_tx("1", op_addr, memos, None)
+
+
+def get_w3_client() -> Web3:
+    flare_rpc = os.getenv("FLR_RPC_URL")
+    assert flare_rpc
+
+    w3 = Web3(Web3.HTTPProvider(flare_rpc), middleware=[ExtraDataToPOAMiddleware])
+    assert w3.is_connected()
+
+    return w3
+
+
+def scan_events(
+    events: Sequence[Event], block_range: tuple[int, int]
+) -> Iterator[LogReceipt]:
+    addresses = list({e.contract.address for e in events})
+    signatures = {e.signature for e in events}
+
+    w3 = get_w3_client()
+
+    start, end = block_range
+    for block in range(start, end, 30):
+        latest = w3.eth.block_number
+        if block >= latest:
+            break
+
+        logs = w3.eth.get_logs(
+            {
+                "address": addresses,
+                "fromBlock": block,
+                "toBlock": min(block + 30, latest) - 1,
+            }
+        )
+
+        for log in logs:
+            if log["topics"][0].hex() in signatures:
+                yield log
+
+
+def get_flr_block_near_ts(ts: int) -> int:
+    w3 = get_w3_client()
+
+    b = w3.eth.get_block("latest")
+    assert "timestamp" in b and "number" in b
+    assert ts < b["timestamp"]
+
+    p_sample = w3.eth.get_block(b["number"] - 1_000_000)
+    assert "timestamp" in p_sample and "number" in p_sample
+
+    production_per_s = (b["number"] - p_sample["number"]) / (
+        b["timestamp"] - p_sample["timestamp"]
+    )
+
+    a = w3.eth.get_block(
+        b["number"] - int((b["timestamp"] - ts) * production_per_s) * 2
+    )
+    assert "timestamp" in a and "number" in a
+    assert ts > a["timestamp"]
+
+    while True:
+        c_block = (b["number"] + a["number"]) // 2
+        c = w3.eth.get_block(c_block)
+        assert "timestamp" in c and "number" in c
+
+        if abs(c["timestamp"] - ts) < 10:
+            return c["number"]
+
+        if c["timestamp"] > ts:
+            (a, b) = (a, c)
+        else:
+            (a, b) = (c, b)
+
+
+def wait_for_event(
+    event: Event,
+    block_range: tuple[int, int],
+    filter_fn: Callable[[EventData], bool],
+    message: str | None = None,
+) -> EventData | None:
+    w3 = get_w3_client()
+
+    while True:
+        if message is not None:
+            print(message)
+
+        for e in scan_events((event,), block_range):
+            data = get_event_data(w3.codec, event.abi, e)
+            if filter_fn(data):
+                return data
+
+        if w3.eth.block_number > block_range[1]:
+            break
+
+        time.sleep(10)
+
+
+def wait_to_bridge(r: Response) -> EventData | None:
+    master_account_controller = Contract(
+        name="MasterAccountController",
+        address=to_checksum_address("0x6DE265B7B3DbbA995db8229dE5818BA793113cfe"),
+        abi="./abis/MasterAccountController.json",
+    )
+
+    block = get_flr_block_near_ts(
+        ripple_time_to_posix(r.result["tx_json"]["date"]) - 90
+    )
+
+    event = master_account_controller.events["InstructionExecuted"]
+
+    return wait_for_event(
+        event,
+        (block, block + 4 * 90),
+        lambda x: x["args"]["transactionId"].hex() == r.result["hash"].lower(),
+        "waiting to bridge",
+    )
+
+
+def reserve_collateral(agent_address: str, lots: int) -> Response:
+    memo_data = (
+        MessageType.ReserveCollateral
+        + lots.to_bytes().hex().zfill(22)
+        + agent_address.removeprefix("0x")
+    )
+    return bridge_tx([memo(memo_data)])
+
+
+def bridge_pp(resp: Response) -> EventData | None:
+    print("sent instruction on underlying:", resp.result["hash"])
+    print(f"https://testnet.xrpl.org/transactions/{resp.result['hash']}/detailed")
+    print()
+    bridged = wait_to_bridge(resp)
+
+    if bridged is None:
+        print("failed to bridge")
+        return
+
+    bridged_tx_hash = bridged["transactionHash"].hex()
+    print(f"BRIDGED FOR {bridged['args']['personalAccount']}")
+    print(f"successfully bridged in tx 0x{bridged_tx_hash}")
+    print(f"https://coston2-explorer.flare.network/tx/0x{bridged_tx_hash}?tab=logs")
+    print()
+
+    return bridged
+
+
+def mint(agent_address: str, lots: int) -> None:
+    w3 = get_w3_client()
+
+    resp = reserve_collateral(agent_address, lots)
+    bridged = bridge_pp(resp)
+    if bridged is None:
+        print("failed to bridge")
+        return
+    bridged_tx_hash, bridged_tx_block = (
+        bridged["transactionHash"].hex(),
+        bridged["blockNumber"],
+    )
+
+    collateral_reservations_facet = Contract(
+        name="CollateralReservationsFacet",
+        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
+        abi="./abis/CollateralReservationsFacet.json",
+    )
+
+    cr_event = collateral_reservations_facet.events["CollateralReserved"]
+    cr_log = next(scan_events((cr_event,), (bridged_tx_block, bridged_tx_block + 1)))
+    data = get_event_data(w3.codec, cr_event.abi, cr_log)
+
+    args = data["args"]
+    amount = str(args["valueUBA"] + args["feeUBA"])
+    destination = args["paymentAddress"]
+    memos = [memo(args["paymentReference"].hex())]
+    last_ledger_sequence = args["lastUnderlyingBlock"]
+    collateral_reservation_id = args["collateralReservationId"]
+
+    input(
+        "successful collateral resevation, continue to 2nd part of mint... press enter"
+    )
+    resp = send_xpr_tx(amount, destination, memos, last_ledger_sequence)
+    print("sent underlying assets in", resp.result["hash"])
+    print(f"https://testnet.xrpl.org/transactions/{resp.result['hash']}/detailed")
+
+    minting_facet = Contract(
+        name="MintingFacet",
+        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
+        abi="./abis/MintingFacet.json",
+    )
+    me_event = minting_facet.events["MintingExecuted"]
+
+    block = get_flr_block_near_ts(
+        ripple_time_to_posix(resp.result["tx_json"]["date"]) - 90
+    )
+
+    bridged = wait_for_event(
+        me_event,
+        (block, block + 90 * 4),
+        lambda x: x["args"]["collateralReservationId"] == collateral_reservation_id,
+        "waiting for mint execution",
+    )
+
+    if bridged is None:
+        print("failed to bridge")
+        return
+
+    bridged_tx_hash, bridged_tx_block = (
+        bridged["transactionHash"].hex(),
+        bridged["blockNumber"],
+    )
+    print("successfully minted in tx", "0x" + bridged_tx_hash)
+    print(f"https://coston2-explorer.flare.network/tx/{bridged_tx_hash}?tab=logs")
+    print()
+
+
+def memo(memo_data: str) -> Memo:
+    return Memo(memo_data=memo_data)
+
+
+def get_xrp_client() -> JsonRpcClient:
+    rpc_url = os.getenv("XRP_RPC_URL")
+    assert rpc_url is not None
+    return JsonRpcClient(rpc_url)
+
+
+def get_xrp_tx(tx_hash: str):
+    client = get_xrp_client()
+    return client.request(Tx(transaction=tx_hash))
+
+
+def approve() -> None:
+    memo_data = MessageType.Approve + "1000000".zfill(62)
+    resp = bridge_tx([memo(memo_data)])
+    bridge_pp(resp)
+
+
+def deposit() -> None:
+    memo_data = MessageType.Deposit + "1000000".zfill(62)
+    resp = bridge_tx([memo(memo_data)])
+    bridge_pp(resp)
+
+
+def withdraw() -> None:
+    memo_data = MessageType.Withdraw + "1000000".zfill(62)
+    resp = bridge_tx([memo(memo_data)])
+    bridge_pp(resp)
+
+
+def redeem(lots: int) -> None:
+    memo_data = MessageType.Redeem + lots.to_bytes().hex().zfill(22) + "0" * 40
+    resp = bridge_tx([memo(memo_data)])
+    bridge_pp(resp)
+
+
+def main():
+    dotenv.load_dotenv()
+
+    mint("0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC", 2)
+    print("minted fassets, check here:")
+    print(
+        "https://coston2-explorer.flare.network/address/0x0b6A3645c240605887a5532109323A3E12273dc7?tab=read_proxy"
+    )
+    print()
+    input("continue to approve... press enter")
+    approve()
+    print()
+    input("continue to deposit... press enter")
+    deposit()
+    print("deposited into vault, check here:")
+    print(
+        "https://coston2-explorer.flare.network/address/0x1639b3b8cB5E52491b9c2A1c59898205540060e3?tab=read_contract"
+    )
+    print()
+    input("continue to withdraw... press enter")
+    withdraw()
+    print("withdrawn from vault, check here:")
+    print(
+        "https://coston2-explorer.flare.network/address/0x1639b3b8cB5E52491b9c2A1c59898205540060e3?tab=read_contract"
+    )
+    print()
+    input("continue to redeem... press enter")
+    redeem(1)
+
+
+if __name__ == "__main__":
+    main()
