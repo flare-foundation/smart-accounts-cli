@@ -7,33 +7,6 @@ from eth_utils.address import to_checksum_address
 from web3.types import Wei
 
 
-class NamespaceSerializer:
-    @classmethod
-    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
-        return cls(**{a.name: getattr(namespace, a.name) for a in cls.__attrs_attrs__})  # type: ignore
-
-
-@attrs.frozen
-class BridgeDeposit(NamespaceSerializer):
-    amount: int
-
-
-@attrs.frozen
-class BridgeWithdraw(NamespaceSerializer):
-    amount: int
-
-
-@attrs.frozen
-class BridgeRedeem(NamespaceSerializer):
-    lots: int
-
-
-@attrs.frozen
-class BridgeMint(NamespaceSerializer):
-    agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
-    lots: int
-
-
 def value_parser(value: str) -> Wei:
     try:
         return Wei(int(value))
@@ -57,7 +30,40 @@ def value_parser(value: str) -> Wei:
     )
 
 
-@attrs.frozen
+class NamespaceSerializer:
+    @classmethod
+    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
+        return cls(**{a.name: getattr(namespace, a.name) for a in cls.__attrs_attrs__})  # type: ignore
+
+
+@attrs.frozen(kw_only=True)
+class Bridge:
+    silent: bool = False
+    no_wait: bool = False
+
+
+@attrs.frozen(kw_only=True)
+class BridgeDeposit(Bridge, NamespaceSerializer):
+    amount: int
+
+
+@attrs.frozen(kw_only=True)
+class BridgeWithdraw(Bridge, NamespaceSerializer):
+    amount: int
+
+
+@attrs.frozen(kw_only=True)
+class BridgeRedeem(Bridge, NamespaceSerializer):
+    lots: int
+
+
+@attrs.frozen(kw_only=True)
+class BridgeMint(Bridge, NamespaceSerializer):
+    agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
+    lots: int
+
+
+@attrs.frozen(kw_only=True)
 class BridgeCustom(NamespaceSerializer):
     address: ChecksumAddress = attrs.field(converter=to_checksum_address)
     value: Wei = attrs.field(converter=value_parser)
