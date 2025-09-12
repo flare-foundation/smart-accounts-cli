@@ -7,7 +7,7 @@ from collections.abc import Iterator, Sequence
 from typing import Callable
 
 import dotenv
-from attrs import field, frozen
+from attrs import asdict, field, frozen
 from eth_typing import ABI, ABIEvent, ABIFunction, ChecksumAddress
 from eth_utils.address import to_checksum_address
 from web3 import Web3
@@ -22,7 +22,15 @@ from xrpl.transaction import sign, submit_and_wait
 from xrpl.utils import ripple_time_to_posix
 from xrpl.wallet import Wallet
 
-from src.cli import get_cli_parser
+from src import cli, encoder
+from src.cli.types import (
+    BridgeCustom,
+    BridgeDeposit,
+    BridgeMint,
+    BridgeRedeem,
+    BridgeWithdraw,
+    NamespaceSerializer,
+)
 
 
 def abi_from_file_location(file_location: str):
@@ -130,16 +138,6 @@ class REG:
         address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
         abi="./abis/IAssetManagerEvents.json",
     )
-
-
-class MessageType:
-    Deposit = "01"
-    Withdraw = "02"
-    Approve = "03"
-    Redeem = "04"
-    ReserveCollateral = "05"
-    ClaimWithdraw = "06"
-    Custom = (99).to_bytes(1).hex()
 
 
 def send_xpr_tx(
@@ -287,12 +285,8 @@ def wait_to_bridge(r: Response) -> EventData | None:
     )
 
 
-def reserve_collateral(agent_address: str, lots: int) -> Response:
-    memo_data = (
-        MessageType.ReserveCollateral
-        + lots.to_bytes().hex().zfill(22)
-        + agent_address.removeprefix("0x")
-    )
+def reserve_collateral(agent_address: ChecksumAddress, lots: int) -> Response:
+    memo_data = encoder.reserve_collateral(agent_address, lots).hex()
     return bridge_tx([memo(memo_data)])
 
 
@@ -315,7 +309,7 @@ def bridge_pp(resp: Response) -> EventData | None:
     return bridged
 
 
-def mint(agent_address: str, lots: int) -> None:
+def mint(agent_address: ChecksumAddress, lots: int) -> None:
     w3 = get_w3_client()
 
     resp = reserve_collateral(agent_address, lots)
@@ -387,53 +381,47 @@ def get_xrp_tx(tx_hash: str):
     return client.request(Tx(transaction=tx_hash))
 
 
-def approve() -> None:
-    memo_data = MessageType.Approve + "1000000".zfill(62)
+def deposit(value: int) -> None:
+    memo_data = encoder.deposit(value).hex()
     resp = bridge_tx([memo(memo_data)])
     bridge_pp(resp)
 
 
-def deposit() -> None:
-    memo_data = MessageType.Deposit + "1000000".zfill(62)
-    resp = bridge_tx([memo(memo_data)])
-    bridge_pp(resp)
-
-
-def withdraw() -> None:
-    memo_data = MessageType.Withdraw + "1000000".zfill(62)
+def withdraw(value: int) -> None:
+    memo_data = encoder.withdraw(value).hex()
     resp = bridge_tx([memo(memo_data)])
     bridge_pp(resp)
 
 
 def redeem(lots: int) -> None:
-    memo_data = MessageType.Redeem + lots.to_bytes().hex().zfill(22) + "0" * 40
+    memo_data = encoder.deposit(lots).hex()
     resp = bridge_tx([memo(memo_data)])
     bridge_pp(resp)
 
 
 def full_scenario():
-    mint("0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC", 2)
+    mint(to_checksum_address("0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC"), 2)
     print("minted fassets, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x0b6A3645c240605887a5532109323A3E12273dc7?tab=read_proxy"
     )
     print()
     input("continue to deposit... press enter")
-    deposit()
+    deposit(1_000_000)
     print("deposited into vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to withdraw... press enter")
-    withdraw()
+    withdraw(1_000_000)
     print("withdrawn from vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to redeem... press enter")
-    redeem(1)
+    redeem(2)
 
 
 def custom(address: ChecksumAddress, value: Wei, calldata: bytes) -> None:
@@ -463,24 +451,29 @@ def custom(address: ChecksumAddress, value: Wei, calldata: bytes) -> None:
     evnt = REG.MASTER_ACCOUNT_CONTROLLER.events["CustomInstructionRegistered"]
     evnt_log = next(scan_events((evnt,), (block, block + 1)))
     data = get_event_data(w3.codec, evnt.abi, evnt_log)
-    call_hash = data["args"]["callHash"].to_bytes(31).hex()
-    memo_data = MessageType.Custom + call_hash
+    call_hash = data["args"]["callHash"].to_bytes(31)
+    memo_data = encoder.custom(call_hash).hex()
     resp = bridge_tx([memo(memo_data)])
     bridge_pp(resp)
 
 
 def fsa() -> None:
-    cli = get_cli_parser()
-    args = cli.parse_args()
+    args = cli.get_parser().parse_args()
+
+    bridge_resolver: dict[
+        str, tuple[type[NamespaceSerializer], Callable[..., None]]
+    ] = {
+        "deposit": (BridgeDeposit, deposit),
+        "withdraw": (BridgeWithdraw, withdraw),
+        "redeem": (BridgeRedeem, redeem),
+        "mint": (BridgeMint, mint),
+        "custom": (BridgeCustom, custom),
+    }
 
     match args.command:
         case "bridge":
-            match args.subcommand:
-                case "custom":
-                    custom(args.address, args.value, bytes.fromhex(args.data))
-
-                case _:
-                    raise NotImplementedError()
+            serializer, resolver = bridge_resolver[args.subcommand]
+            resolver(**asdict(serializer.from_namespace(args)))
 
         case "debug":
             match args.subcommand:
