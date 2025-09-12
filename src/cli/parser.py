@@ -93,26 +93,38 @@ def get_parser() -> argparse.ArgumentParser:
     b_custom_instruction.add_argument(
         "-a",
         "--address",
+        action="append",
         type=str,
-        required=True,
+        required=False,
+        default=[],
         help="flare transaction target address",
         metavar="",
     )
     b_custom_instruction.add_argument(
         "-v",
         "--value",
+        action="append",
         type=str,
-        required=True,
+        required=False,
+        default=[],
         help="flare transaction value, 'flr' can be appended for flare units",
         metavar="",
     )
     b_custom_instruction.add_argument(
         "-d",
         "--data",
+        action="append",
         type=str,
-        required=True,
+        required=False,
         help="flare transaction calldata hex encoded",
+        default=[],
         metavar="",
+    )
+    b_custom_instruction.add_argument(
+        "json",
+        nargs="?",
+        type=str,
+        help="json file to read, if '-' is passed stdin is read instead",
     )
 
     d_cli = subcli.add_parser("debug", help="utility functions for bridge info")

@@ -1,118 +1,26 @@
 {
   "abi": [
     {
-      "type": "constructor",
-      "inputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "UPGRADE_INTERFACE_VERSION",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "allCallHashes",
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "cancelGovernanceCall",
-      "inputs": [
-        {
-          "name": "_selector",
-          "type": "bytes4",
-          "internalType": "bytes4"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "customInstructions",
-      "inputs": [
-        {
-          "name": "callHash",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "_contract",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "_value",
-          "type": "uint256",
-          "internalType": "uint256"
-        },
-        {
-          "name": "_calldata",
-          "type": "bytes",
-          "internalType": "bytes"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "depositVault",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
       "type": "function",
       "name": "encodeCustomInstruction",
       "inputs": [
         {
           "name": "_customInstruction",
-          "type": "tuple",
-          "internalType": "struct IMasterAccountController.CustomInstruction",
+          "type": "tuple[]",
+          "internalType": "struct IMasterAccountController.CustomInstruction[]",
           "components": [
             {
-              "name": "_contract",
+              "name": "targetContract",
               "type": "address",
               "internalType": "address"
             },
             {
-              "name": "_value",
+              "name": "value",
               "type": "uint256",
               "internalType": "uint256"
             },
             {
-              "name": "_calldata",
+              "name": "data",
               "type": "bytes",
               "internalType": "bytes"
             }
@@ -126,19 +34,6 @@
           "internalType": "uint256"
         }
       ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "executeGovernanceCall",
-      "inputs": [
-        {
-          "name": "_selector",
-          "type": "bytes4",
-          "internalType": "bytes4"
-        }
-      ],
-      "outputs": [],
       "stateMutability": "nonpayable"
     },
     {
@@ -289,98 +184,10 @@
     },
     {
       "type": "function",
-      "name": "executor",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address payable"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "executorFee",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "fxrp",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "getAllCallHashes",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "getCustomInstruction",
-      "inputs": [
-        {
-          "name": "callHash",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "tuple",
-          "internalType": "struct IMasterAccountController.CustomInstruction",
-          "components": [
-            {
-              "name": "_contract",
-              "type": "address",
-              "internalType": "address"
-            },
-            {
-              "name": "_value",
-              "type": "uint256",
-              "internalType": "uint256"
-            },
-            {
-              "name": "_calldata",
-              "type": "bytes",
-              "internalType": "bytes"
-            }
-          ]
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
       "name": "getPersonalAccount",
       "inputs": [
         {
-          "name": "xrplOwner",
+          "name": "_xrplOwner",
           "type": "string",
           "internalType": "string"
         }
@@ -392,239 +199,7 @@
           "internalType": "contract PersonalAccount"
         }
       ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "governance",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "governanceSettings",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IGovernanceSettings"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "hashToAccount",
-      "inputs": [
-        {
-          "name": "xrplAddressHash",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "implementation",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "initialise",
-      "inputs": [
-        {
-          "name": "_governanceSettings",
-          "type": "address",
-          "internalType": "contract IGovernanceSettings"
-        },
-        {
-          "name": "_initialGovernance",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
       "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
-        {
-          "name": "_governanceSettings",
-          "type": "address",
-          "internalType": "contract IGovernanceSettings"
-        },
-        {
-          "name": "_initialGovernance",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "_depositVault",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "_executor",
-          "type": "address",
-          "internalType": "address payable"
-        },
-        {
-          "name": "_executorFee",
-          "type": "uint256",
-          "internalType": "uint256"
-        },
-        {
-          "name": "_xrplProviderWallet",
-          "type": "string",
-          "internalType": "string"
-        },
-        {
-          "name": "_operatorAddress",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "_operatorExecutionWindowSeconds",
-          "type": "uint256",
-          "internalType": "uint256"
-        },
-        {
-          "name": "_personalAccountImplementation",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "isExecutor",
-      "inputs": [
-        {
-          "name": "_address",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "operatorAddress",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "operatorExecutionWindowSeconds",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "personalAccountImplementation",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "personalAccountToXrpl",
-      "inputs": [
-        {
-          "name": "personalAccount",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "xrplAddress",
-          "type": "string",
-          "internalType": "string"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "productionMode",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "proxiableUUID",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
-      ],
-      "stateMutability": "view"
     },
     {
       "type": "function",
@@ -632,162 +207,35 @@
       "inputs": [
         {
           "name": "_customInstruction",
-          "type": "tuple",
-          "internalType": "struct IMasterAccountController.CustomInstruction",
+          "type": "tuple[]",
+          "internalType": "struct IMasterAccountController.CustomInstruction[]",
           "components": [
             {
-              "name": "_contract",
+              "name": "targetContract",
               "type": "address",
               "internalType": "address"
             },
             {
-              "name": "_value",
+              "name": "value",
               "type": "uint256",
               "internalType": "uint256"
             },
             {
-              "name": "_calldata",
+              "name": "data",
               "type": "bytes",
               "internalType": "bytes"
             }
           ]
         }
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setExecutorFee",
-      "inputs": [
+      "outputs": [
         {
-          "name": "_newExecutorFee",
+          "name": "",
           "type": "uint256",
           "internalType": "uint256"
         }
       ],
-      "outputs": [],
       "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setOperatorExecutionWindowSeconds",
-      "inputs": [
-        {
-          "name": "_newWindowSeconds",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setPersonalAccountImplementation",
-      "inputs": [
-        {
-          "name": "_newImplementation",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "switchToProductionMode",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "timelockedCalls",
-      "inputs": [
-        {
-          "name": "selector",
-          "type": "bytes4",
-          "internalType": "bytes4"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "allowedAfterTimestamp",
-          "type": "uint256",
-          "internalType": "uint256"
-        },
-        {
-          "name": "encodedCall",
-          "type": "bytes",
-          "internalType": "bytes"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "upgradeToAndCall",
-      "inputs": [
-        {
-          "name": "newImplementation",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "data",
-          "type": "bytes",
-          "internalType": "bytes"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "usedPaymentHashes",
-      "inputs": [
-        {
-          "name": "transactionId",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "xrplProviderWallet",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "xrplProviderWalletHash",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
-      ],
-      "stateMutability": "view"
     },
     {
       "type": "event",
@@ -811,57 +259,6 @@
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "GovernanceCallTimelocked",
-      "inputs": [
-        {
-          "name": "selector",
-          "type": "bytes4",
-          "indexed": false,
-          "internalType": "bytes4"
-        },
-        {
-          "name": "allowedAfterTimestamp",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "name": "encodedCall",
-          "type": "bytes",
-          "indexed": false,
-          "internalType": "bytes"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "GovernanceInitialised",
-      "inputs": [
-        {
-          "name": "initialGovernance",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "GovernedProductionModeEntered",
-      "inputs": [
-        {
-          "name": "governanceSettings",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
         }
       ],
       "anonymous": false
@@ -949,111 +346,8 @@
       "anonymous": false
     },
     {
-      "type": "event",
-      "name": "TimelockedGovernanceCallCanceled",
-      "inputs": [
-        {
-          "name": "selector",
-          "type": "bytes4",
-          "indexed": false,
-          "internalType": "bytes4"
-        },
-        {
-          "name": "timestamp",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "TimelockedGovernanceCallExecuted",
-      "inputs": [
-        {
-          "name": "selector",
-          "type": "bytes4",
-          "indexed": false,
-          "internalType": "bytes4"
-        },
-        {
-          "name": "timestamp",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "Upgraded",
-      "inputs": [
-        {
-          "name": "implementation",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "error",
-      "name": "AddressEmptyCode",
-      "inputs": [
-        {
-          "name": "target",
-          "type": "address",
-          "internalType": "address"
-        }
-      ]
-    },
-    {
-      "type": "error",
-      "name": "AlreadyInProductionMode",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "AlreadyInitialised",
-      "inputs": []
-    },
-    {
       "type": "error",
       "name": "AmountZero",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "ERC1967InvalidImplementation",
-      "inputs": [
-        {
-          "name": "implementation",
-          "type": "address",
-          "internalType": "address"
-        }
-      ]
-    },
-    {
-      "type": "error",
-      "name": "ERC1967NonPayable",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "FailedCall",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "GovernanceSettingsZero",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "GovernanceZero",
       "inputs": []
     },
     {
@@ -1134,16 +428,6 @@
     },
     {
       "type": "error",
-      "name": "OnlyExecutor",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "OnlyGovernance",
-      "inputs": []
-    },
-    {
-      "type": "error",
       "name": "OnlyOperatorCanExecute",
       "inputs": []
     },
@@ -1154,34 +438,8 @@
     },
     {
       "type": "error",
-      "name": "TimelockInvalidSelector",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "TimelockNotAllowedYet",
-      "inputs": []
-    },
-    {
-      "type": "error",
       "name": "TransactionAlreadyExecuted",
       "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "UUPSUnauthorizedCallContext",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "UUPSUnsupportedProxiableUUID",
-      "inputs": [
-        {
-          "name": "slot",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
-      ]
     }
   ]
 }

@@ -1,5 +1,7 @@
 import argparse
-from typing import Self
+import json
+import sys
+from typing import Any, Callable, Self
 
 import attrs
 from eth_typing import ChecksumAddress
@@ -7,11 +9,13 @@ from eth_utils.address import to_checksum_address
 from web3.types import Wei
 
 
-def value_parser(value: str) -> Wei:
+def value_parser(value: str | Wei) -> Wei:
     try:
         return Wei(int(value))
     except ValueError:
         pass
+
+    assert isinstance(value, str)
 
     if value.endswith("wei"):
         try:
@@ -30,10 +34,41 @@ def value_parser(value: str) -> Wei:
     )
 
 
+def list_map_converter[T, U](mapper: Callable[[T], U]) -> Callable[[list[T]], list[U]]:
+    def wrapped(item_list: list[T]) -> list[U]:
+        return [mapper(i) for i in item_list]
+
+    return wrapped
+
+
+def json_read_file_or_stdin(path: str | None) -> Any:
+    if path is None:
+        return []
+
+    if path == "-":
+        file = sys.stdin
+    else:
+        file = open(path)
+
+    return json.load(file)
+
+
+def bytes_parser(b: str | bytes) -> bytes:
+    if isinstance(b, bytes):
+        return b
+    return bytes.fromhex(b.removeprefix("0x"))
+
+
 class NamespaceSerializer:
     @classmethod
     def from_namespace(cls, namespace: argparse.Namespace) -> Self:
-        return cls(**{a.name: getattr(namespace, a.name) for a in cls.__attrs_attrs__})  # type: ignore
+        return cls(
+            **{
+                a.name: getattr(namespace, a.name)
+                for a in cls.__attrs_attrs__  # type: ignore
+                if a.init
+            }
+        )
 
 
 @attrs.frozen(kw_only=True)
@@ -68,8 +103,45 @@ class BridgeClaimWithdraw(Bridge, NamespaceSerializer):
     reward_epoch: int
 
 
-@attrs.frozen(kw_only=True)
-class BridgeCustom(NamespaceSerializer):
+@attrs.frozen
+class CustomInstruction:
     address: ChecksumAddress = attrs.field(converter=to_checksum_address)
     value: Wei = attrs.field(converter=value_parser)
-    data: bytes = attrs.field(converter=bytes.fromhex)
+    data: bytes = attrs.field(converter=bytes_parser)
+
+
+@attrs.frozen(kw_only=True)
+class BridgeCustom(NamespaceSerializer):
+    address: list[ChecksumAddress] = attrs.field(
+        converter=list_map_converter(to_checksum_address)
+    )
+    value: list[Wei] = attrs.field(converter=list_map_converter(value_parser))
+    data: list[bytes] = attrs.field(converter=list_map_converter(bytes_parser))
+    json: Any = attrs.field(converter=json_read_file_or_stdin)
+    serialized: list[CustomInstruction] = attrs.field(init=False)
+
+    def __attrs_post_init__(self):
+        if len(self.address) != len(self.value) or len(self.value) != len(self.data):
+            raise ValueError(
+                "length of passed addresses, values and data must be equal"
+            )
+
+        if self.address and self.json:
+            raise ValueError(
+                "can't parse json file and flag parameters at the same time"
+            )
+
+        if not self.address and not self.json:
+            raise ValueError("must pass json file or flag paramteres")
+
+        object.__setattr__(
+            self,
+            "serialized",
+            [
+                *[CustomInstruction(**obj) for obj in self.json],
+                *[
+                    CustomInstruction(*t)
+                    for t in zip(self.address, self.value, self.data)
+                ],
+            ],
+        )
