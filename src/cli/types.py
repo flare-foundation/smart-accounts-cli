@@ -64,6 +64,11 @@ class BridgeMint(Bridge, NamespaceSerializer):
 
 
 @attrs.frozen(kw_only=True)
+class BridgeClaimWithdraw(Bridge, NamespaceSerializer):
+    reward_epoch: int
+
+
+@attrs.frozen(kw_only=True)
 class BridgeCustom(NamespaceSerializer):
     address: ChecksumAddress = attrs.field(converter=to_checksum_address)
     value: Wei = attrs.field(converter=value_parser)

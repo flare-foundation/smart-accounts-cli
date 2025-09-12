@@ -38,5 +38,10 @@ def reserve_collateral(agent_address: ChecksumAddress, lots: int) -> bytes:
     return _encode(instruction_id=InstructionId.ReserveCollateral, value=value)
 
 
+def claim_withdraw(reward_epoch: int) -> bytes:
+    value = reward_epoch.to_bytes(3) + 28 * b"\x00"
+    return _encode(instruction_id=InstructionId.ClaimWithdraw, value=value)
+
+
 def custom(call_hash: bytes) -> bytes:
     return _encode(instruction_id=InstructionId.Custom, value=call_hash)

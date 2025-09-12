@@ -25,6 +25,7 @@ from xrpl.wallet import Wallet
 
 from src import cli, encoder
 from src.cli.types import (
+    BridgeClaimWithdraw,
     BridgeCustom,
     BridgeDeposit,
     BridgeMint,
@@ -417,6 +418,12 @@ def withdraw(globals: Globals, args: BridgeWithdraw) -> None:
     bridge_pp(globals.w3, resp)
 
 
+def claim_withdraw(globals: Globals, args: BridgeClaimWithdraw) -> None:
+    memo_data = encoder.claim_withdraw(args.reward_epoch).hex()
+    resp = bridge_tx(globals.xrp, [memo(memo_data)])
+    bridge_pp(globals.w3, resp)
+
+
 def redeem(globals: Globals, args: BridgeRedeem) -> None:
     memo_data = encoder.deposit(args.lots).hex()
     resp = bridge_tx(globals.xrp, [memo(memo_data)])
@@ -444,6 +451,7 @@ def full_scenario(
     print()
     input("continue to withdraw... press enter")
     withdraw(globals, BridgeWithdraw(amount=1_000_000))
+    claim_withdraw(globals, BridgeClaimWithdraw(reward_epoch=1))
     print("withdrawn from vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
@@ -503,6 +511,7 @@ def fsa(env: ParsedEnv) -> None:
         "withdraw": (BridgeWithdraw, withdraw),
         "redeem": (BridgeRedeem, redeem),
         "mint": (BridgeMint, mint),
+        "claim-withdraw": (BridgeClaimWithdraw, claim_withdraw),
         "custom": (BridgeCustom, custom),
     }
 
