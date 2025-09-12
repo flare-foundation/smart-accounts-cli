@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 import os
 import time
@@ -11,7 +13,7 @@ from eth_utils.address import to_checksum_address
 from web3 import Web3
 from web3._utils.events import get_event_data
 from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
-from web3.types import EventData, LogReceipt
+from web3.types import EventData, LogReceipt, Wei
 from xrpl.account import get_next_valid_seq_number
 from xrpl.clients import JsonRpcClient
 from xrpl.ledger import get_latest_validated_ledger_sequence
@@ -19,6 +21,8 @@ from xrpl.models import Memo, Payment, Response, Tx
 from xrpl.transaction import sign, submit_and_wait
 from xrpl.utils import ripple_time_to_posix
 from xrpl.wallet import Wallet
+
+from src.cli import get_cli_parser
 
 
 def abi_from_file_location(file_location: str):
@@ -114,6 +118,20 @@ class Contract:
         object.__setattr__(self, "functions", functions)
 
 
+class REG:
+    MASTER_ACCOUNT_CONTROLLER = Contract(
+        name="MasterAccountController",
+        address=to_checksum_address("0x11a74FDcc3C36CDcAa5641496626957773Ca0692"),
+        abi="./abis/MasterAccountController.json",
+    )
+
+    ASSET_MANAGER_EVENTS = Contract(
+        name="AssetManagerFXRP",
+        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
+        abi="./abis/IAssetManagerEvents.json",
+    )
+
+
 class MessageType:
     Deposit = "01"
     Withdraw = "02"
@@ -121,6 +139,7 @@ class MessageType:
     Redeem = "04"
     ReserveCollateral = "05"
     ClaimWithdraw = "06"
+    Custom = (99).to_bytes(1).hex()
 
 
 def send_xpr_tx(
@@ -180,14 +199,14 @@ def scan_events(
     start, end = block_range
     for block in range(start, end, 30):
         latest = w3.eth.block_number
-        if block >= latest:
+        if block > latest:
             break
 
         logs = w3.eth.get_logs(
             {
                 "address": addresses,
                 "fromBlock": block,
-                "toBlock": min(block + 30, latest) - 1,
+                "toBlock": min(block + 30 - 1, latest),
             }
         )
 
@@ -254,17 +273,11 @@ def wait_for_event(
 
 
 def wait_to_bridge(r: Response) -> EventData | None:
-    master_account_controller = Contract(
-        name="MasterAccountController",
-        address=to_checksum_address("0x6DE265B7B3DbbA995db8229dE5818BA793113cfe"),
-        abi="./abis/MasterAccountController.json",
-    )
-
     block = get_flr_block_near_ts(
         ripple_time_to_posix(r.result["tx_json"]["date"]) - 90
     )
 
-    event = master_account_controller.events["InstructionExecuted"]
+    event = REG.MASTER_ACCOUNT_CONTROLLER.events["InstructionExecuted"]
 
     return wait_for_event(
         event,
@@ -315,13 +328,7 @@ def mint(agent_address: str, lots: int) -> None:
         bridged["blockNumber"],
     )
 
-    collateral_reservations_facet = Contract(
-        name="CollateralReservationsFacet",
-        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
-        abi="./abis/CollateralReservationsFacet.json",
-    )
-
-    cr_event = collateral_reservations_facet.events["CollateralReserved"]
+    cr_event = REG.ASSET_MANAGER_EVENTS.events["CollateralReserved"]
     cr_log = next(scan_events((cr_event,), (bridged_tx_block, bridged_tx_block + 1)))
     data = get_event_data(w3.codec, cr_event.abi, cr_log)
 
@@ -339,12 +346,7 @@ def mint(agent_address: str, lots: int) -> None:
     print("sent underlying assets in", resp.result["hash"])
     print(f"https://testnet.xrpl.org/transactions/{resp.result['hash']}/detailed")
 
-    minting_facet = Contract(
-        name="MintingFacet",
-        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
-        abi="./abis/MintingFacet.json",
-    )
-    me_event = minting_facet.events["MintingExecuted"]
+    me_event = REG.ASSET_MANAGER_EVENTS.events["MintingExecuted"]
 
     block = get_flr_block_near_ts(
         ripple_time_to_posix(resp.result["tx_json"]["date"]) - 90
@@ -409,34 +411,89 @@ def redeem(lots: int) -> None:
     bridge_pp(resp)
 
 
-def main():
-    dotenv.load_dotenv()
-
+def full_scenario():
     mint("0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC", 2)
     print("minted fassets, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x0b6A3645c240605887a5532109323A3E12273dc7?tab=read_proxy"
     )
     print()
-    input("continue to approve... press enter")
-    approve()
-    print()
     input("continue to deposit... press enter")
     deposit()
     print("deposited into vault, check here:")
     print(
-        "https://coston2-explorer.flare.network/address/0x1639b3b8cB5E52491b9c2A1c59898205540060e3?tab=read_contract"
+        "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to withdraw... press enter")
     withdraw()
     print("withdrawn from vault, check here:")
     print(
-        "https://coston2-explorer.flare.network/address/0x1639b3b8cB5E52491b9c2A1c59898205540060e3?tab=read_contract"
+        "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to redeem... press enter")
     redeem(1)
+
+
+def custom(address: ChecksumAddress, value: Wei, calldata: bytes) -> None:
+    w3 = get_w3_client()
+    pk = os.getenv("PRIVATE_KEY")
+    assert pk
+    addr = w3.eth.account.from_key(pk).address
+    tx = (
+        w3.eth.contract(
+            address=REG.MASTER_ACCOUNT_CONTROLLER.address,
+            abi=REG.MASTER_ACCOUNT_CONTROLLER.abi,
+        )
+        .functions.registerCustomInstruction((address, value, calldata))
+        .build_transaction(
+            {
+                "from": addr,
+                "nonce": w3.eth.get_transaction_count(addr),
+                "gasPrice": Wei(round(w3.eth.gas_price * 1.5)),
+            }
+        )
+    )
+
+    rtx = w3.eth.account.sign_transaction(tx, pk)
+    tx_hash = w3.eth.send_raw_transaction(rtx.raw_transaction)
+    rec = w3.eth.wait_for_transaction_receipt(tx_hash)
+    block = rec["blockNumber"]
+    evnt = REG.MASTER_ACCOUNT_CONTROLLER.events["CustomInstructionRegistered"]
+    evnt_log = next(scan_events((evnt,), (block, block + 1)))
+    data = get_event_data(w3.codec, evnt.abi, evnt_log)
+    call_hash = data["args"]["callHash"].to_bytes(31).hex()
+    memo_data = MessageType.Custom + call_hash
+    resp = bridge_tx([memo(memo_data)])
+    bridge_pp(resp)
+
+
+def fsa() -> None:
+    cli = get_cli_parser()
+    args = cli.parse_args()
+
+    match args.command:
+        case "bridge":
+            match args.subcommand:
+                case "custom":
+                    custom(args.address, args.value, bytes.fromhex(args.data))
+
+                case _:
+                    raise NotImplementedError()
+
+        case "debug":
+            match args.subcommand:
+                case "full":
+                    full_scenario()
+
+        case _:
+            raise NotImplementedError()
+
+
+def main() -> None:
+    dotenv.load_dotenv()
+    return fsa()
 
 
 if __name__ == "__main__":

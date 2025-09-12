@@ -20,6 +20,25 @@
     },
     {
       "type": "function",
+      "name": "allCallHashes",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
       "name": "cancelGovernanceCall",
       "inputs": [
         {
@@ -33,6 +52,35 @@
     },
     {
       "type": "function",
+      "name": "customInstructions",
+      "inputs": [
+        {
+          "name": "callHash",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "_contract",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "_calldata",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
       "name": "depositVault",
       "inputs": [],
       "outputs": [
@@ -40,6 +88,42 @@
           "name": "",
           "type": "address",
           "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "encodeCustomInstruction",
+      "inputs": [
+        {
+          "name": "_customInstruction",
+          "type": "tuple",
+          "internalType": "struct IMasterAccountController.CustomInstruction",
+          "components": [
+            {
+              "name": "_contract",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "_value",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "_calldata",
+              "type": "bytes",
+              "internalType": "bytes"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "stateMutability": "view"
@@ -238,6 +322,55 @@
           "name": "",
           "type": "address",
           "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getAllCallHashes",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getCustomInstruction",
+      "inputs": [
+        {
+          "name": "callHash",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple",
+          "internalType": "struct IMasterAccountController.CustomInstruction",
+          "components": [
+            {
+              "name": "_contract",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "_value",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "_calldata",
+              "type": "bytes",
+              "internalType": "bytes"
+            }
+          ]
         }
       ],
       "stateMutability": "view"
@@ -495,6 +628,36 @@
     },
     {
       "type": "function",
+      "name": "registerCustomInstruction",
+      "inputs": [
+        {
+          "name": "_customInstruction",
+          "type": "tuple",
+          "internalType": "struct IMasterAccountController.CustomInstruction",
+          "components": [
+            {
+              "name": "_contract",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "_value",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "_calldata",
+              "type": "bytes",
+              "internalType": "bytes"
+            }
+          ]
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
       "name": "setExecutorFee",
       "inputs": [
         {
@@ -625,6 +788,19 @@
         }
       ],
       "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "CustomInstructionRegistered",
+      "inputs": [
+        {
+          "name": "callHash",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
     },
     {
       "type": "event",
