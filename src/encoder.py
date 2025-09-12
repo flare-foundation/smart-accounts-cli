@@ -4,7 +4,6 @@ from eth_typing import ChecksumAddress
 class InstructionId:
     Deposit = 1
     Withdraw = 2
-    Approve = 3
     Redeem = 4
     ReserveCollateral = 5
     ClaimWithdraw = 6
@@ -26,11 +25,6 @@ def deposit(amount: int) -> bytes:
 def withdraw(amount: int) -> bytes:
     value = amount.to_bytes(31)
     return _encode(instruction_id=InstructionId.Withdraw, value=value)
-
-
-def approve(amount: int) -> bytes:
-    value = amount.to_bytes(31)
-    return _encode(instruction_id=InstructionId.Approve, value=value)
 
 
 def redeem(lots: int) -> bytes:
