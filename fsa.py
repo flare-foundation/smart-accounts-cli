@@ -29,6 +29,7 @@ from src.cli.types import (
     BridgeRedeem,
     BridgeWithdraw,
     DebugCheckStatus,
+    DebugSimulation,
     NamespaceSerializer,
 )
 from src.registry import Event, registry
@@ -343,9 +344,9 @@ def redeem(args: BridgeRedeem) -> None:
     bridge_pp(globals.w3, resp)
 
 
-def full_scenario():
+def simulation(args: DebugSimulation):
     mint(
-        BridgeMint(agent_address="0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC", lots=2),
+        BridgeMint(agent_address=args.agent_address, lots=args.lots),
     )
     print("minted fassets, check here:")
     print(
@@ -353,14 +354,14 @@ def full_scenario():
     )
     print()
     input("continue to deposit... press enter")
-    deposit(BridgeDeposit(amount=1_000_000))
+    deposit(BridgeDeposit(amount=args.amount))
     print("deposited into vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to withdraw... press enter")
-    withdraw(BridgeWithdraw(amount=1_000_000))
+    withdraw(BridgeWithdraw(amount=args.amount))
     claim_withdraw(BridgeClaimWithdraw(reward_epoch=1))
     print("withdrawn from vault, check here:")
     print(
@@ -368,7 +369,7 @@ def full_scenario():
     )
     print()
     input("continue to redeem... press enter")
-    redeem(BridgeRedeem(lots=1))
+    redeem(BridgeRedeem(lots=args.lots))
 
 
 def custom(args: BridgeCustom) -> None:
@@ -424,8 +425,8 @@ def fsa() -> None:
             "custom": (BridgeCustom, custom),
         },
         "debug": {
-            # "full": (),
-            "check-status": (DebugCheckStatus, check_status)
+            "simulation": (DebugSimulation, simulation),
+            "check-status": (DebugCheckStatus, check_status),
         },
     }
 

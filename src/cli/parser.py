@@ -131,10 +131,6 @@ def get_parser() -> argparse.ArgumentParser:
 
     d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
 
-    d_subcli.add_parser(
-        "full", help="run full scenario - mint, deposit, withdraw, redeem"
-    )
-
     d_check_status = d_subcli.add_parser(
         "check-status", help="check bridge status of xrpl transaction"
     )
@@ -142,6 +138,34 @@ def get_parser() -> argparse.ArgumentParser:
         "xrpl_hash",
         type=str,
         help="xrpl transaction hash to be checked",
+    )
+
+    d_simulation = d_subcli.add_parser(
+        "simulation", help="run full simulation - mint, deposit, withdraw, redeem"
+    )
+    d_simulation.add_argument(
+        "-a",
+        "--agent-address",
+        type=str,
+        required=True,
+        help="agent address to mint with",
+        metavar="",
+    )
+    d_simulation.add_argument(
+        "-m",
+        "--mint",
+        type=int,
+        required=True,
+        help="number of lots to mint and redeem",
+        metavar="",
+    )
+    d_simulation.add_argument(
+        "-d",
+        "--deposit",
+        type=int,
+        required=True,
+        help="number of tokens to deposit/withdraw to/from vault",
+        metavar="",
     )
 
     return cli

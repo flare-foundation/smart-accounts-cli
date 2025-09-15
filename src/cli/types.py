@@ -150,3 +150,10 @@ class BridgeCustom(NamespaceSerializer):
 @attrs.frozen(kw_only=True)
 class DebugCheckStatus(NamespaceSerializer):
     xrpl_hash: bytes = attrs.field(converter=bytes_parser)
+
+
+@attrs.frozen(kw_only=True)
+class DebugSimulation(NamespaceSerializer):
+    agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
+    lots: int
+    amount: int
