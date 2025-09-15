@@ -63,6 +63,16 @@ class Globals:
     env: ParsedEnv
 
 
+def get_globals() -> Globals:
+    env = ParsedEnv.from_env()
+
+    return Globals(
+        w3=get_w3_client(env.flr_rpc_url),
+        xrp=JsonRpcClient(env.xrp_rpc_url),
+        env=env,
+    )
+
+
 def send_xpr_tx(
     xrp: JsonRpcClient,
     amount: str,
@@ -228,7 +238,8 @@ def bridge_pp(w3, resp: Response) -> EventData | None:
     return bridged
 
 
-def mint(globals: Globals, args: BridgeMint) -> None:
+def mint(args: BridgeMint) -> None:
+    globals = get_globals()
     w3 = globals.w3
     xrp = globals.xrp
 
@@ -297,35 +308,36 @@ def get_xrp_tx(xrp: JsonRpcClient, tx_hash: str):
     return xrp.request(Tx(transaction=tx_hash))
 
 
-def deposit(globals: Globals, args: BridgeDeposit) -> None:
+def deposit(args: BridgeDeposit) -> None:
+    globals = get_globals()
     memo_data = encoder.deposit(args.amount).hex()
     resp = bridge_tx(globals.xrp, [memo(memo_data)])
     bridge_pp(globals.w3, resp)
 
 
-def withdraw(globals: Globals, args: BridgeWithdraw) -> None:
+def withdraw(args: BridgeWithdraw) -> None:
+    globals = get_globals()
     memo_data = encoder.withdraw(args.amount).hex()
     resp = bridge_tx(globals.xrp, [memo(memo_data)])
     bridge_pp(globals.w3, resp)
 
 
-def claim_withdraw(globals: Globals, args: BridgeClaimWithdraw) -> None:
+def claim_withdraw(args: BridgeClaimWithdraw) -> None:
+    globals = get_globals()
     memo_data = encoder.claim_withdraw(args.reward_epoch).hex()
     resp = bridge_tx(globals.xrp, [memo(memo_data)])
     bridge_pp(globals.w3, resp)
 
 
-def redeem(globals: Globals, args: BridgeRedeem) -> None:
+def redeem(args: BridgeRedeem) -> None:
+    globals = get_globals()
     memo_data = encoder.deposit(args.lots).hex()
     resp = bridge_tx(globals.xrp, [memo(memo_data)])
     bridge_pp(globals.w3, resp)
 
 
-def full_scenario(
-    globals: Globals,
-):
+def full_scenario():
     mint(
-        globals,
         BridgeMint(agent_address="0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC", lots=2),
     )
     print("minted fassets, check here:")
@@ -334,25 +346,26 @@ def full_scenario(
     )
     print()
     input("continue to deposit... press enter")
-    deposit(globals, BridgeDeposit(amount=1_000_000))
+    deposit(BridgeDeposit(amount=1_000_000))
     print("deposited into vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to withdraw... press enter")
-    withdraw(globals, BridgeWithdraw(amount=1_000_000))
-    claim_withdraw(globals, BridgeClaimWithdraw(reward_epoch=1))
+    withdraw(BridgeWithdraw(amount=1_000_000))
+    claim_withdraw(BridgeClaimWithdraw(reward_epoch=1))
     print("withdrawn from vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to redeem... press enter")
-    redeem(globals, BridgeRedeem(lots=1))
+    redeem(BridgeRedeem(lots=1))
 
 
-def custom(globals: Globals, args: BridgeCustom) -> None:
+def custom(args: BridgeCustom) -> None:
+    globals = get_globals()
     w3 = globals.w3
     pk = os.getenv("FLR_PRIVATE_KEY")
     assert pk
@@ -388,16 +401,10 @@ def custom(globals: Globals, args: BridgeCustom) -> None:
 
 
 T = TypeVar("T", bound=NamespaceSerializer)
-Resolver = dict[str, tuple[type[T], Callable[[Globals, T], None]]]
+Resolver = dict[str, tuple[type[T], Callable[[T], None]]]
 
 
-def fsa(env: ParsedEnv) -> None:
-    globals = Globals(
-        w3=get_w3_client(env.flr_rpc_url),
-        xrp=JsonRpcClient(env.xrp_rpc_url),
-        env=env,
-    )
-
+def fsa() -> None:
     args = cli.get_parser().parse_args()
 
     bridge_resolver: Resolver = {
@@ -409,19 +416,27 @@ def fsa(env: ParsedEnv) -> None:
         "custom": (BridgeCustom, custom),
     }
 
+    debug_resolver: Resolver = {
+        # "full": (),
+        # "check-status": (DebugCheckStatus, check_status)
+    }
+
     match args.command:
         case "bridge":
             serializer, resolver_fn = bridge_resolver[args.subcommand]
             try:
-                resolver_fn(globals, serializer.from_namespace(args))
+                resolver_fn(serializer.from_namespace(args))
             except ValueError as e:
                 print(f"error: {', '.join(e.args)}", file=sys.stderr)
                 exit(2)
 
         case "debug":
-            match args.subcommand:
-                case "full":
-                    full_scenario(globals)
+            serializer, resolver_fn = debug_resolver[args.subcommand]
+            try:
+                resolver_fn(serializer.from_namespace(args))
+            except ValueError as e:
+                print(f"error: {', '.join(e.args)}", file=sys.stderr)
+                exit(2)
 
         case _:
             raise NotImplementedError()
@@ -429,7 +444,7 @@ def fsa(env: ParsedEnv) -> None:
 
 def main() -> None:
     dotenv.load_dotenv()
-    return fsa(ParsedEnv.from_env())
+    return fsa()
 
 
 if __name__ == "__main__":
