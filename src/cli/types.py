@@ -145,3 +145,8 @@ class BridgeCustom(NamespaceSerializer):
                 ],
             ],
         )
+
+
+@attrs.frozen(kw_only=True)
+class DebugCheckStatus(NamespaceSerializer):
+    xrpl_hash: bytes = attrs.field(converter=bytes_parser)

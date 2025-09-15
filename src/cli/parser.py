@@ -128,9 +128,20 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     d_cli = subcli.add_parser("debug", help="utility functions for bridge info")
+
     d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
+
     d_subcli.add_parser(
         "full", help="run full scenario - mint, deposit, withdraw, redeem"
+    )
+
+    d_check_status = d_subcli.add_parser(
+        "check-status", help="check bridge status of xrpl transaction"
+    )
+    d_check_status.add_argument(
+        "xrpl_hash",
+        type=str,
+        help="xrpl transaction hash to be checked",
     )
 
     return cli

@@ -28,6 +28,7 @@ from src.cli.types import (
     BridgeMint,
     BridgeRedeem,
     BridgeWithdraw,
+    DebugCheckStatus,
     NamespaceSerializer,
 )
 from src.registry import Event, registry
@@ -238,6 +239,12 @@ def bridge_pp(w3, resp: Response) -> EventData | None:
     return bridged
 
 
+def check_status(args: DebugCheckStatus) -> None:
+    globals = get_globals()
+    resp = get_xrp_tx(globals.xrp, args.xrpl_hash.hex())
+    bridge_pp(globals.w3, resp)
+
+
 def mint(args: BridgeMint) -> None:
     globals = get_globals()
     w3 = globals.w3
@@ -401,45 +408,40 @@ def custom(args: BridgeCustom) -> None:
 
 
 T = TypeVar("T", bound=NamespaceSerializer)
-Resolver = dict[str, tuple[type[T], Callable[[T], None]]]
+Resolver = dict[str, tuple[type[T], Callable[[T], int | None]]]
 
 
 def fsa() -> None:
     args = cli.get_parser().parse_args()
 
-    bridge_resolver: Resolver = {
-        "deposit": (BridgeDeposit, deposit),
-        "withdraw": (BridgeWithdraw, withdraw),
-        "redeem": (BridgeRedeem, redeem),
-        "mint": (BridgeMint, mint),
-        "claim-withdraw": (BridgeClaimWithdraw, claim_withdraw),
-        "custom": (BridgeCustom, custom),
+    resolver: dict[str, Resolver] = {
+        "bridge": {
+            "deposit": (BridgeDeposit, deposit),
+            "withdraw": (BridgeWithdraw, withdraw),
+            "redeem": (BridgeRedeem, redeem),
+            "mint": (BridgeMint, mint),
+            "claim-withdraw": (BridgeClaimWithdraw, claim_withdraw),
+            "custom": (BridgeCustom, custom),
+        },
+        "debug": {
+            # "full": (),
+            "check-status": (DebugCheckStatus, check_status)
+        },
     }
 
-    debug_resolver: Resolver = {
-        # "full": (),
-        # "check-status": (DebugCheckStatus, check_status)
-    }
+    r = resolver.get(args.command, {}).get(args.subcommand)
+    if r is None:
+        print("error: not implemented")
+        exit(2)
 
-    match args.command:
-        case "bridge":
-            serializer, resolver_fn = bridge_resolver[args.subcommand]
-            try:
-                resolver_fn(serializer.from_namespace(args))
-            except ValueError as e:
-                print(f"error: {', '.join(e.args)}", file=sys.stderr)
-                exit(2)
-
-        case "debug":
-            serializer, resolver_fn = debug_resolver[args.subcommand]
-            try:
-                resolver_fn(serializer.from_namespace(args))
-            except ValueError as e:
-                print(f"error: {', '.join(e.args)}", file=sys.stderr)
-                exit(2)
-
-        case _:
-            raise NotImplementedError()
+    serializer, resolver_fn = r
+    try:
+        exit_code = resolver_fn(serializer.from_namespace(args))
+        if exit_code is not None:
+            exit(exit_code)
+    except ValueError as e:
+        print(f"error: {', '.join(e.args)}", file=sys.stderr)
+        exit(2)
 
 
 def main() -> None:
