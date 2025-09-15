@@ -157,3 +157,41 @@ class DebugSimulation(NamespaceSerializer):
     agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
     lots: int
     amount: int
+
+
+@attrs.frozen(kw_only=True)
+class DebugMockCustom(NamespaceSerializer):
+    seed: str
+    address: list[ChecksumAddress] = attrs.field(
+        converter=list_map_converter(to_checksum_address)
+    )
+    value: list[Wei] = attrs.field(converter=list_map_converter(value_parser))
+    data: list[bytes] = attrs.field(converter=list_map_converter(bytes_parser))
+    json: Any = attrs.field(converter=json_read_file_or_stdin)
+    serialized: list[CustomInstruction] = attrs.field(init=False)
+
+    def __attrs_post_init__(self):
+        if len(self.address) != len(self.value) or len(self.value) != len(self.data):
+            raise ValueError(
+                "length of passed addresses, values and data must be equal"
+            )
+
+        if self.address and self.json:
+            raise ValueError(
+                "can't parse json file and flag parameters at the same time"
+            )
+
+        if not self.address and not self.json:
+            raise ValueError("must pass json file or flag paramteres")
+
+        object.__setattr__(
+            self,
+            "serialized",
+            [
+                *[CustomInstruction(**obj) for obj in self.json],
+                *[
+                    CustomInstruction(*t)
+                    for t in zip(self.address, self.value, self.data)
+                ],
+            ],
+        )

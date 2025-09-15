@@ -107,7 +107,7 @@ def get_parser() -> argparse.ArgumentParser:
         type=str,
         required=False,
         default=[],
-        help="flare transaction value, 'flr' can be appended for flare units",
+        help="flare transaction value; 'flr' can be appended for flare units",
         metavar="",
     )
     b_custom_instruction.add_argument(
@@ -124,12 +124,63 @@ def get_parser() -> argparse.ArgumentParser:
         "json",
         nargs="?",
         type=str,
-        help="json file to read, if '-' is passed stdin is read instead",
+        help="json file to read; if '-' is passed stdin is read instead",
     )
 
     d_cli = subcli.add_parser("debug", help="utility functions for bridge info")
 
     d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
+
+    d_mock_custom = d_subcli.add_parser(
+        "mock-custom", help="simulate custom instruction with the mock contract"
+    )
+    d_mock_custom.add_argument(
+        "-s",
+        "--seed",
+        type=str,
+        required=True,
+        help=(
+            "seed for personal account derivation, same string will always "
+            "result in same personal account"
+        ),
+        metavar="",
+    )
+    d_mock_custom.add_argument(
+        "-a",
+        "--address",
+        action="append",
+        type=str,
+        required=False,
+        default=[],
+        help="flare transaction target address",
+        metavar="",
+    )
+    d_mock_custom.add_argument(
+        "-v",
+        "--value",
+        action="append",
+        type=str,
+        required=False,
+        default=[],
+        help="flare transaction value; 'flr' can be appended for flare units",
+        metavar="",
+    )
+    d_mock_custom.add_argument(
+        "-d",
+        "--data",
+        action="append",
+        type=str,
+        required=False,
+        help="flare transaction calldata hex encoded",
+        default=[],
+        metavar="",
+    )
+    d_mock_custom.add_argument(
+        "json",
+        nargs="?",
+        type=str,
+        help="json file to read; if '-' is passed stdin is read instead",
+    )
 
     d_check_status = d_subcli.add_parser(
         "check-status", help="check bridge status of xrpl transaction"
@@ -141,7 +192,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     d_simulation = d_subcli.add_parser(
-        "simulation", help="run full simulation - mint, deposit, withdraw, redeem"
+        "simulation", help="run full simulation (mint, deposit, withdraw, redeem)"
     )
     d_simulation.add_argument(
         "-a",

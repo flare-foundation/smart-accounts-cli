@@ -106,6 +106,12 @@ class Registry:
         abi="./abis/MasterAccountController.json",
     )
 
+    master_account_controller_dev_mock = Contract(
+        name="MasterAccountControllerDevMock",
+        address=to_checksum_address("0x787419810116b29fbB45a7E679Ae6c3dfCA9600b"),
+        abi="./abis/MasterAccountControllerDevMock.json",
+    )
+
     asset_manager_events = Contract(
         name="AssetManagerFXRP",
         address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),

@@ -29,6 +29,7 @@ from src.cli.types import (
     BridgeRedeem,
     BridgeWithdraw,
     DebugCheckStatus,
+    DebugMockCustom,
     DebugSimulation,
     NamespaceSerializer,
 )
@@ -375,7 +376,7 @@ def simulation(args: DebugSimulation):
 def custom(args: BridgeCustom) -> None:
     globals = get_globals()
     w3 = globals.w3
-    pk = os.getenv("FLR_PRIVATE_KEY")
+    pk = globals.env.flr_private_key
     assert pk
     addr = w3.eth.account.from_key(pk).address
     tx = (
@@ -408,6 +409,36 @@ def custom(args: BridgeCustom) -> None:
     bridge_pp(w3, resp)
 
 
+def mock_custom(args: DebugMockCustom) -> int | None:
+    globals = get_globals()
+
+    w3 = globals.w3
+    pk = globals.env.flr_private_key
+    addr = w3.eth.account.from_key(pk).address
+
+    tx = (
+        w3.eth.contract(
+            address=registry.master_account_controller_dev_mock.address,
+            abi=registry.master_account_controller_dev_mock.abi,
+        )
+        .functions.executeCustomInstructionDevelopment(
+            args.seed, [(a.address, a.value, a.data) for a in args.serialized]
+        )
+        .build_transaction(
+            {
+                "from": addr,
+                "nonce": w3.eth.get_transaction_count(addr),
+                "gasPrice": Wei(round(w3.eth.gas_price * 1.5)),
+            }
+        )
+    )
+
+    rtx = w3.eth.account.sign_transaction(tx, pk)
+    tx_hash = w3.eth.send_raw_transaction(rtx.raw_transaction)
+    rec = w3.eth.wait_for_transaction_receipt(tx_hash)
+    print(f"0x{rec['transactionHash'].hex()}")
+
+
 T = TypeVar("T", bound=NamespaceSerializer)
 Resolver = dict[str, tuple[type[T], Callable[[T], int | None]]]
 
@@ -425,6 +456,7 @@ def fsa() -> None:
             "custom": (BridgeCustom, custom),
         },
         "debug": {
+            "mock-custom": (DebugMockCustom, mock_custom),
             "simulation": (DebugSimulation, simulation),
             "check-status": (DebugCheckStatus, check_status),
         },
