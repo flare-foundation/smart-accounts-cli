@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from collections.abc import Iterator, Sequence
-from typing import Any, Callable, Self
+from typing import Callable, Self, TypeVar
 
 import attrs
 import dotenv
@@ -387,6 +387,10 @@ def custom(globals: Globals, args: BridgeCustom) -> None:
     bridge_pp(w3, resp)
 
 
+T = TypeVar("T", bound=NamespaceSerializer)
+Resolver = dict[str, tuple[type[T], Callable[[Globals, T], None]]]
+
+
 def fsa(env: ParsedEnv) -> None:
     globals = Globals(
         w3=get_w3_client(env.flr_rpc_url),
@@ -396,10 +400,7 @@ def fsa(env: ParsedEnv) -> None:
 
     args = cli.get_parser().parse_args()
 
-    bridge_resolver: dict[
-        str,
-        tuple[type[NamespaceSerializer], Callable[[Globals, Any], None]],
-    ] = {
+    bridge_resolver: Resolver = {
         "deposit": (BridgeDeposit, deposit),
         "withdraw": (BridgeWithdraw, withdraw),
         "redeem": (BridgeRedeem, redeem),
@@ -410,9 +411,9 @@ def fsa(env: ParsedEnv) -> None:
 
     match args.command:
         case "bridge":
-            serializer, resolver = bridge_resolver[args.subcommand]
+            serializer, resolver_fn = bridge_resolver[args.subcommand]
             try:
-                resolver(globals, serializer.from_namespace(args))
+                resolver_fn(globals, serializer.from_namespace(args))
             except ValueError as e:
                 print(f"error: {', '.join(e.args)}", file=sys.stderr)
                 exit(2)
