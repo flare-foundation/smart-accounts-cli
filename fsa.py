@@ -347,7 +347,7 @@ def redeem(args: BridgeRedeem) -> None:
 
 def simulation(args: DebugSimulation):
     mint(
-        BridgeMint(agent_address=args.agent_address, lots=args.lots),
+        BridgeMint(agent_address=args.agent_address, lots=args.mint),
     )
     print("minted fassets, check here:")
     print(
@@ -355,14 +355,14 @@ def simulation(args: DebugSimulation):
     )
     print()
     input("continue to deposit... press enter")
-    deposit(BridgeDeposit(amount=args.amount))
+    deposit(BridgeDeposit(amount=args.deposit))
     print("deposited into vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
     )
     print()
     input("continue to withdraw... press enter")
-    withdraw(BridgeWithdraw(amount=args.amount))
+    withdraw(BridgeWithdraw(amount=args.deposit))
     claim_withdraw(BridgeClaimWithdraw(reward_epoch=1))
     print("withdrawn from vault, check here:")
     print(
@@ -370,7 +370,7 @@ def simulation(args: DebugSimulation):
     )
     print()
     input("continue to redeem... press enter")
-    redeem(BridgeRedeem(lots=args.lots))
+    redeem(BridgeRedeem(lots=args.mint))
 
 
 def custom(args: BridgeCustom) -> None:

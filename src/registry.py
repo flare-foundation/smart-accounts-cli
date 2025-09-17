@@ -102,7 +102,7 @@ class Contract:
 class Registry:
     master_account_controller = Contract(
         name="MasterAccountController",
-        address=to_checksum_address("0x9224128D8BB13D19adC14d9A70260e545Ba8cE01"),
+        address=to_checksum_address("0xa7bc2aC84DB618fde9fa4892D1166fFf75D36FA6"),
         abi="./abis/MasterAccountController.json",
     )
 

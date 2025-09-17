@@ -155,8 +155,8 @@ class DebugCheckStatus(NamespaceSerializer):
 @attrs.frozen(kw_only=True)
 class DebugSimulation(NamespaceSerializer):
     agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
-    lots: int
-    amount: int
+    mint: int
+    deposit: int
 
 
 @attrs.frozen(kw_only=True)
