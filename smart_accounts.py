@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 import sys
-import time
-from collections.abc import Iterator, Sequence
 from typing import Callable, TypeVar
 
 import dotenv
 from eth_typing import ChecksumAddress
-from web3 import Web3
 from web3._utils.events import get_event_data
-from web3.types import EventData, LogReceipt, Wei
+from web3.types import EventData, Wei
 from xrpl.models import Memo, Response
 from xrpl.utils import ripple_time_to_posix
 
-from src import cli, encoder, xrpl_client
+from src import cli, encoder, flare_client, xrpl_client
 from src.cli.types import (
     BridgeClaimWithdraw,
     BridgeCustom,
@@ -25,103 +22,8 @@ from src.cli.types import (
     DebugSimulation,
     NamespaceSerializer,
 )
-from src.registry import Event, registry
+from src.registry import registry
 from src.settings import settings
-
-
-def scan_events(
-    w3: Web3, events: Sequence[Event], block_range: tuple[int, int]
-) -> Iterator[LogReceipt]:
-    addresses = list({e.contract.address for e in events})
-    signatures = {e.signature for e in events}
-
-    start, end = block_range
-    for block in range(start, end, 30):
-        latest = w3.eth.block_number
-        if block > latest:
-            break
-
-        logs = w3.eth.get_logs(
-            {
-                "address": addresses,
-                "fromBlock": block,
-                "toBlock": min(block + 30 - 1, latest),
-            }
-        )
-
-        for log in logs:
-            if log["topics"][0].hex() in signatures:
-                yield log
-
-
-def get_flr_block_near_ts(w3: Web3, timestamp: int) -> int:
-    b = w3.eth.get_block("latest")
-    assert "timestamp" in b and "number" in b
-    assert timestamp < b["timestamp"]
-
-    p_sample = w3.eth.get_block(b["number"] - 1_000_000)
-    assert "timestamp" in p_sample and "number" in p_sample
-
-    production_per_s = (b["number"] - p_sample["number"]) / (
-        b["timestamp"] - p_sample["timestamp"]
-    )
-
-    a = w3.eth.get_block(
-        b["number"] - int((b["timestamp"] - timestamp) * production_per_s) * 2
-    )
-    assert "timestamp" in a and "number" in a
-    assert timestamp > a["timestamp"]
-
-    while True:
-        c_block = (b["number"] + a["number"]) // 2
-        c = w3.eth.get_block(c_block)
-        assert "timestamp" in c and "number" in c
-
-        if abs(c["timestamp"] - timestamp) < 10:
-            return c["number"]
-
-        if c["timestamp"] > timestamp:
-            (a, b) = (a, c)
-        else:
-            (a, b) = (c, b)
-
-
-def wait_for_event(
-    w3: Web3,
-    event: Event,
-    block_range: tuple[int, int],
-    filter_fn: Callable[[EventData], bool],
-    message: str | None = None,
-) -> EventData | None:
-    while True:
-        if message is not None:
-            print(message)
-
-        for e in scan_events(w3, (event,), block_range):
-            data = get_event_data(w3.codec, event.abi, e)
-            if filter_fn(data):
-                return data
-
-        if w3.eth.block_number > block_range[1]:
-            break
-
-        time.sleep(10)
-
-
-def wait_to_bridge(w3, r: Response) -> EventData | None:
-    block = get_flr_block_near_ts(
-        w3, ripple_time_to_posix(r.result["tx_json"]["date"]) - 90
-    )
-
-    event = registry.master_account_controller.events["InstructionExecuted"]
-
-    return wait_for_event(
-        w3,
-        event,
-        (block, block + 4 * 90),
-        lambda x: x["args"]["transactionId"].hex() == r.result["hash"].lower(),
-        "waiting to bridge",
-    )
 
 
 def reserve_collateral(agent_address: ChecksumAddress, lots: int) -> Response:
@@ -129,11 +31,11 @@ def reserve_collateral(agent_address: ChecksumAddress, lots: int) -> Response:
     return xrpl_client.send_bridge_request_tx(memo_data)
 
 
-def bridge_pp(w3, resp: Response) -> EventData | None:
+def bridge_pp(resp: Response) -> EventData | None:
     print("sent instruction on underlying:", resp.result["hash"])
     print(f"https://testnet.xrpl.org/transactions/{resp.result['hash']}/detailed")
     print()
-    bridged = wait_to_bridge(w3, resp)
+    bridged = flare_client.wait_until_bridged(resp)
 
     if bridged is None:
         print("failed to bridge")
@@ -150,14 +52,14 @@ def bridge_pp(w3, resp: Response) -> EventData | None:
 
 def check_status(args: DebugCheckStatus) -> None:
     resp = xrpl_client.get_tx(args.xrpl_hash.hex())
-    bridge_pp(settings.w3, resp)
+    bridge_pp(resp)
 
 
 def mint(args: BridgeMint) -> None:
     w3 = settings.w3
 
     resp = reserve_collateral(args.agent_address, args.lots)
-    bridged = bridge_pp(w3, resp)
+    bridged = bridge_pp(resp)
     if bridged is None:
         print("failed to bridge")
         return
@@ -167,9 +69,7 @@ def mint(args: BridgeMint) -> None:
     )
 
     cr_event = registry.asset_manager_events.events["CollateralReserved"]
-    cr_log = next(
-        scan_events(w3, (cr_event,), (bridged_tx_block, bridged_tx_block + 1))
-    )
+    cr_log = flare_client.get_event(cr_event, bridged_tx_block)
     data = get_event_data(w3.codec, cr_event.abi, cr_log)
 
     _args = data["args"]
@@ -188,12 +88,11 @@ def mint(args: BridgeMint) -> None:
 
     me_event = registry.asset_manager_events.events["MintingExecuted"]
 
-    block = get_flr_block_near_ts(
-        w3, ripple_time_to_posix(resp.result["tx_json"]["date"]) - 90
+    block = flare_client.find_block_near_timestamp(
+        ripple_time_to_posix(resp.result["tx_json"]["date"]) - 90
     )
 
-    bridged = wait_for_event(
-        w3,
+    bridged = flare_client.wait_for_event(
         me_event,
         (block, block + 90 * 4),
         lambda x: x["args"]["collateralReservationId"] == collateral_reservation_id,
@@ -220,25 +119,25 @@ def memo(memo_data: str) -> Memo:
 def deposit(args: BridgeDeposit) -> None:
     memo_data = encoder.deposit(args.amount).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
-    bridge_pp(settings.w3, resp)
+    bridge_pp(resp)
 
 
 def withdraw(args: BridgeWithdraw) -> None:
     memo_data = encoder.withdraw(args.amount).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
-    bridge_pp(settings.w3, resp)
+    bridge_pp(resp)
 
 
 def claim_withdraw(args: BridgeClaimWithdraw) -> None:
     memo_data = encoder.claim_withdraw(args.reward_epoch).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
-    bridge_pp(settings.w3, resp)
+    bridge_pp(resp)
 
 
 def redeem(args: BridgeRedeem) -> None:
     memo_data = encoder.deposit(args.lots).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
-    bridge_pp(settings.w3, resp)
+    bridge_pp(resp)
 
 
 def simulation(args: DebugSimulation):
@@ -296,12 +195,12 @@ def custom(args: BridgeCustom) -> None:
     rec = w3.eth.wait_for_transaction_receipt(tx_hash)
     block = rec["blockNumber"]
     evnt = registry.master_account_controller.events["CustomInstructionRegistered"]
-    evnt_log = next(scan_events(w3, (evnt,), (block, block + 1)))
+    evnt_log = flare_client.get_event(evnt, block)
     data = get_event_data(w3.codec, evnt.abi, evnt_log)
     call_hash = data["args"]["callHash"].to_bytes(31)
     memo_data = encoder.custom(call_hash).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
-    bridge_pp(w3, resp)
+    bridge_pp(resp)
 
 
 def mock_custom(args: DebugMockCustom) -> int | None:
