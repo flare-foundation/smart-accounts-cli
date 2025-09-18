@@ -2,7 +2,7 @@ import argparse
 
 
 def get_parser() -> argparse.ArgumentParser:
-    cli = argparse.ArgumentParser(prog="fsa")
+    cli = argparse.ArgumentParser(prog="./smart_accounts")
 
     subcli = cli.add_subparsers(title="command", required=True, dest="command")
 

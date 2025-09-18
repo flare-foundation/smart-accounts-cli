@@ -336,7 +336,7 @@ T = TypeVar("T", bound=NamespaceSerializer)
 Resolver = dict[str, tuple[type[T], Callable[[T], int | None]]]
 
 
-def fsa() -> None:
+def smart_accounts() -> None:
     args = cli.get_parser().parse_args()
 
     resolver: dict[str, Resolver] = {
@@ -372,7 +372,7 @@ def fsa() -> None:
 
 def main() -> None:
     dotenv.load_dotenv()
-    return fsa()
+    return smart_accounts()
 
 
 if __name__ == "__main__":
