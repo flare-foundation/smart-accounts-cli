@@ -123,7 +123,7 @@ class Registry:
         flare_contract_registry = Contract(
             "FlareContractRegistry",
             to_checksum_address("0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019"),
-            "./abis/FlareContractRegistry.json",
+            "./artifacts/FlareContractRegistry.json",
         )
 
         def get_address_by_name(name: str) -> ChecksumAddress:
@@ -141,21 +141,21 @@ class Registry:
             asset_manager_events=Contract(
                 name="AssetManagerFXRP",
                 address=get_address_by_name("AssetManagerFXRP"),
-                abi="./abis/IAssetManagerEvents.json",
+                abi="./artifacts/IAssetManagerEvents.json",
             ),
             master_account_controller=Contract(
                 name="MasterAccountController",
                 address=to_checksum_address(
                     "0xa7bc2aC84DB618fde9fa4892D1166fFf75D36FA6"
                 ),
-                abi="./abis/MasterAccountController.json",
+                abi="./artifacts/MasterAccountController.json",
             ),
             master_account_controller_dev_mock=Contract(
                 name="MasterAccountControllerDevMock",
                 address=to_checksum_address(
                     "0x787419810116b29fbB45a7E679Ae6c3dfCA9600b"
                 ),
-                abi="./abis/MasterAccountControllerDevMock.json",
+                abi="./artifacts/MasterAccountControllerDevMock.json",
             ),
         )
 
