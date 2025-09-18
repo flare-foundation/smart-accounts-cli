@@ -2,7 +2,8 @@ import argparse
 
 
 def get_parser() -> argparse.ArgumentParser:
-    cli = argparse.ArgumentParser(prog="./smart_accounts")
+    cli = argparse.ArgumentParser(prog="smart_accounts")
+    cli.add_argument("--version", "-V", action="version", version="%(prog)s v0.1.0")
 
     subcli = cli.add_subparsers(title="command", required=True, dest="command")
 
