@@ -52,6 +52,19 @@
     },
     {
       "type": "function",
+      "name": "createFundPersonalAccount",
+      "inputs": [
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
       "name": "customInstructions",
       "inputs": [
         {
@@ -138,7 +151,7 @@
       "name": "executeCustomInstructionDevelopment",
       "inputs": [
         {
-          "name": "_rippleAccount",
+          "name": "_xrplAddress",
           "type": "string",
           "internalType": "string"
         },
@@ -319,7 +332,7 @@
           ]
         },
         {
-          "name": "_rippleAccount",
+          "name": "_xrplAddress",
           "type": "string",
           "internalType": "string"
         }

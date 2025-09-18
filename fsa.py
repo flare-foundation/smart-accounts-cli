@@ -1,26 +1,18 @@
 #!/usr/bin/env python
-import os
 import sys
 import time
 from collections.abc import Iterator, Sequence
-from typing import Callable, Self, TypeVar
+from typing import Callable, TypeVar
 
-import attrs
 import dotenv
 from eth_typing import ChecksumAddress
 from web3 import Web3
 from web3._utils.events import get_event_data
-from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
 from web3.types import EventData, LogReceipt, Wei
-from xrpl.account import get_next_valid_seq_number
-from xrpl.clients import JsonRpcClient
-from xrpl.ledger import get_latest_validated_ledger_sequence
-from xrpl.models import Memo, Payment, Response, Tx
-from xrpl.transaction import sign, submit_and_wait
+from xrpl.models import Memo, Response
 from xrpl.utils import ripple_time_to_posix
-from xrpl.wallet import Wallet
 
-from src import cli, encoder
+from src import cli, encoder, xrpl_client
 from src.cli.types import (
     BridgeClaimWithdraw,
     BridgeCustom,
@@ -34,90 +26,7 @@ from src.cli.types import (
     NamespaceSerializer,
 )
 from src.registry import Event, registry
-
-
-@attrs.frozen(kw_only=True)
-class ParsedEnv:
-    xrp_seed: str
-    flr_private_key: str
-    flr_rpc_url: str
-    xrp_rpc_url: str
-
-    @classmethod
-    def from_env(cls) -> Self:
-        # TODO:(janezicmatej) add validation and nice error
-        xrp_seed = os.environ["XRP_SEED"]
-        flr_private_key = os.environ["FLR_PRIVATE_KEY"]
-        flr_rpc_url = os.environ["FLR_RPC_URL"]
-        xrp_rpc_url = os.environ["XRP_RPC_URL"]
-
-        return cls(
-            xrp_seed=xrp_seed,
-            flr_private_key=flr_private_key,
-            flr_rpc_url=flr_rpc_url,
-            xrp_rpc_url=xrp_rpc_url,
-        )
-
-
-@attrs.frozen(kw_only=True)
-class Globals:
-    w3: Web3
-    xrp: JsonRpcClient
-    env: ParsedEnv
-
-
-def get_globals() -> Globals:
-    env = ParsedEnv.from_env()
-
-    return Globals(
-        w3=get_w3_client(env.flr_rpc_url),
-        xrp=JsonRpcClient(env.xrp_rpc_url),
-        env=env,
-    )
-
-
-def send_xpr_tx(
-    xrp: JsonRpcClient,
-    amount: str,
-    destination: str,
-    memos: list[Memo] | None,
-    last_ledger_sequence: int | None,
-) -> Response:
-    client = JsonRpcClient(os.getenv("XRP_RPC_URL", ""))
-
-    seed = os.getenv("XRP_SEED")
-    assert seed
-
-    if last_ledger_sequence is None:
-        last_ledger_sequence = get_latest_validated_ledger_sequence(client) + 20
-
-    wallet_from_seed = Wallet.from_seed(seed)
-
-    payment_tx = Payment(
-        account=wallet_from_seed.address,
-        amount=amount,
-        destination=destination,
-        memos=memos,
-        last_ledger_sequence=last_ledger_sequence,
-        sequence=get_next_valid_seq_number(wallet_from_seed.address, client),
-        fee="10",
-    )
-
-    payment_response = submit_and_wait(sign(payment_tx, wallet_from_seed), client)
-    return get_xrp_tx(xrp, payment_response.result["hash"])
-
-
-def bridge_tx(xrp: JsonRpcClient, memos: list[Memo] | None) -> Response:
-    op_addr = "rBNkSvAFebTRYB5ksRXbNtJAPa6NeVPbRj"
-    assert op_addr
-    return send_xpr_tx(xrp, "1", op_addr, memos, None)
-
-
-def get_w3_client(rpc_url: str) -> Web3:
-    w3 = Web3(Web3.HTTPProvider(rpc_url), middleware=[ExtraDataToPOAMiddleware])
-    assert w3.is_connected()
-
-    return w3
+from src.settings import settings
 
 
 def scan_events(
@@ -215,11 +124,9 @@ def wait_to_bridge(w3, r: Response) -> EventData | None:
     )
 
 
-def reserve_collateral(
-    xrp: JsonRpcClient, agent_address: ChecksumAddress, lots: int
-) -> Response:
+def reserve_collateral(agent_address: ChecksumAddress, lots: int) -> Response:
     memo_data = encoder.reserve_collateral(agent_address, lots).hex()
-    return bridge_tx(xrp, [memo(memo_data)])
+    return xrpl_client.send_bridge_request_tx(memo_data)
 
 
 def bridge_pp(w3, resp: Response) -> EventData | None:
@@ -242,17 +149,14 @@ def bridge_pp(w3, resp: Response) -> EventData | None:
 
 
 def check_status(args: DebugCheckStatus) -> None:
-    globals = get_globals()
-    resp = get_xrp_tx(globals.xrp, args.xrpl_hash.hex())
-    bridge_pp(globals.w3, resp)
+    resp = xrpl_client.get_tx(args.xrpl_hash.hex())
+    bridge_pp(settings.w3, resp)
 
 
 def mint(args: BridgeMint) -> None:
-    globals = get_globals()
-    w3 = globals.w3
-    xrp = globals.xrp
+    w3 = settings.w3
 
-    resp = reserve_collateral(xrp, args.agent_address, args.lots)
+    resp = reserve_collateral(args.agent_address, args.lots)
     bridged = bridge_pp(w3, resp)
     if bridged is None:
         print("failed to bridge")
@@ -271,14 +175,14 @@ def mint(args: BridgeMint) -> None:
     _args = data["args"]
     amount = str(_args["valueUBA"] + _args["feeUBA"])
     destination = _args["paymentAddress"]
-    memos = [memo(_args["paymentReference"].hex())]
+    memo = _args["paymentReference"].hex()
     last_ledger_sequence = _args["lastUnderlyingBlock"]
     collateral_reservation_id = _args["collateralReservationId"]
 
     input(
         "successful collateral resevation, continue to 2nd part of mint... press enter"
     )
-    resp = send_xpr_tx(xrp, amount, destination, memos, last_ledger_sequence)
+    resp = xrpl_client.send_tx(amount, destination, memo, last_ledger_sequence)
     print("sent underlying assets in", resp.result["hash"])
     print(f"https://testnet.xrpl.org/transactions/{resp.result['hash']}/detailed")
 
@@ -313,36 +217,28 @@ def memo(memo_data: str) -> Memo:
     return Memo(memo_data=memo_data)
 
 
-def get_xrp_tx(xrp: JsonRpcClient, tx_hash: str):
-    return xrp.request(Tx(transaction=tx_hash))
-
-
 def deposit(args: BridgeDeposit) -> None:
-    globals = get_globals()
     memo_data = encoder.deposit(args.amount).hex()
-    resp = bridge_tx(globals.xrp, [memo(memo_data)])
-    bridge_pp(globals.w3, resp)
+    resp = xrpl_client.send_bridge_request_tx(memo_data)
+    bridge_pp(settings.w3, resp)
 
 
 def withdraw(args: BridgeWithdraw) -> None:
-    globals = get_globals()
     memo_data = encoder.withdraw(args.amount).hex()
-    resp = bridge_tx(globals.xrp, [memo(memo_data)])
-    bridge_pp(globals.w3, resp)
+    resp = xrpl_client.send_bridge_request_tx(memo_data)
+    bridge_pp(settings.w3, resp)
 
 
 def claim_withdraw(args: BridgeClaimWithdraw) -> None:
-    globals = get_globals()
     memo_data = encoder.claim_withdraw(args.reward_epoch).hex()
-    resp = bridge_tx(globals.xrp, [memo(memo_data)])
-    bridge_pp(globals.w3, resp)
+    resp = xrpl_client.send_bridge_request_tx(memo_data)
+    bridge_pp(settings.w3, resp)
 
 
 def redeem(args: BridgeRedeem) -> None:
-    globals = get_globals()
     memo_data = encoder.deposit(args.lots).hex()
-    resp = bridge_tx(globals.xrp, [memo(memo_data)])
-    bridge_pp(globals.w3, resp)
+    resp = xrpl_client.send_bridge_request_tx(memo_data)
+    bridge_pp(settings.w3, resp)
 
 
 def simulation(args: DebugSimulation):
@@ -374,9 +270,8 @@ def simulation(args: DebugSimulation):
 
 
 def custom(args: BridgeCustom) -> None:
-    globals = get_globals()
-    w3 = globals.w3
-    pk = globals.env.flr_private_key
+    w3 = settings.w3
+    pk = settings.env.flr_private_key
     assert pk
     addr = w3.eth.account.from_key(pk).address
     tx = (
@@ -405,15 +300,13 @@ def custom(args: BridgeCustom) -> None:
     data = get_event_data(w3.codec, evnt.abi, evnt_log)
     call_hash = data["args"]["callHash"].to_bytes(31)
     memo_data = encoder.custom(call_hash).hex()
-    resp = bridge_tx(globals.xrp, [memo(memo_data)])
+    resp = xrpl_client.send_bridge_request_tx(memo_data)
     bridge_pp(w3, resp)
 
 
 def mock_custom(args: DebugMockCustom) -> int | None:
-    globals = get_globals()
-
-    w3 = globals.w3
-    pk = globals.env.flr_private_key
+    w3 = settings.w3
+    pk = settings.env.flr_private_key
     addr = w3.eth.account.from_key(pk).address
 
     tx = (

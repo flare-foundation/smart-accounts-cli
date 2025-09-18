@@ -1,9 +1,12 @@
 import json
+from typing import Self
 
+import attrs
 from attrs import field, frozen
 from eth_typing import ABI, ABIEvent, ABIFunction, ChecksumAddress
 from eth_utils.address import to_checksum_address
 from web3 import Web3
+from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
 
 
 def abi_from_file_location(file_location: str):
@@ -99,24 +102,62 @@ class Contract:
         object.__setattr__(self, "functions", functions)
 
 
+@attrs.frozen
 class Registry:
-    master_account_controller = Contract(
-        name="MasterAccountController",
-        address=to_checksum_address("0xa7bc2aC84DB618fde9fa4892D1166fFf75D36FA6"),
-        abi="./abis/MasterAccountController.json",
-    )
+    flare_contract_registry: Contract
+    asset_manager_events: Contract
+    master_account_controller: Contract
+    master_account_controller_dev_mock: Contract
 
-    master_account_controller_dev_mock = Contract(
-        name="MasterAccountControllerDevMock",
-        address=to_checksum_address("0x787419810116b29fbB45a7E679Ae6c3dfCA9600b"),
-        abi="./abis/MasterAccountControllerDevMock.json",
-    )
+    @classmethod
+    def default(cls) -> Self:
+        client = Web3(
+            provider=Web3.HTTPProvider("https://coston2-api.flare.network/ext/C/rpc"),
+            middleware=(ExtraDataToPOAMiddleware,),
+        )
 
-    asset_manager_events = Contract(
-        name="AssetManagerFXRP",
-        address=to_checksum_address("0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA"),
-        abi="./abis/IAssetManagerEvents.json",
-    )
+        # NOTE:(janezicmatej) FlareContractRegistry smart contract always provides an up
+        # to date mapper ({name:address}) for all official Flare contracts. It is
+        # deployed on all 4 chains on the SAME address and is guaranteed to never be
+        # redeployed. This is why we can hardcode it here.
+        flare_contract_registry = Contract(
+            "FlareContractRegistry",
+            to_checksum_address("0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019"),
+            "./abis/FlareContractRegistry.json",
+        )
+
+        def get_address_by_name(name: str) -> ChecksumAddress:
+            return to_checksum_address(
+                client.eth.contract(
+                    address=flare_contract_registry.address,
+                    abi=flare_contract_registry.abi,
+                )
+                .functions.getContractAddressByName(name)
+                .call()
+            )
+
+        return cls(
+            flare_contract_registry=flare_contract_registry,
+            asset_manager_events=Contract(
+                name="AssetManagerFXRP",
+                address=get_address_by_name("AssetManagerFXRP"),
+                abi="./abis/IAssetManagerEvents.json",
+            ),
+            master_account_controller=Contract(
+                name="MasterAccountController",
+                address=to_checksum_address(
+                    "0xa7bc2aC84DB618fde9fa4892D1166fFf75D36FA6"
+                ),
+                abi="./abis/MasterAccountController.json",
+            ),
+            master_account_controller_dev_mock=Contract(
+                name="MasterAccountControllerDevMock",
+                address=to_checksum_address(
+                    "0x787419810116b29fbB45a7E679Ae6c3dfCA9600b"
+                ),
+                abi="./abis/MasterAccountControllerDevMock.json",
+            ),
+        )
 
 
-registry = Registry
+registry: Registry = Registry.default()
