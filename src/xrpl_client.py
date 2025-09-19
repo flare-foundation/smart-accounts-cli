@@ -12,6 +12,13 @@ def get_tx(tx_hash: str) -> Response:
     return settings.xrp.request(Tx(transaction=tx_hash))
 
 
+def get_wallet(secret: str | None = None) -> Wallet:
+    if secret is None:
+        secret = settings.env.xrp_seed
+
+    return Wallet.from_seed(secret)
+
+
 def send_tx(
     amount: str | int,
     destination: str,
@@ -19,12 +26,11 @@ def send_tx(
     last_ledger_sequence: int | None = None,
 ) -> Response:
     client = settings.xrp
-    seed = settings.env.xrp_seed
 
     if last_ledger_sequence is None:
         last_ledger_sequence = get_latest_validated_ledger_sequence(client) + 20
 
-    wallet_from_seed = Wallet.from_seed(seed)
+    wallet = get_wallet()
 
     built_memos = None
 
@@ -34,16 +40,16 @@ def send_tx(
         built_memos = [Memo(memo_data=m) for m in memos]
 
     payment_tx = Payment(
-        account=wallet_from_seed.address,
+        account=wallet.address,
         amount=str(amount),
         destination=destination,
         memos=built_memos,
         last_ledger_sequence=last_ledger_sequence,
-        sequence=get_next_valid_seq_number(wallet_from_seed.address, client),
+        sequence=get_next_valid_seq_number(wallet.address, client),
         fee="10",
     )
 
-    payment_response = submit_and_wait(sign(payment_tx, wallet_from_seed), client)
+    payment_response = submit_and_wait(sign(payment_tx, wallet), client)
     return get_tx(payment_response.result["hash"])
 
 
