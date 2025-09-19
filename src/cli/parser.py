@@ -8,22 +8,6 @@ def get_parser() -> argparse.ArgumentParser:
     subcli = cli.add_subparsers(title="command", required=True, dest="command")
 
     b_cli = subcli.add_parser("bridge", help="flare smart accounts system interface")
-    b_cli.add_argument(
-        "-s",
-        "--silent",
-        action="store_true",
-        default=False,
-        required=False,
-        help="silent mode",
-    )
-    b_cli.add_argument(
-        "-W",
-        "--no-wait",
-        action="store_true",
-        default=False,
-        required=False,
-        help="don't wait for bridge confirmation",
-    )
 
     b_subcli = b_cli.add_subparsers(required=True, dest="subcommand")
 
