@@ -59,20 +59,18 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="",
     )
 
-    b_claim_withdraw = b_subcli.add_parser(
-        "claim-withdraw", help="claim withdrawal of fassets from vault"
-    )
-    b_claim_withdraw.add_argument(
-        "-r",
-        "--reward-epoch",
-        type=int,
-        required=True,
-        help=(
-            "which reward epoch to claim withdrawal for"
-            " - mock implementation will accept any value"
-        ),
-        metavar="",
-    )
+    b_subcli.add_parser("claim-withdraw", help="claim withdrawal of fassets from vault")
+    # b_claim_withdraw.add_argument(
+    #     "-r",
+    #     "--reward-epoch",
+    #     type=int,
+    #     required=True,
+    #     help=(
+    #         "which reward epoch to claim withdrawal for"
+    #         " - mock implementation will accept any value"
+    #     ),
+    #     metavar="",
+    # )
 
     b_custom_instruction = b_subcli.add_parser("custom", help="send custom instruction")
     b_custom_instruction.add_argument(

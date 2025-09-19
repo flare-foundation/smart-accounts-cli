@@ -132,7 +132,7 @@ def withdraw(args: BridgeWithdraw) -> None:
 
 
 def claim_withdraw(args: BridgeClaimWithdraw) -> None:
-    memo_data = encoder.claim_withdraw(args.reward_epoch).hex()
+    memo_data = encoder.claim_withdraw(1).hex()
     resp = xrpl_client.send_bridge_request_tx(memo_data)
     bridge_pp(resp)
 

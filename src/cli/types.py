@@ -101,7 +101,8 @@ class BridgeMint(Bridge, NamespaceSerializer):
 
 @attrs.frozen(kw_only=True)
 class BridgeClaimWithdraw(Bridge, NamespaceSerializer):
-    reward_epoch: int
+    # reward_epoch: int
+    pass
 
 
 @attrs.frozen
