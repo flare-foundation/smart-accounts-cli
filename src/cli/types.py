@@ -75,8 +75,7 @@ class NamespaceSerializer:
 
 @attrs.frozen(kw_only=True)
 class Bridge:
-    silent: bool = False
-    no_wait: bool = False
+    pass
 
 
 @attrs.frozen(kw_only=True)
