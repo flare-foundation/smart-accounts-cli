@@ -131,7 +131,7 @@ def get_parser() -> argparse.ArgumentParser:
         "print", help="print personal account address on flare of xrpl address"
     )
     pa_print.add_argument(
-        "xrpl_account",
+        "xrpl_address",
         type=str,
         nargs="?",
         help="xrpl address to be checked",
@@ -141,7 +141,7 @@ def get_parser() -> argparse.ArgumentParser:
         "faucet", help="faucet personal account address on flare of xrpl address"
     )
     pa_faucet.add_argument(
-        "xrpl_account",
+        "xrpl_address",
         type=str,
         nargs="?",
         help="xrpl address to be checked",
