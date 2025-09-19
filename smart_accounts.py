@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from typing import Callable, TypeVar
+from typing import Any, Callable, TypeVar
 
 import dotenv
 from eth_typing import ChecksumAddress
@@ -231,6 +231,12 @@ def mock_custom(args: DebugMockCustom) -> int | None:
     print(f"0x{rec['transactionHash'].hex()}")
 
 
+def not_implemented(args: Any) -> int | None:
+    print(args)
+    print("error: not implemented")
+    return 2
+
+
 T = TypeVar("T", bound=NamespaceSerializer)
 Resolver = dict[str, tuple[type[T], Callable[[T], int | None]]]
 
@@ -256,8 +262,7 @@ def smart_accounts() -> None:
 
     r = resolver.get(args.command, {}).get(args.subcommand)
     if r is None:
-        print("error: not implemented")
-        exit(2)
+        exit(not_implemented(args))
 
     serializer, resolver_fn = r
     try:

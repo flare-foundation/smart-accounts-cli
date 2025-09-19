@@ -112,9 +112,71 @@ def get_parser() -> argparse.ArgumentParser:
         help="json file to read; if '-' is passed stdin is read instead",
     )
 
+    pa_cli = subcli.add_parser(
+        "personal-account",
+        help="commands for interacting with personal account given an xrpl account",
+    )
+    pa_cli.add_argument(
+        "-e",
+        "--from-env",
+        action="store_true",
+        required=False,
+        default=False,
+        help="derive address from XRPL_SECRET env variable",
+    )
+
+    pa_subcli = pa_cli.add_subparsers(required=True, dest="subcommand")
+
+    pa_print = pa_subcli.add_parser(
+        "print", help="print personal account address on flare of xrpl address"
+    )
+    pa_print.add_argument(
+        "xrpl_account",
+        type=str,
+        nargs="?",
+        help="xrpl address to be checked",
+    )
+
+    pa_faucet = pa_subcli.add_parser(
+        "faucet", help="faucet personal account address on flare of xrpl address"
+    )
+    pa_faucet.add_argument(
+        "xrpl_account",
+        type=str,
+        nargs="?",
+        help="xrpl address to be checked",
+    )
+
     d_cli = subcli.add_parser("debug", help="utility functions for bridge info")
 
     d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
+
+    d_mock_create_fund = d_subcli.add_parser(
+        "mock-create-fund", help="create and fund personal account on mock contract"
+    )
+    d_mock_create_fund.add_argument(
+        "-s",
+        "--seed",
+        type=str,
+        required=True,
+        help=(
+            "seed for personal account derivation, same string will always "
+            "result in same personal account"
+        ),
+        metavar="",
+    )
+    d_mock_create_fund.add_argument(
+        "-v",
+        "--value",
+        type=str,
+        required=False,
+        default=0,
+        help=(
+            "amount to fund (will be moved from address of provided private key); "
+            "'flr' can be appended for flare units"
+        ),
+        metavar="",
+    )
 
     d_mock_custom = d_subcli.add_parser(
         "mock-custom", help="simulate custom instruction with the mock contract"
