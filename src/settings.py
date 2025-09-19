@@ -9,31 +9,31 @@ from xrpl.clients import JsonRpcClient
 
 @attrs.frozen(kw_only=True)
 class ParsedEnv:
-    xrp_seed: str
+    xrpl_seed: str
     flr_private_key: str
     flr_rpc_url: str
-    xrp_rpc_url: str
+    xrpl_rpc_url: str
 
     @classmethod
     def from_env(cls) -> Self:
         # TODO:(janezicmatej) add validation and nice error
-        xrp_seed = os.environ["XRP_SEED"]
+        xrpl_seed = os.environ["XRPL_SECRET"]
         flr_private_key = os.environ["FLR_PRIVATE_KEY"]
         flr_rpc_url = os.environ["FLR_RPC_URL"]
-        xrp_rpc_url = os.environ["XRP_RPC_URL"]
+        xrpl_rpc_url = os.environ["XRPL_RPC_URL"]
 
         return cls(
-            xrp_seed=xrp_seed,
+            xrpl_seed=xrpl_seed,
             flr_private_key=flr_private_key,
             flr_rpc_url=flr_rpc_url,
-            xrp_rpc_url=xrp_rpc_url,
+            xrpl_rpc_url=xrpl_rpc_url,
         )
 
 
 @attrs.frozen(kw_only=True)
 class Settings:
     w3: Web3
-    xrp: JsonRpcClient
+    xrpl: JsonRpcClient
     env: ParsedEnv
 
     @classmethod
@@ -47,7 +47,7 @@ class Settings:
 
         return cls(
             w3=w3,
-            xrp=JsonRpcClient(env.xrp_rpc_url),
+            xrpl=JsonRpcClient(env.xrpl_rpc_url),
             env=env,
         )
 

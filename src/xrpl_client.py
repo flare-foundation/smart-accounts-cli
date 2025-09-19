@@ -9,12 +9,12 @@ from src.settings import settings
 
 
 def get_tx(tx_hash: str) -> Response:
-    return settings.xrp.request(Tx(transaction=tx_hash))
+    return settings.xrpl.request(Tx(transaction=tx_hash))
 
 
 def get_wallet(secret: str | None = None) -> Wallet:
     if secret is None:
-        secret = settings.env.xrp_seed
+        secret = settings.env.xrpl_seed
 
     return Wallet.from_seed(secret)
 
@@ -25,7 +25,7 @@ def send_tx(
     memos: str | list[str] | None,
     last_ledger_sequence: int | None = None,
 ) -> Response:
-    client = settings.xrp
+    client = settings.xrpl
 
     if last_ledger_sequence is None:
         last_ledger_sequence = get_latest_validated_ledger_sequence(client) + 20
