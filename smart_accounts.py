@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from typing import Callable, TypeVar
+from typing import Any, Callable, TypeVar
 
 import dotenv
 from eth_typing import ChecksumAddress
@@ -18,9 +18,12 @@ from src.cli.types import (
     BridgeRedeem,
     BridgeWithdraw,
     DebugCheckStatus,
+    DebugMockCreateFund,
     DebugMockCustom,
     DebugSimulation,
     NamespaceSerializer,
+    PersonalAccountFaucet,
+    PersonalAccountPrint,
 )
 from src.registry import registry
 from src.settings import settings
@@ -231,6 +234,66 @@ def mock_custom(args: DebugMockCustom) -> int | None:
     print(f"0x{rec['transactionHash'].hex()}")
 
 
+def mock_create_fund(args: DebugMockCreateFund) -> int | None:
+    w3 = settings.w3
+    pk = settings.env.flr_private_key
+    addr = w3.eth.account.from_key(pk).address
+
+    tx = (
+        w3.eth.contract(
+            address=registry.master_account_controller_dev_mock.address,
+            abi=registry.master_account_controller_dev_mock.abi,
+        )
+        .functions.createFundPersonalAccount(args.seed)
+        .build_transaction(
+            {
+                "from": addr,
+                "nonce": w3.eth.get_transaction_count(addr),
+                "gasPrice": Wei(round(w3.eth.gas_price * 1.5)),
+                "value": args.value,
+            }
+        )
+    )
+
+    rtx = w3.eth.account.sign_transaction(tx, pk)
+    tx_hash = w3.eth.send_raw_transaction(rtx.raw_transaction)
+    rec = w3.eth.wait_for_transaction_receipt(tx_hash)
+    print(f"0x{rec['transactionHash'].hex()}")
+
+
+def personal_account_print(args: PersonalAccountPrint) -> int | None:
+    w3 = settings.w3
+    print(
+        w3.eth.contract(
+            address=registry.master_account_controller.address,
+            abi=registry.master_account_controller.abi,
+        )
+        .functions.getPersonalAccount(args.xrpl_address_parsed)
+        .call()
+    )
+
+
+def personal_account_faucet(args: PersonalAccountPrint) -> int | None:
+    w3 = settings.w3
+
+    account = (
+        w3.eth.contract(
+            address=registry.master_account_controller.address,
+            abi=registry.master_account_controller.abi,
+        )
+        .functions.getPersonalAccount(args.xrpl_address_parsed)
+        .call()
+    )
+    print("account is:", account)
+    print("you can faucet here: https://faucet.flare.network/coston2")
+
+
+def not_implemented(args: Any) -> int | None:
+    print(args)
+    print("error: not implemented")
+    return 2
+
+
 T = TypeVar("T", bound=NamespaceSerializer)
 Resolver = dict[str, tuple[type[T], Callable[[T], int | None]]]
 
@@ -248,16 +311,20 @@ def smart_accounts() -> None:
             "custom": (BridgeCustom, custom),
         },
         "debug": {
+            "mock-create-fund": (DebugMockCreateFund, mock_create_fund),
             "mock-custom": (DebugMockCustom, mock_custom),
             "simulation": (DebugSimulation, simulation),
             "check-status": (DebugCheckStatus, check_status),
+        },
+        "personal-account": {
+            "print": (PersonalAccountPrint, personal_account_print),
+            "faucet": (PersonalAccountFaucet, personal_account_faucet),
         },
     }
 
     r = resolver.get(args.command, {}).get(args.subcommand)
     if r is None:
-        print("error: not implemented")
-        exit(2)
+        exit(not_implemented(args))
 
     serializer, resolver_fn = r
     try:

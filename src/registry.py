@@ -153,7 +153,7 @@ class Registry:
             master_account_controller_dev_mock=Contract(
                 name="MasterAccountControllerDevMock",
                 address=to_checksum_address(
-                    "0x787419810116b29fbB45a7E679Ae6c3dfCA9600b"
+                    "0x38d4C185B4844c062B462722BD632049F7C3C653"
                 ),
                 abi="./artifacts/MasterAccountControllerDevMock.json",
             ),

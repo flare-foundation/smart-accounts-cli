@@ -8,6 +8,8 @@ from eth_typing import ChecksumAddress
 from eth_utils.address import to_checksum_address
 from web3.types import Wei
 
+from src import xrpl_client
+
 
 def value_parser(value: str | Wei) -> Wei:
     try:
@@ -148,6 +150,12 @@ class BridgeCustom(NamespaceSerializer):
 
 
 @attrs.frozen(kw_only=True)
+class DebugMockCreateFund(NamespaceSerializer):
+    seed: str
+    value: Wei = attrs.field(converter=value_parser)
+
+
+@attrs.frozen(kw_only=True)
 class DebugCheckStatus(NamespaceSerializer):
     xrpl_hash: bytes = attrs.field(converter=bytes_parser)
 
@@ -194,4 +202,51 @@ class DebugMockCustom(NamespaceSerializer):
                     for t in zip(self.address, self.value, self.data)
                 ],
             ],
+        )
+
+
+@attrs.frozen(kw_only=True)
+class PersonalAccount:
+    from_env: bool
+
+
+@attrs.frozen(kw_only=True)
+class PersonalAccountPrint(PersonalAccount, NamespaceSerializer):
+    xrpl_address: str | None
+    xrpl_address_parsed: str = attrs.field(init=False)
+
+    def __attrs_post_init__(self):
+        if self.xrpl_address is None and not self.from_env:
+            raise ValueError("--from-env/-e must be passed if xrpl_address is omitted")
+
+        if self.xrpl_address and self.from_env:
+            raise ValueError(
+                "cannot read value from environment and command line at the same time"
+            )
+
+        object.__setattr__(
+            self,
+            "xrpl_address_parsed",
+            xrpl_client.get_wallet().address,
+        )
+
+
+@attrs.frozen(kw_only=True)
+class PersonalAccountFaucet(PersonalAccount, NamespaceSerializer):
+    xrpl_address: str | None
+    xrpl_address_parsed: str = attrs.field(init=False)
+
+    def __attrs_post_init__(self):
+        if self.xrpl_address is None and not self.from_env:
+            raise ValueError("--from-env/-e must be passed if xrpl_address is omitted")
+
+        if self.xrpl_address and self.from_env:
+            raise ValueError(
+                "cannot read value from environment and command line at the same time"
+            )
+
+        object.__setattr__(
+            self,
+            "xrpl_address_parsed",
+            xrpl_client.get_wallet().address,
         )
