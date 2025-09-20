@@ -1,7 +1,7 @@
 import argparse
 import json
 import sys
-from typing import Any, Callable, Self
+from typing import Any, Callable, Self, TypeVar
 
 import attrs
 from eth_typing import ChecksumAddress
@@ -36,7 +36,11 @@ def value_parser(value: str | Wei) -> Wei:
     )
 
 
-def list_map_converter[T, U](mapper: Callable[[T], U]) -> Callable[[list[T]], list[U]]:
+T = TypeVar("T")
+U = TypeVar("U")
+
+
+def list_map_converter(mapper: Callable[[T], U]) -> Callable[[list[T]], list[U]]:
     def wrapped(item_list: list[T]) -> list[U]:
         return [mapper(i) for i in item_list]
 
