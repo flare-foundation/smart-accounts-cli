@@ -46,7 +46,8 @@ def get_parser() -> argparse.ArgumentParser:
         "-a",
         "--agent-address",
         type=str,
-        required=True,
+        required=False,
+        default="0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC",
         help="agent address to mint with",
         metavar="",
     )
