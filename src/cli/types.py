@@ -150,6 +150,11 @@ class BridgeCustom(NamespaceSerializer):
 
 
 @attrs.frozen(kw_only=True)
+class DebugMockPrint(NamespaceSerializer):
+    seed: str
+
+
+@attrs.frozen(kw_only=True)
 class DebugMockCreateFund(NamespaceSerializer):
     seed: str
     value: Wei = attrs.field(converter=value_parser)

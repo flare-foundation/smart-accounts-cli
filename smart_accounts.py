@@ -20,6 +20,7 @@ from src.cli.types import (
     DebugCheckStatus,
     DebugMockCreateFund,
     DebugMockCustom,
+    DebugMockPrint,
     DebugSimulation,
     NamespaceSerializer,
     PersonalAccountFaucet,
@@ -234,6 +235,21 @@ def mock_custom(args: DebugMockCustom) -> int | None:
     print(f"0x{rec['transactionHash'].hex()}")
 
 
+def debug_mock_print(args: DebugMockPrint) -> int | None:
+    w3 = settings.w3
+    pk = settings.env.flr_private_key
+    addr = w3.eth.account.from_key(pk).address
+
+    print(
+        w3.eth.contract(
+            address=registry.concat_this.address,
+            abi=registry.concat_this.abi,
+        )
+        .functions.concatAddr(args.seed, addr)
+        .call()
+    )
+
+
 def mock_create_fund(args: DebugMockCreateFund) -> int | None:
     w3 = settings.w3
     pk = settings.env.flr_private_key
@@ -311,6 +327,7 @@ def smart_accounts() -> None:
             "custom": (BridgeCustom, custom),
         },
         "debug": {
+            "mock-print": (DebugMockPrint, debug_mock_print),
             "mock-create-fund": (DebugMockCreateFund, mock_create_fund),
             "mock-custom": (DebugMockCustom, mock_custom),
             "simulation": (DebugSimulation, simulation),
@@ -332,7 +349,7 @@ def smart_accounts() -> None:
         if exit_code is not None:
             exit(exit_code)
     except ValueError as e:
-        print(f"error: {', '.join(e.args)}", file=sys.stderr)
+        print(f"error: {', '.join(map(str, e.args))}", file=sys.stderr)
         exit(2)
 
 

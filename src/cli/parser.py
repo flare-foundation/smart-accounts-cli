@@ -149,6 +149,21 @@ def get_parser() -> argparse.ArgumentParser:
 
     d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
 
+    d_mock_print = d_subcli.add_parser(
+        "mock-print", help="print personal account on mock contract given the seed"
+    )
+    d_mock_print.add_argument(
+        "-s",
+        "--seed",
+        type=str,
+        required=True,
+        help=(
+            "seed for personal account derivation, same string will always "
+            "result in same personal account"
+        ),
+        metavar="",
+    )
+
     d_mock_create_fund = d_subcli.add_parser(
         "mock-create-fund", help="create and fund personal account on mock contract"
     )

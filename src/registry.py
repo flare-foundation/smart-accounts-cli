@@ -108,6 +108,7 @@ class Registry:
     asset_manager_events: Contract
     master_account_controller: Contract
     master_account_controller_dev_mock: Contract
+    concat_this: Contract
 
     @classmethod
     def default(cls) -> Self:
@@ -156,6 +157,14 @@ class Registry:
                     "0x38d4C185B4844c062B462722BD632049F7C3C653"
                 ),
                 abi="./artifacts/MasterAccountControllerDevMock.json",
+            ),
+            # FIX:(janezicmatej) temporary hack for hackathon duration
+            concat_this=Contract(
+                name="ConcatThis",
+                address=to_checksum_address(
+                    "0x0971321f773Ded77D0aD4A550911a70C1F111cD9"
+                ),
+                abi="./artifacts/ConcatThis.json",
             ),
         )
 
