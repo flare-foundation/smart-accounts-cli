@@ -134,6 +134,14 @@ The `seed` is a string representing an XRPL account.
 ./smart_accounts.py debug mock-custom -s <seed> -a <address> -v <value> -d <calldata>
 ```
 
+### `mock-print`
+
+Prints a mock account associated with the provided seed.
+
+```sh
+./smart_accounts.py debug mock-print -s <seed>
+```
+
 ### `check-status`
 
 Check the status of the XRPL transaction with the `xrpl_hash`.
@@ -159,4 +167,14 @@ This is equivalent to running the following commands:
 ./smart_accounts.py bridge withdraw -a <deposit>
 ./smart_accounts.py bridge claim-withdraw
 ./smart_accounts.py bridge redeem -l <mint>
+```
+
+
+## `encode` command
+
+The `encode` command prints encoded memo fields that can be used in XRPL transactions to instruct the operator to perform certain actions on Flare.
+
+```sh
+./smart_accounts.py encode custom json_example/requestRedemption.json
+./smart_accounts.py encode encode mint -l 1
 ```
