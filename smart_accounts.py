@@ -162,7 +162,7 @@ def simulation(args: DebugSimulation):
     print()
     input("continue to withdraw... press enter")
     withdraw(BridgeWithdraw(amount=args.deposit))
-    claim_withdraw(BridgeClaimWithdraw(reward_epoch=1))
+    claim_withdraw(BridgeClaimWithdraw())
     print("withdrawn from vault, check here:")
     print(
         "https://coston2-explorer.flare.network/address/0x912DbF2173bD48ec0848357a128652D4c0fc33EB?tab=read_contract"
