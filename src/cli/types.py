@@ -74,34 +74,28 @@ class NamespaceSerializer:
 
 
 @attrs.frozen(kw_only=True)
-class Bridge:
-    pass
-
-
-@attrs.frozen(kw_only=True)
-class BridgeDeposit(Bridge, NamespaceSerializer):
+class Deposit:
     amount: int
 
 
 @attrs.frozen(kw_only=True)
-class BridgeWithdraw(Bridge, NamespaceSerializer):
+class Withdraw:
     amount: int
 
 
 @attrs.frozen(kw_only=True)
-class BridgeRedeem(Bridge, NamespaceSerializer):
+class Redeem:
     lots: int
 
 
 @attrs.frozen(kw_only=True)
-class BridgeMint(Bridge, NamespaceSerializer):
+class Mint:
     agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
     lots: int
 
 
 @attrs.frozen(kw_only=True)
-class BridgeClaimWithdraw(Bridge, NamespaceSerializer):
-    # reward_epoch: int
+class ClaimWithdraw:
     pass
 
 
@@ -113,7 +107,7 @@ class CustomInstruction:
 
 
 @attrs.frozen(kw_only=True)
-class BridgeCustom(NamespaceSerializer):
+class Custom:
     address: list[ChecksumAddress] = attrs.field(
         converter=list_map_converter(to_checksum_address)
     )
@@ -147,6 +141,76 @@ class BridgeCustom(NamespaceSerializer):
                 ],
             ],
         )
+
+
+@attrs.frozen(kw_only=True)
+class Encode:
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeDeposit(Encode, Deposit, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeWithdraw(Encode, Withdraw, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeRedeem(Encode, Redeem, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeMint(Encode, Mint, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeClaimWithdraw(Encode, ClaimWithdraw, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeCustom(Encode, Custom, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class Bridge:
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeDeposit(Bridge, Deposit, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeWithdraw(Bridge, Withdraw, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeRedeem(Bridge, Redeem, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeMint(Bridge, Mint, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeClaimWithdraw(Bridge, ClaimWithdraw, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class BridgeCustom(Bridge, Custom, NamespaceSerializer):
+    pass
 
 
 @attrs.frozen(kw_only=True)
@@ -173,41 +237,8 @@ class DebugSimulation(NamespaceSerializer):
 
 
 @attrs.frozen(kw_only=True)
-class DebugMockCustom(NamespaceSerializer):
+class DebugMockCustom(Custom, NamespaceSerializer):
     seed: str
-    address: list[ChecksumAddress] = attrs.field(
-        converter=list_map_converter(to_checksum_address)
-    )
-    value: list[Wei] = attrs.field(converter=list_map_converter(value_parser))
-    data: list[bytes] = attrs.field(converter=list_map_converter(bytes_parser))
-    json: Any = attrs.field(converter=json_read_file_or_stdin)
-    serialized: list[CustomInstruction] = attrs.field(init=False)
-
-    def __attrs_post_init__(self):
-        if len(self.address) != len(self.value) or len(self.value) != len(self.data):
-            raise ValueError(
-                "length of passed addresses, values and data must be equal"
-            )
-
-        if self.address and self.json:
-            raise ValueError(
-                "can't parse json file and flag parameters at the same time"
-            )
-
-        if not self.address and not self.json:
-            raise ValueError("must pass json file or flag paramteres")
-
-        object.__setattr__(
-            self,
-            "serialized",
-            [
-                *[CustomInstruction(**obj) for obj in self.json],
-                *[
-                    CustomInstruction(*t)
-                    for t in zip(self.address, self.value, self.data)
-                ],
-            ],
-        )
 
 
 @attrs.frozen(kw_only=True)
