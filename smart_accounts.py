@@ -171,7 +171,7 @@ def bridge_mint(args: BridgeMint) -> None:
         bridged["blockNumber"],
     )
     print("successfully minted in tx", "0x" + bridged_tx_hash)
-    print(f"https://coston2-explorer.flare.network/tx/{bridged_tx_hash}?tab=logs")
+    print(f"https://coston2-explorer.flare.network/tx/0x{bridged_tx_hash}?tab=logs")
     print()
 
 
