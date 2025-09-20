@@ -1,0 +1,20 @@
+// This is an example file with comments - copy and modify it before using it in the main script
+[
+    {
+        "address": "0xc1Ca88b937d0b528842F95d5731ffB586f4fbDFA", // AssetManager contract on Coston2
+        // Either manually encode this or use a tool for encoding
+        // Combine everything below here into "data"        
+        "data_method_selector": "0x99646d1c", // redeem(uint256,string,address)
+        "data_lots": "0000000000000000000000000000000000000000000000000000000000000002", // Hex encoded number of lots to redeem - 2 lots
+        "data_string_offset": "0000000000000000000000000000000000000000000000000000000000000060", // abi encoded offset for string with the length that works for XRPL address - just keep it that way
+        "data_executor_address": "0000000000000000000000000000000000000000000000000000000000000000", // executor address - use 0x0..0 unless you run your own
+        "data_to_address": "000000000000000000000000219f68120f198fdf2367461324277dc291a038cd", // keep the leading zeros, we omit the 0x as you need to concatenate everything 
+        "data_amount": "0000000000000000000000000000000000000000000000000000000001c9c380", // amount in hex to send -- 30,000,000 in hex (smallest unit), omit the 0x
+        "data_string_length": "0000000000000000000000000000000000000000000000000000000000000022" , // length of the string - 34 bytes for r3SBJi8jBNuUH3RJZgKB4ZFzmfsvmeicEH
+        "data_address_string": "723353424a69386a424e75554833524a5a674b42345a467a6d6673766d6569634548000000000000000000000000000000000000000000000000000000000000", // hex encoded string - r3SBJi8jBNuUH3RJZgKB4ZFzmfsvmeicEH - make sure to zero pad it to 128 chars (64 bytes)
+        "data": "Concatenate everything in data_* above here", // final data field to be used in the transaction
+        // "example_data": "0x99646d1c0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000022723353424a69386a424e75554833524a5a674b42345a467a6d6673766d6569634548000000000000000000000000000000000000000000000000000000000000",
+
+        "value": "0" // No value is sent - just ERC20 transfer
+    }
+]

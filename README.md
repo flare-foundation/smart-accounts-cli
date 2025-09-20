@@ -85,6 +85,8 @@ The script first reserves collateral with the agent with the `address`, by sendi
 It then sends a `lots` amount of XRP to the agent's underlying address.
 An executor, determined by the `MasterAccountController`, will complete the minting process, and `lots` of FXRP will be minted to the user's smart account.
 
+If you are unsure about the agent address you should use `0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC` on coston2.
+
 ```sh
 ./smart_accounts.py bridge mint -a <address> -l <lots>
 ```
