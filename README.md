@@ -40,10 +40,25 @@ You can then run the script with the command:
 ```
 
 ## help message
+
 ```sh
 ./smart_accounts --help
 ```
 
+## `encode` command
+
+The `encode` command prints encoded memo fields that can be used in XRPL transactions to instruct the operator to perform certain actions on Flare.
+It allows for the following positional arguments: `deposit`, `withdraw`, `redeem`, `mint`, `claim-withdraw`, and `custom`.
+The command produces a payment reference corresponding to each instruction type.
+
+For example, the following command
+
+```sh
+./smart_accounts.py encode deposit -a 1
+```
+
+would result in the payment reference `0100000000000000000000000000000000000000000000000000000000000001`.
+The first `01` here signals that it is a `deposit` instruction, while the remaining bytes give the amount - in this case `1`.
 
 ## `bridge` command
 
@@ -85,11 +100,11 @@ The script first reserves collateral with the agent with the `address`, by sendi
 It then sends a `lots` amount of XRP to the agent's underlying address.
 An executor, determined by the `MasterAccountController`, will complete the minting process, and `lots` of FXRP will be minted to the user's smart account.
 
-If you are unsure about the agent address you should use `0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC` on coston2.
-
 ```sh
 ./smart_accounts.py bridge mint -a <address> -l <lots>
 ```
+
+On Coston2, you can use `0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC` as the agent address.
 
 ### `claim-withdraw`
 
@@ -108,7 +123,7 @@ Make a transaction to the `address`, paying the `value`, and attaching the `call
 The `calldata` is the encoding of a function and its argument values, on the smart contract at the `address.
 
 ```sh
-./smart_accounts.py bridge deposit -a <address> -v <value> -d <calldata>
+./smart_accounts.py bridge custom -a <address> -v <value> -d <calldata>
 ```
 
 Before making a transaction on XRPL with the necessary instructions, this command performs an additional step.
@@ -117,10 +132,71 @@ Then, it calls the `registerCustomInstruction` function of the `MasterAccountCon
 
 Thus, it both registers a custom instruction with the `MasterAccountController` contract and retrieves the required `callHash`, which it can then send to the operator's XRPL address as instructions.
 
+Instead of the `address`, `value` and `calldata` parameters, a JSON file with an array of custom instructions can be used.
+The command then reads as follows:
+
+```sh
+./smart_accounts.py bridge custom <json_file>
+```
+
+Two provided json files in `json_examples/` directory demonstrate the expected format.
+
+```sh
+./smart_accounts.py bridge custom json_example/sendFXRPCoston.json
+```
+
+## `personal-account` command
+
+The `personal-account` command gives insight into personal accounts of XRPL addresses.
+
+It allows for the following positional arguments: `print` and `faucet`.
+
+### `print`
+
+Prints the Flare address of the personal account belonging to the `xrpl_address`.
+
+```sh
+./smart_accounts.py personal-account print <xrpl_address>
+```
+
+### `faucet`
+
+{/_ TODO:(Nik) fix the bellow text once it can faucet _/}
+Prints the Flare address of the personal account belonging to the `xrpl_address` and the faucet instructions.
+In the future, it will faucet funds to the address instead.
+
+```sh
+./smart_accounts.py personal-account faucet <xrpl_address>
+```
+
 ## `debug` command
 
 The `debug` command offers some utility options for running the CLI.
 It allows three positional arguments: `mock-custom`, `check-status`, and `simulation`.
+
+### `mock-print`
+
+Prints the Flare address of the personal account created by the mock `MasterAccountController` contract from the `seed` string.
+The personal account is created by the `createFundPersonalAccount` developer function.
+It represents the XRPL "address" of the concatenated string of `msg.sender` and `seed`.
+This allows for easier creation of multiple personal accounts with invocative names, for easier development.
+
+```sh
+./smart_accounts.py debug mock-print -s <seed>
+```
+
+### `mock-create-fund`
+
+Creates a personal account for the `seed` address string through the `MasterAccountController` contract, and sends to it the `value` amount.
+The personal account is created by the `createFundPersonalAccount` developer function.
+It represents the XRPL "address" of the concatenated string of `msg.sender` and `seed`.
+This allows for easier creation of multiple personal accounts with invocative names, for easier development.
+
+```sh
+./smart_accounts.py debug mock-create-fund -s <seed> -v <value>
+```
+
+The `value` can be expressed as as `flr` (ex. `42flr`).
 
 ### `mock-custom`
 
@@ -134,12 +210,10 @@ The `seed` is a string representing an XRPL account.
 ./smart_accounts.py debug mock-custom -s <seed> -a <address> -v <value> -d <calldata>
 ```
 
-### `mock-print`
-
-Prints a mock account associated with the provided seed.
+As with the `custom` command, a JSON file containing an array of custom instructions can be used.
 
 ```sh
-./smart_accounts.py debug mock-print -s <seed>
+./smart_accounts.py debug mock-custom -s <seed> <json_file>
 ```
 
 ### `check-status`
@@ -167,14 +241,4 @@ This is equivalent to running the following commands:
 ./smart_accounts.py bridge withdraw -a <deposit>
 ./smart_accounts.py bridge claim-withdraw
 ./smart_accounts.py bridge redeem -l <mint>
-```
-
-
-## `encode` command
-
-The `encode` command prints encoded memo fields that can be used in XRPL transactions to instruct the operator to perform certain actions on Flare.
-
-```sh
-./smart_accounts.py encode custom json_example/requestRedemption.json
-./smart_accounts.py encode encode mint -l 1
 ```
