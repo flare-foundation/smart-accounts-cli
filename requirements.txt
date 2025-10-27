@@ -1,4 +1,4 @@
-attrs
-python-dotenv
-web3
-xrpl-py
+attrs==25.3.0
+python-dotenv==1.1.1
+web3==7.13.0
+xrpl-py==4.3.0
