@@ -143,7 +143,7 @@ def bridge_mint(args: BridgeMint) -> None:
     collateral_reservation_id = _args["collateralReservationId"]
 
     input(
-        "successful collateral resevation, continue to 2nd part of mint... press enter"
+        "successful collateral reservation, continue to 2nd part of mint... press enter"
     )
     resp = xrpl_client.send_tx(amount, destination, memo, last_ledger_sequence)
     print("sent underlying assets in", resp.result["hash"])
