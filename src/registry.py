@@ -1,13 +1,15 @@
 import json
-from typing import Self
+from collections.abc import Callable
+from typing import Self, cast
 
 import attrs
 from attrs import field, frozen
-from django.conf import settings
 from eth_typing import ABI, ABIEvent, ABIFunction, ChecksumAddress
 from eth_utils.address import to_checksum_address
 from web3 import Web3
 from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
+
+from src.settings import settings
 
 
 def abi_from_file_location(file_location: str):
@@ -134,19 +136,10 @@ class Registry:
     # ftso
     ftso_v2: Contract
 
-    # fdc
-    fdc_hub: Contract
-    fdc_verification: Contract
-    fdc_request_fee_conf: Contract
-
-    # relay
-    # TODO:(@janezicmatej) rename to relay
-    fdc_relay: Contract
-
     @classmethod
     def default(cls) -> Self:
         client = Web3(
-            provider=Web3.HTTPProvider(settings.FLR_RPC_URL),
+            provider=Web3.HTTPProvider(settings.env.flr_rpc_url),
             middleware=(ExtraDataToPOAMiddleware,),
         )
 
@@ -203,29 +196,19 @@ class Registry:
                 address=get_address_by_name("FtsoV2"),
                 abi="./artifacts/FtsoV2Interface.json",
             ),
-            # fdc
-            fdc_hub=Contract(
-                name="FdcHub",
-                address=get_address_by_name("FdcHub"),
-                abi="./artifacts/FdcHub.json",
-            ),
-            fdc_verification=Contract(
-                name="FdcVerification",
-                address=get_address_by_name("FdcVerification"),
-                abi="./artifacts/FdcVerification.json",
-            ),
-            fdc_request_fee_conf=Contract(
-                name="FdcRequestFeeConfigurations",
-                address=get_address_by_name("FdcRequestFeeConfigurations"),
-                abi="./artifacts/FdcRequestFeeConfigurations.json",
-            ),
-            # relay
-            fdc_relay=Contract(
-                name="Relay",
-                address=get_address_by_name("Relay"),
-                abi="./artifacts/FdcRelay.json",
-            ),
         )
 
 
-registry: Registry = Registry.default()
+class RegistryWrapper:
+    def __init__(self, factory: Callable[[], Registry]) -> None:
+        self.factory = factory
+        self.wrapped: Registry | None = None
+
+    def __getattr__(self, *args, **kwargs):
+        if self.wrapped is None:
+            self.wrapped = self.factory()
+
+        return getattr(self.wrapped, *args, **kwargs)
+
+
+registry = cast(Registry, RegistryWrapper(Registry.default))
