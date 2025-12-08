@@ -1,388 +1,139 @@
 import argparse
+import datetime
+
+import attrs
+
+from src.cli.types import (
+    EncodeFirelightClaimWithdraw,
+    EncodeFirelightCrDeposit,
+    EncodeFirelightDeposit,
+    EncodeFirelightRedeem,
+    EncodeFxrpCr,
+    EncodeFxrpRedeem,
+    EncodeFxrpTransfer,
+    EncodeUpshiftClaim,
+    EncodeUpshiftCrDeposit,
+    EncodeUpshiftDeposit,
+    EncodeUpshiftRequestRedeem,
+    NamespaceSerializer,
+)
+
+
+def _apply_arguments(argp: argparse.ArgumentParser, acls: type[NamespaceSerializer]):
+    s = set()
+
+    a: attrs.Attribute
+    for a in attrs.fields(acls):
+        if not a.init:
+            continue
+
+        short = None
+        for c in a.name.replace("_", ""):
+            if c not in s:
+                short = c
+                s.add(c)
+                break
+
+        args = []
+
+        if short is not None:
+            args.append(f"-{short}")
+
+        args.append(f"--{a.name.replace('_', '-')}")
+
+        type = a.type
+        if type is None:
+            return
+
+        if type in [datetime.date]:
+            type = str
+
+        argp.add_argument(
+            *args,
+            type=type,
+            required=True,
+            help=f"{a.name.replace('_', ' ')} argument",
+            metavar="",
+        )
 
 
 def get_parser() -> argparse.ArgumentParser:
     cli = argparse.ArgumentParser(prog="smart_accounts")
     cli.add_argument("--version", "-V", action="version", version="%(prog)s v0.1.0")
 
-    subcli = cli.add_subparsers(title="command", required=True, dest="command")
-
-    e_cli = subcli.add_parser(
-        "encode", help="flare smart accounts system reference encoding"
+    subcli = cli.add_subparsers(
+        title="command", required=True, dest="command", metavar=""
     )
 
-    e_subcli = e_cli.add_subparsers(required=True, dest="subcommand")
-    e_deposit = e_subcli.add_parser("deposit", help="deposit fassets into vault")
-    e_deposit.add_argument(
-        "-a",
-        "--amount",
-        type=int,
-        required=True,
-        help="number of tokens to deposit to vault",
-        metavar="",
+    # encode cli
+    e_cli = subcli.add_parser("encode", help="encode instructions")
+
+    e_subcli = e_cli.add_subparsers(required=True, dest="subcommand", metavar="")
+
+    e_fxrpcr = e_subcli.add_parser("fxrp-cr", help="mint fassets")
+    _apply_arguments(e_fxrpcr, EncodeFxrpCr)
+
+    e_fxrptransfer = e_subcli.add_parser("fxrp-transfer", help="transfer fassets")
+    _apply_arguments(e_fxrptransfer, EncodeFxrpTransfer)
+
+    e_fxrpredeem = e_subcli.add_parser("fxrp-redeem", help="redeem fassets")
+    _apply_arguments(e_fxrpredeem, EncodeFxrpRedeem)
+
+    e_firelightcrdeposit = e_subcli.add_parser(
+        "firelight-cr-deposit", help="mint and deposit into vault"
+    )
+    _apply_arguments(e_firelightcrdeposit, EncodeFirelightCrDeposit)
+
+    e_firelightdeposit = e_subcli.add_parser(
+        "firelight-deposit", help="deposit fassets into vault"
+    )
+    _apply_arguments(e_firelightdeposit, EncodeFirelightDeposit)
+
+    e_firelightredeem = e_subcli.add_parser(
+        "firelight-redeem", help="request withdrawal from vault"
+    )
+    _apply_arguments(e_firelightredeem, EncodeFirelightRedeem)
+
+    e_firelightclaimwithdraw = e_subcli.add_parser(
+        "firelight-claim-withdraw", help="claim withdrawal from vault"
+    )
+    _apply_arguments(e_firelightclaimwithdraw, EncodeFirelightClaimWithdraw)
+
+    e_upshiftcrdeposit = e_subcli.add_parser(
+        "upshift-cr-deposit", help="mint and deposit into vault"
+    )
+    _apply_arguments(e_upshiftcrdeposit, EncodeUpshiftCrDeposit)
+
+    e_upshiftdeposit = e_subcli.add_parser(
+        "upshift-deposit", help="deposit fassets into vault"
+    )
+    _apply_arguments(e_upshiftdeposit, EncodeUpshiftDeposit)
+
+    e_upshiftrequestredeem = e_subcli.add_parser(
+        "upshift-request-redeem", help="request withdrawal from vault"
+    )
+    _apply_arguments(e_upshiftrequestredeem, EncodeUpshiftRequestRedeem)
+
+    e_upshiftclaim = e_subcli.add_parser(
+        "upshift-claim", help="claim withdrawal from vault"
+    )
+    _apply_arguments(e_upshiftclaim, EncodeUpshiftClaim)
+
+    d_cli = subcli.add_parser("decode", help="decode instructions")
+    d_cli.add_argument(
+        "instruction", type=str, help="hex encoded instruction to decode or - for stdin"
     )
 
-    e_withdraw = e_subcli.add_parser("withdraw", help="withdraw fassets from vault")
-    e_withdraw.add_argument(
-        "-a",
-        "--amount",
-        type=int,
-        required=True,
-        help="number of tokens to withdraw from vault",
-        metavar="",
-    )
+    # bridge
+    b_cli = subcli.add_parser("bridge", help="bridge related commands")
 
-    e_redeem = e_subcli.add_parser("redeem", help="redeem fassets")
-    e_redeem.add_argument(
-        "-l",
-        "--lots",
-        type=int,
-        required=True,
-        help="number of lots to redeem",
-        metavar="",
-    )
+    b_subcli = b_cli.add_subparsers(required=True, dest="subcommand", metavar="")
 
-    e_mint = e_subcli.add_parser("mint", help="reserve collateral and send underlying")
-    e_mint.add_argument(
-        "-a",
-        "--agent-address",
-        type=str,
-        required=False,
-        default="0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC",
-        help="agent address to mint with",
-        metavar="",
-    )
-    e_mint.add_argument(
-        "-l",
-        "--lots",
-        type=int,
-        required=True,
-        help="number of lots to mint",
-        metavar="",
-    )
-
-    e_subcli.add_parser("claim-withdraw", help="claim withdrawal of fassets from vault")
-    # e_claim_withdraw.add_argument(
-    #     "-r",
-    #     "--reward-epoch",
-    #     type=int,
-    #     required=True,
-    #     help=(
-    #         "which reward epoch to claim withdrawal for"
-    #         " - mock implementation will accept any value"
-    #     ),
-    #     metavar="",
-    # )
-
-    e_custom_instruction = e_subcli.add_parser("custom", help="send custom instruction")
-    e_custom_instruction.add_argument(
-        "-a",
-        "--address",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction target address",
-        metavar="",
-    )
-    e_custom_instruction.add_argument(
-        "-v",
-        "--value",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction value; 'flr' can be appended for flare units",
-        metavar="",
-    )
-    e_custom_instruction.add_argument(
-        "-d",
-        "--data",
-        action="append",
-        type=str,
-        required=False,
-        help="flare transaction calldata hex encoded",
-        default=[],
-        metavar="",
-    )
-    e_custom_instruction.add_argument(
-        "json",
-        nargs="?",
-        type=str,
-        help="json file to read; if '-' is passed stdin is read instead",
-    )
-
-    b_cli = subcli.add_parser("bridge", help="flare smart accounts system interface")
-
-    b_subcli = b_cli.add_subparsers(required=True, dest="subcommand")
-
-    b_deposit = b_subcli.add_parser("deposit", help="deposit fassets into vault")
+    b_deposit = b_subcli.add_parser("instruction", help="send bridge request")
     b_deposit.add_argument(
-        "-a",
-        "--amount",
-        type=int,
-        required=True,
-        help="number of tokens to deposit to vault",
-        metavar="",
-    )
-
-    b_withdraw = b_subcli.add_parser("withdraw", help="withdraw fassets from vault")
-    b_withdraw.add_argument(
-        "-a",
-        "--amount",
-        type=int,
-        required=True,
-        help="number of tokens to withdraw from vault",
-        metavar="",
-    )
-
-    b_redeem = b_subcli.add_parser("redeem", help="redeem fassets")
-    b_redeem.add_argument(
-        "-l",
-        "--lots",
-        type=int,
-        required=True,
-        help="number of lots to redeem",
-        metavar="",
-    )
-
-    b_mint = b_subcli.add_parser("mint", help="reserve collateral and send underlying")
-    b_mint.add_argument(
-        "-a",
-        "--agent-address",
+        "instruction",
         type=str,
-        required=False,
-        default="0x55c815260cBE6c45Fe5bFe5FF32E3C7D746f14dC",
-        help="agent address to mint with",
-        metavar="",
-    )
-    b_mint.add_argument(
-        "-l",
-        "--lots",
-        type=int,
-        required=True,
-        help="number of lots to mint",
-        metavar="",
-    )
-
-    b_subcli.add_parser("claim-withdraw", help="claim withdrawal of fassets from vault")
-    # b_claim_withdraw.add_argument(
-    #     "-r",
-    #     "--reward-epoch",
-    #     type=int,
-    #     required=True,
-    #     help=(
-    #         "which reward epoch to claim withdrawal for"
-    #         " - mock implementation will accept any value"
-    #     ),
-    #     metavar="",
-    # )
-
-    b_custom_instruction = b_subcli.add_parser("custom", help="send custom instruction")
-    b_custom_instruction.add_argument(
-        "-a",
-        "--address",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction target address",
-        metavar="",
-    )
-    b_custom_instruction.add_argument(
-        "-v",
-        "--value",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction value; 'flr' can be appended for flare units",
-        metavar="",
-    )
-    b_custom_instruction.add_argument(
-        "-d",
-        "--data",
-        action="append",
-        type=str,
-        required=False,
-        help="flare transaction calldata hex encoded",
-        default=[],
-        metavar="",
-    )
-    b_custom_instruction.add_argument(
-        "json",
-        nargs="?",
-        type=str,
-        help="json file to read; if '-' is passed stdin is read instead",
-    )
-
-    pa_cli = subcli.add_parser(
-        "personal-account",
-        help="commands for interacting with personal account given an xrpl account",
-    )
-    pa_cli.add_argument(
-        "-e",
-        "--from-env",
-        action="store_true",
-        required=False,
-        default=False,
-        help="derive address from XRPL_SECRET env variable",
-    )
-
-    pa_subcli = pa_cli.add_subparsers(required=True, dest="subcommand")
-
-    pa_print = pa_subcli.add_parser(
-        "print", help="print personal account address on flare of xrpl address"
-    )
-    pa_print.add_argument(
-        "xrpl_address",
-        type=str,
-        nargs="?",
-        help="xrpl address to be checked",
-    )
-
-    pa_faucet = pa_subcli.add_parser(
-        "faucet", help="faucet personal account address on flare of xrpl address"
-    )
-    pa_faucet.add_argument(
-        "xrpl_address",
-        type=str,
-        nargs="?",
-        help="xrpl address to be checked",
-    )
-
-    d_cli = subcli.add_parser("debug", help="utility functions for bridge info")
-
-    d_subcli = d_cli.add_subparsers(required=True, dest="subcommand")
-
-    d_mock_print = d_subcli.add_parser(
-        "mock-print", help="print personal account on mock contract given the seed"
-    )
-    d_mock_print.add_argument(
-        "-s",
-        "--seed",
-        type=str,
-        required=True,
-        help=(
-            "seed for personal account derivation, same string will always "
-            "result in same personal account"
-        ),
-        metavar="",
-    )
-
-    d_mock_create_fund = d_subcli.add_parser(
-        "mock-create-fund", help="create and fund personal account on mock contract"
-    )
-    d_mock_create_fund.add_argument(
-        "-s",
-        "--seed",
-        type=str,
-        required=True,
-        help=(
-            "seed for personal account derivation, same string will always "
-            "result in same personal account"
-        ),
-        metavar="",
-    )
-    d_mock_create_fund.add_argument(
-        "-v",
-        "--value",
-        type=str,
-        required=False,
-        default=0,
-        help=(
-            "amount to fund (will be moved from address of provided private key); "
-            "'flr' can be appended for flare units"
-        ),
-        metavar="",
-    )
-
-    d_mock_custom = d_subcli.add_parser(
-        "mock-custom", help="simulate custom instruction with the mock contract"
-    )
-    d_mock_custom.add_argument(
-        "-s",
-        "--seed",
-        type=str,
-        required=True,
-        help=(
-            "seed for personal account derivation, same string will always "
-            "result in same personal account"
-        ),
-        metavar="",
-    )
-    d_mock_custom.add_argument(
-        "-a",
-        "--address",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction target address",
-        metavar="",
-    )
-    d_mock_custom.add_argument(
-        "-v",
-        "--value",
-        action="append",
-        type=str,
-        required=False,
-        default=[],
-        help="flare transaction value; 'flr' can be appended for flare units",
-        metavar="",
-    )
-    d_mock_custom.add_argument(
-        "-d",
-        "--data",
-        action="append",
-        type=str,
-        required=False,
-        help="flare transaction calldata hex encoded",
-        default=[],
-        metavar="",
-    )
-    d_mock_custom.add_argument(
-        "json",
-        nargs="?",
-        type=str,
-        help="json file to read; if '-' is passed stdin is read instead",
-    )
-
-    d_check_status = d_subcli.add_parser(
-        "check-status", help="check bridge status of xrpl transaction"
-    )
-    d_check_status.add_argument(
-        "xrpl_hash",
-        type=str,
-        help="xrpl transaction hash to be checked",
-    )
-
-    d_simulation = d_subcli.add_parser(
-        "simulation", help="run full simulation (mint, deposit, withdraw, redeem)"
-    )
-    d_simulation.add_argument(
-        "-a",
-        "--agent-address",
-        type=str,
-        required=True,
-        help="agent address to mint with",
-        metavar="",
-    )
-    d_simulation.add_argument(
-        "-m",
-        "--mint",
-        type=int,
-        required=True,
-        help="number of lots to mint and redeem",
-        metavar="",
-    )
-    d_simulation.add_argument(
-        "-d",
-        "--deposit",
-        type=int,
-        required=True,
-        help="number of tokens to deposit/withdraw to/from vault",
-        metavar="",
+        help="hex encoded bridge instruction to send or - for stdin",
     )
 
     return cli
