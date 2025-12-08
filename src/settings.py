@@ -1,5 +1,6 @@
 import os
-from typing import Callable, Self, cast
+from collections.abc import Callable
+from typing import Self, cast
 
 import attrs
 from web3 import Web3
