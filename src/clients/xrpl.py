@@ -23,7 +23,7 @@ class Client:
         response = self.client.request(AccountInfo(account=xrpl_address))
         return int(response.result["account_data"]["Balance"])
 
-    def _get_tx(self, tx_hash: str) -> Response:
+    def get_tx(self, tx_hash: str) -> Response:
         return self.client.request(Tx(transaction=tx_hash))
 
     def _get_wallet(self) -> Wallet:
@@ -62,4 +62,4 @@ class Client:
         )
 
         payment_response = submit_and_wait(sign(payment_tx, wallet), client)
-        return self._get_tx(payment_response.result["hash"])
+        return self.get_tx(payment_response.result["hash"])

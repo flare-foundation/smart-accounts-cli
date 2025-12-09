@@ -1,9 +1,8 @@
 import json
-from typing import Any, Self
+from typing import Self
 
 import attrs
 from eth_typing import ChecksumAddress
-from web3.types import TxParams
 
 from src.clients import flare
 from src.registry import registry
@@ -49,7 +48,6 @@ class Client:
     def get_vaults(self) -> dict[int, VaultInfo]:
         vaults = self.contract.functions.getVaults().call()
 
-        # TODO:(@janezicmatej) ask if vaults on some id could change
         for i, address, vault_type in zip(vaults[0], vaults[1], vaults[2], strict=True):
             if i in self._vault_cache:
                 continue
@@ -102,27 +100,13 @@ class Client:
     def get_executor_fee(self) -> int:
         return self.contract.functions.getExecutorInfo().call()[1]
 
-    def reserve_collateral(
-        self, xrpl_address: str, payment_reference: bytes, transaction_id: bytes
-    ) -> TxParams:
-        # TODO:(@janezicmatej) figure out why this failed and then how to figure
-        # out the gas estimation (i think it's because this client doesn't have
-        # signer middleware injected)
-        return self.contract.functions.reserveCollateral(
-            xrpl_address, payment_reference, transaction_id
-        ).build_transaction({"gas": 2_000_000})
-
-    def execute_instruction(self, proof: dict[str, Any], xrpl_address: str) -> TxParams:
-        return self.contract.functions.executeInstruction(
-            proof, xrpl_address
-        ).build_transaction({"gas": 2_000_000})
-
-    def execute_deposit_after_minting(
-        self, collateral_reservation_id: int, proof: dict[str, Any], xrpl_address: str
-    ) -> TxParams:
-        return self.contract.functions.executeDepositAfterMinting(
-            collateral_reservation_id, proof, xrpl_address
-        ).build_transaction()
-
-    def is_transaction_id_used(self, transaction_id: bytes) -> bool:
-        return self.contract.functions.isTransactionIdUsed(transaction_id).call()
+    def get_transaction_id_for_collateral_reservation(
+        self, collateral_reservation_id: int
+    ) -> str:
+        return (
+            self.contract.functions.getTransactionIdForCollateralReservation(
+                collateral_reservation_id
+            )
+            .call()
+            .hex()
+        )

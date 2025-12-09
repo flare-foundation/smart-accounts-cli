@@ -51,3 +51,34 @@ class Client:
         self.client.eth.wait_for_transaction_receipt(tx_hash)
 
         return tx_hash
+
+    def find_block_near_timestamp(self, timestamp: int, tolerance: int = 10) -> int:
+        b = self.client.eth.get_block("latest")
+        assert "timestamp" in b and "number" in b
+        assert timestamp < b["timestamp"]
+
+        p_sample = self.client.eth.get_block(b["number"] - 1_000_000)
+        assert "timestamp" in p_sample and "number" in p_sample
+
+        production_per_s = (b["number"] - p_sample["number"]) / (
+            b["timestamp"] - p_sample["timestamp"]
+        )
+
+        a = self.client.eth.get_block(
+            b["number"] - int((b["timestamp"] - timestamp) * production_per_s) * 2
+        )
+        assert "timestamp" in a and "number" in a
+        assert timestamp > a["timestamp"]
+
+        while True:
+            c_block = (b["number"] + a["number"]) // 2
+            c = self.client.eth.get_block(c_block)
+            assert "timestamp" in c and "number" in c
+
+            if abs(c["timestamp"] - timestamp) < tolerance:
+                return c["number"]
+
+            if c["timestamp"] > timestamp:
+                (a, b) = (a, c)
+            else:
+                (a, b) = (c, b)
