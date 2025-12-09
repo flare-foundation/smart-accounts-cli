@@ -48,7 +48,7 @@ def list_map_converter(mapper: Callable[[T], U]) -> Callable[[list[T]], list[U]]
 
 def str_or_stdin(s: str) -> str:
     if s == "-":
-        return sys.stdin.read()
+        return sys.stdin.read().rstrip()
     return s
 
 
@@ -176,3 +176,9 @@ def hexstr_validator(instance: Any, attribute: attrs.Attribute, value: str) -> N
 @attrs.frozen(kw_only=True)
 class BridgeInstruction(Bridge, NamespaceSerializer):
     instruction: str = attrs.field(validator=hexstr_validator, converter=str_or_stdin)
+
+
+@attrs.frozen(kw_only=True)
+class BridgeMintTx(Bridge, NamespaceSerializer):
+    wait: bool
+    xrpl_hash: str = attrs.field(validator=hexstr_validator, converter=str_or_stdin)

@@ -136,4 +136,19 @@ def get_parser() -> argparse.ArgumentParser:
         help="hex encoded bridge instruction to send or - for stdin",
     )
 
+    b_deposit = b_subcli.add_parser(
+        "mint-tx", help="send mint transaction for bridge transaction"
+    )
+    b_deposit.add_argument(
+        "-w",
+        "--wait",
+        action="store_true",
+        help="wait for operator to perform collateral reservation",
+    )
+    b_deposit.add_argument(
+        "xrpl_hash",
+        type=str,
+        help="hex encoded bridge transaction to mint for or - for stdin",
+    )
+
     return cli

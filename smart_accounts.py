@@ -54,6 +54,7 @@ def smart_accounts() -> None:
         "decode": (ct.DecodeInstruction, handlers.decode.decode_instruction),
         "bridge": {
             "instruction": (ct.BridgeInstruction, handlers.bridge.bridge_instruction),
+            "mint-tx": (ct.BridgeMintTx, handlers.bridge.bridge_mint_tx),
         },
     }
 

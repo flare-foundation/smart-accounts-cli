@@ -82,6 +82,19 @@ This also supports passing values via stdin by passing `-` so command
 composition like this is possible
 
 ```bash
-./smart_accounts.py encode fxrp-cr -w 136 -v 1 -a 1 | ./smart_accounts.py bridge instruction -
+./smart_accounts.py encode fxrp-cr -w 136 -v 1 -a 1 \
+  | ./smart_accounts.py bridge instruction -
 # sent bridge request: 102B3C3B8064EBEEB9C7816CF75A920ED1B22FEF8B5B6244BD3CA2AE4DAA7C78
+```
+
+After you send a bridge request that requires minting (currently `fxrp-cr`,
+`firelight-cr-deposit` and `upshift-cr-deposit`) you can do it like this:
+
+```bash
+./smart_accounts.py encode fxrp-cr -w 69 -v 1 -a 1 \
+  | ./smart_accounts.py bridge instruction - \
+  | ./smart_accounts.py bridge mint-tx -w -
+# sent bridge instruction transaction: FDCF127501B5A4DE74880554A6702585592F1C446380EE2DF76BB964E3CF717A
+# sent mint tx: 4FA89BD1CDAC1BB7B632845555AE143A19337FABD57101F5ADF9D691B387C1C4
+# 4FA89BD1CDAC1BB7B632845555AE143A19337FABD57101F5ADF9D691B387C1C4
 ```
