@@ -168,7 +168,7 @@ class FxrpTransfer(InstructionAbc):
     )
 
     def encode(self) -> bytes:
-        if len(self.recipient_address) != 20:
+        if len(self.recipient_address) != 42:
             raise EncodeError("recipient_address must be 20 bytes")
 
         b = bytearray(32)
