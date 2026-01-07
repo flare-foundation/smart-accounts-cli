@@ -1,14 +1,13 @@
 import argparse
 import json
 import sys
-from typing import Any, Callable, Self, TypeVar
+from collections.abc import Callable
+from typing import Any, Self, TypeVar
 
 import attrs
-from eth_typing import ChecksumAddress
-from eth_utils.address import to_checksum_address
 from web3.types import Wei
 
-from src import xrpl_client
+from src import encoder
 
 
 def value_parser(value: str | Wei) -> Wei:
@@ -47,6 +46,12 @@ def list_map_converter(mapper: Callable[[T], U]) -> Callable[[list[T]], list[U]]
     return wrapped
 
 
+def str_or_stdin(s: str) -> str:
+    if s == "-":
+        return sys.stdin.read().rstrip()
+    return s
+
+
 def json_read_file_or_stdin(path: str | None) -> Any:
     if path is None:
         return []
@@ -78,108 +83,81 @@ class NamespaceSerializer:
 
 
 @attrs.frozen(kw_only=True)
-class Deposit:
-    amount: int
-
-
-@attrs.frozen(kw_only=True)
-class Withdraw:
-    amount: int
-
-
-@attrs.frozen(kw_only=True)
-class Redeem:
-    lots: int
-
-
-@attrs.frozen(kw_only=True)
-class Mint:
-    agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
-    lots: int
-
-
-@attrs.frozen(kw_only=True)
-class ClaimWithdraw:
-    pass
-
-
-@attrs.frozen
-class CustomInstruction:
-    address: ChecksumAddress = attrs.field(converter=to_checksum_address)
-    value: Wei = attrs.field(converter=value_parser)
-    data: bytes = attrs.field(converter=bytes_parser)
-
-
-@attrs.frozen(kw_only=True)
-class Custom:
-    address: list[ChecksumAddress] = attrs.field(
-        converter=list_map_converter(to_checksum_address)
-    )
-    value: list[Wei] = attrs.field(converter=list_map_converter(value_parser))
-    data: list[bytes] = attrs.field(converter=list_map_converter(bytes_parser))
-    json: Any = attrs.field(converter=json_read_file_or_stdin)
-    serialized: list[CustomInstruction] = attrs.field(init=False)
-
-    def __attrs_post_init__(self):
-        if len(self.address) != len(self.value) or len(self.value) != len(self.data):
-            raise ValueError(
-                "length of passed addresses, values and data must be equal"
-            )
-
-        if self.address and self.json:
-            raise ValueError(
-                "can't parse json file and flag parameters at the same time"
-            )
-
-        if not self.address and not self.json:
-            raise ValueError("must pass json file or flag paramteres")
-
-        object.__setattr__(
-            self,
-            "serialized",
-            [
-                *[CustomInstruction(**obj) for obj in self.json],
-                *[
-                    CustomInstruction(*t)
-                    for t in zip(self.address, self.value, self.data)
-                ],
-            ],
-        )
-
-
-@attrs.frozen(kw_only=True)
 class Encode:
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeDeposit(Encode, Deposit, NamespaceSerializer):
+class EncodeFxrpCr(Encode, encoder.FxrpCollateralReservation, NamespaceSerializer):
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeWithdraw(Encode, Withdraw, NamespaceSerializer):
+class EncodeFxrpTransfer(Encode, encoder.FxrpTransfer, NamespaceSerializer):
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeRedeem(Encode, Redeem, NamespaceSerializer):
+class EncodeFxrpRedeem(Encode, encoder.FxrpRedeem, NamespaceSerializer):
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeMint(Encode, Mint, NamespaceSerializer):
+class EncodeFirelightCrDeposit(
+    Encode, encoder.FirelightCollateralReservationAndDeposit, NamespaceSerializer
+):
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeClaimWithdraw(Encode, ClaimWithdraw, NamespaceSerializer):
+class EncodeFirelightDeposit(Encode, encoder.FirelightDeposit, NamespaceSerializer):
     pass
 
 
 @attrs.frozen(kw_only=True)
-class EncodeCustom(Encode, Custom, NamespaceSerializer):
+class EncodeFirelightRedeem(Encode, encoder.FirelightRedeem, NamespaceSerializer):
     pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeFirelightClaimWithdraw(
+    Encode, encoder.FirelightClaimWithdraw, NamespaceSerializer
+):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeUpshiftCrDeposit(
+    Encode, encoder.UpshiftCollateralReservationAndDeposit, NamespaceSerializer
+):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeUpshiftDeposit(Encode, encoder.UpshiftDeposit, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeUpshiftRequestRedeem(
+    Encode, encoder.UpshiftRequestRedeem, NamespaceSerializer
+):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class EncodeUpshiftClaim(Encode, encoder.UpshiftClaim, NamespaceSerializer):
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class Decode:
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class DecodeInstruction(Decode, NamespaceSerializer):
+    instruction: str = attrs.field(converter=str_or_stdin)
 
 
 @attrs.frozen(kw_only=True)
@@ -187,106 +165,20 @@ class Bridge:
     pass
 
 
-@attrs.frozen(kw_only=True)
-class BridgeDeposit(Bridge, Deposit, NamespaceSerializer):
-    pass
+def hexstr_validator(instance: Any, attribute: attrs.Attribute, value: str) -> None:
+    try:
+        bytes.fromhex(value.removeprefix("0x"))
+
+    except ValueError as e:
+        raise ValueError(f"{attribute.name} must be a valid hex string") from e
 
 
 @attrs.frozen(kw_only=True)
-class BridgeWithdraw(Bridge, Withdraw, NamespaceSerializer):
-    pass
+class BridgeInstruction(Bridge, NamespaceSerializer):
+    instruction: str = attrs.field(validator=hexstr_validator, converter=str_or_stdin)
 
 
 @attrs.frozen(kw_only=True)
-class BridgeRedeem(Bridge, Redeem, NamespaceSerializer):
-    pass
-
-
-@attrs.frozen(kw_only=True)
-class BridgeMint(Bridge, Mint, NamespaceSerializer):
-    pass
-
-
-@attrs.frozen(kw_only=True)
-class BridgeClaimWithdraw(Bridge, ClaimWithdraw, NamespaceSerializer):
-    pass
-
-
-@attrs.frozen(kw_only=True)
-class BridgeCustom(Bridge, Custom, NamespaceSerializer):
-    pass
-
-
-@attrs.frozen(kw_only=True)
-class DebugMockPrint(NamespaceSerializer):
-    seed: str
-
-
-@attrs.frozen(kw_only=True)
-class DebugMockCreateFund(NamespaceSerializer):
-    seed: str
-    value: Wei = attrs.field(converter=value_parser)
-
-
-@attrs.frozen(kw_only=True)
-class DebugCheckStatus(NamespaceSerializer):
-    xrpl_hash: bytes = attrs.field(converter=bytes_parser)
-
-
-@attrs.frozen(kw_only=True)
-class DebugSimulation(NamespaceSerializer):
-    agent_address: ChecksumAddress = attrs.field(converter=to_checksum_address)
-    mint: int
-    deposit: int
-
-
-@attrs.frozen(kw_only=True)
-class DebugMockCustom(Custom, NamespaceSerializer):
-    seed: str
-
-
-@attrs.frozen(kw_only=True)
-class PersonalAccount:
-    from_env: bool
-
-
-@attrs.frozen(kw_only=True)
-class PersonalAccountPrint(PersonalAccount, NamespaceSerializer):
-    xrpl_address: str | None
-    xrpl_address_parsed: str = attrs.field(init=False)
-
-    def __attrs_post_init__(self):
-        if self.xrpl_address is None and not self.from_env:
-            raise ValueError("--from-env/-e must be passed if xrpl_address is omitted")
-
-        if self.xrpl_address and self.from_env:
-            raise ValueError(
-                "cannot read value from environment and command line at the same time"
-            )
-
-        object.__setattr__(
-            self,
-            "xrpl_address_parsed",
-            xrpl_client.get_wallet().address,
-        )
-
-
-@attrs.frozen(kw_only=True)
-class PersonalAccountFaucet(PersonalAccount, NamespaceSerializer):
-    xrpl_address: str | None
-    xrpl_address_parsed: str = attrs.field(init=False)
-
-    def __attrs_post_init__(self):
-        if self.xrpl_address is None and not self.from_env:
-            raise ValueError("--from-env/-e must be passed if xrpl_address is omitted")
-
-        if self.xrpl_address and self.from_env:
-            raise ValueError(
-                "cannot read value from environment and command line at the same time"
-            )
-
-        object.__setattr__(
-            self,
-            "xrpl_address_parsed",
-            xrpl_client.get_wallet().address,
-        )
+class BridgeMintTx(Bridge, NamespaceSerializer):
+    wait: bool
+    xrpl_hash: str = attrs.field(validator=hexstr_validator, converter=str_or_stdin)

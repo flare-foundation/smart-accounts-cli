@@ -1,5 +1,6 @@
 import json
-from typing import Self
+from collections.abc import Callable
+from typing import Self, cast
 
 import attrs
 from attrs import field, frozen
@@ -7,6 +8,8 @@ from eth_typing import ABI, ABIEvent, ABIFunction, ChecksumAddress
 from eth_utils.address import to_checksum_address
 from web3 import Web3
 from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
+
+from src.settings import settings
 
 
 def abi_from_file_location(file_location: str):
@@ -103,17 +106,40 @@ class Contract:
 
 
 @attrs.frozen
+class AbiRegistry:
+    # mock vault
+    my_erc_4626: ABI = field(converter=abi_from_file_location)
+
+    # for fxrp
+    erc_20: ABI = field(converter=abi_from_file_location)
+
+    # firelight style abi
+    firelight: ABI = field(converter=abi_from_file_location)
+
+    # upshift style abi
+    upshift: ABI = field(converter=abi_from_file_location)
+
+
+@attrs.frozen
 class Registry:
+    abis: AbiRegistry
+
     flare_contract_registry: Contract
-    asset_manager_events: Contract
+
+    # smart accounts
     master_account_controller: Contract
-    master_account_controller_dev_mock: Contract
-    concat_this: Contract
+
+    # asset manager
+    asset_manager_events: Contract
+    asset_manager: Contract
+
+    # ftso
+    ftso_v2: Contract
 
     @classmethod
     def default(cls) -> Self:
         client = Web3(
-            provider=Web3.HTTPProvider("https://coston2-api.flare.network/ext/C/rpc"),
+            provider=Web3.HTTPProvider(settings.env.flr_rpc_url),
             middleware=(ExtraDataToPOAMiddleware,),
         )
 
@@ -138,35 +164,51 @@ class Registry:
             )
 
         return cls(
+            abis=AbiRegistry(
+                my_erc_4626="./artifacts/MyERC4626.json",
+                erc_20="./artifacts/IErc20.json",
+                firelight="./artifacts/FirelightVault.json",
+                upshift="./artifacts/UpshiftLendingPool.json",
+            ),
             flare_contract_registry=flare_contract_registry,
+            # smart accounts
+            master_account_controller=Contract(
+                name="MasterAccountController",
+                address=to_checksum_address(
+                    "0x3ab31E2d943d1E8F47B275605E50Ff107f2F8393"
+                ),
+                abi="./artifacts/IMasterAccountController.json",
+            ),
+            # asset manager
+            asset_manager=Contract(
+                name="AssetManagerFXRP",
+                address=get_address_by_name("AssetManagerFXRP"),
+                abi="./artifacts/AssetManager.json",
+            ),
             asset_manager_events=Contract(
                 name="AssetManagerFXRP",
                 address=get_address_by_name("AssetManagerFXRP"),
                 abi="./artifacts/IAssetManagerEvents.json",
             ),
-            master_account_controller=Contract(
-                name="MasterAccountController",
-                address=to_checksum_address(
-                    "0xa7bc2aC84DB618fde9fa4892D1166fFf75D36FA6"
-                ),
-                abi="./artifacts/MasterAccountController.json",
-            ),
-            master_account_controller_dev_mock=Contract(
-                name="MasterAccountControllerDevMock",
-                address=to_checksum_address(
-                    "0x38d4C185B4844c062B462722BD632049F7C3C653"
-                ),
-                abi="./artifacts/MasterAccountControllerDevMock.json",
-            ),
-            # FIX:(janezicmatej) temporary hack for hackathon duration
-            concat_this=Contract(
-                name="ConcatThis",
-                address=to_checksum_address(
-                    "0x0971321f773Ded77D0aD4A550911a70C1F111cD9"
-                ),
-                abi="./artifacts/ConcatThis.json",
+            # ftso
+            ftso_v2=Contract(
+                name="FtsoV2",
+                address=get_address_by_name("FtsoV2"),
+                abi="./artifacts/FtsoV2Interface.json",
             ),
         )
 
 
-registry: Registry = Registry.default()
+class RegistryWrapper:
+    def __init__(self, factory: Callable[[], Registry]) -> None:
+        self.factory = factory
+        self.wrapped: Registry | None = None
+
+    def __getattr__(self, *args, **kwargs):
+        if self.wrapped is None:
+            self.wrapped = self.factory()
+
+        return getattr(self.wrapped, *args, **kwargs)
+
+
+registry = cast(Registry, RegistryWrapper(Registry.default))

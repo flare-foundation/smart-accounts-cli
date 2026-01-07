@@ -1,0 +1,4388 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "diamondCut",
+      "inputs": [
+        {
+          "name": "_diamondCut",
+          "type": "tuple[]",
+          "internalType": "struct IDiamond.FacetCut[]",
+          "components": [
+            {
+              "name": "facetAddress",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "action",
+              "type": "uint8",
+              "internalType": "enum IDiamond.FacetCutAction"
+            },
+            {
+              "name": "functionSelectors",
+              "type": "bytes4[]",
+              "internalType": "bytes4[]"
+            }
+          ]
+        },
+        {
+          "name": "_init",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "_calldata",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "executeDepositAfterMinting",
+      "inputs": [
+        {
+          "name": "_collateralReservationId",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "_proof",
+          "type": "tuple",
+          "internalType": "struct IPayment.Proof",
+          "components": [
+            {
+              "name": "merkleProof",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+            },
+            {
+              "name": "data",
+              "type": "tuple",
+              "internalType": "struct IPayment.Response",
+              "components": [
+                {
+                  "name": "attestationType",
+                  "type": "bytes32",
+                  "internalType": "bytes32"
+                },
+                {
+                  "name": "sourceId",
+                  "type": "bytes32",
+                  "internalType": "bytes32"
+                },
+                {
+                  "name": "votingRound",
+                  "type": "uint64",
+                  "internalType": "uint64"
+                },
+                {
+                  "name": "lowestUsedTimestamp",
+                  "type": "uint64",
+                  "internalType": "uint64"
+                },
+                {
+                  "name": "requestBody",
+                  "type": "tuple",
+                  "internalType": "struct IPayment.RequestBody",
+                  "components": [
+                    {
+                      "name": "transactionId",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "inUtxo",
+                      "type": "uint256",
+                      "internalType": "uint256"
+                    },
+                    {
+                      "name": "utxo",
+                      "type": "uint256",
+                      "internalType": "uint256"
+                    }
+                  ]
+                },
+                {
+                  "name": "responseBody",
+                  "type": "tuple",
+                  "internalType": "struct IPayment.ResponseBody",
+                  "components": [
+                    {
+                      "name": "blockNumber",
+                      "type": "uint64",
+                      "internalType": "uint64"
+                    },
+                    {
+                      "name": "blockTimestamp",
+                      "type": "uint64",
+                      "internalType": "uint64"
+                    },
+                    {
+                      "name": "sourceAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "sourceAddressesRoot",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "receivingAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "intendedReceivingAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "spentAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "intendedSpentAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "receivedAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "intendedReceivedAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "standardPaymentReference",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "oneToOne",
+                      "type": "bool",
+                      "internalType": "bool"
+                    },
+                    {
+                      "name": "status",
+                      "type": "uint8",
+                      "internalType": "uint8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "executeInstruction",
+      "inputs": [
+        {
+          "name": "_proof",
+          "type": "tuple",
+          "internalType": "struct IPayment.Proof",
+          "components": [
+            {
+              "name": "merkleProof",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+            },
+            {
+              "name": "data",
+              "type": "tuple",
+              "internalType": "struct IPayment.Response",
+              "components": [
+                {
+                  "name": "attestationType",
+                  "type": "bytes32",
+                  "internalType": "bytes32"
+                },
+                {
+                  "name": "sourceId",
+                  "type": "bytes32",
+                  "internalType": "bytes32"
+                },
+                {
+                  "name": "votingRound",
+                  "type": "uint64",
+                  "internalType": "uint64"
+                },
+                {
+                  "name": "lowestUsedTimestamp",
+                  "type": "uint64",
+                  "internalType": "uint64"
+                },
+                {
+                  "name": "requestBody",
+                  "type": "tuple",
+                  "internalType": "struct IPayment.RequestBody",
+                  "components": [
+                    {
+                      "name": "transactionId",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "inUtxo",
+                      "type": "uint256",
+                      "internalType": "uint256"
+                    },
+                    {
+                      "name": "utxo",
+                      "type": "uint256",
+                      "internalType": "uint256"
+                    }
+                  ]
+                },
+                {
+                  "name": "responseBody",
+                  "type": "tuple",
+                  "internalType": "struct IPayment.ResponseBody",
+                  "components": [
+                    {
+                      "name": "blockNumber",
+                      "type": "uint64",
+                      "internalType": "uint64"
+                    },
+                    {
+                      "name": "blockTimestamp",
+                      "type": "uint64",
+                      "internalType": "uint64"
+                    },
+                    {
+                      "name": "sourceAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "sourceAddressesRoot",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "receivingAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "intendedReceivingAddressHash",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "spentAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "intendedSpentAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "receivedAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "intendedReceivedAmount",
+                      "type": "int256",
+                      "internalType": "int256"
+                    },
+                    {
+                      "name": "standardPaymentReference",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                    },
+                    {
+                      "name": "oneToOne",
+                      "type": "bool",
+                      "internalType": "bool"
+                    },
+                    {
+                      "name": "status",
+                      "type": "uint8",
+                      "internalType": "uint8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "executeTimelockedCall",
+      "inputs": [
+        {
+          "name": "_encodedCall",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "facetAddress",
+      "inputs": [
+        {
+          "name": "_functionSelector",
+          "type": "bytes4",
+          "internalType": "bytes4"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "facetAddress_",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "facetAddresses",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "facetAddresses_",
+          "type": "address[]",
+          "internalType": "address[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "facetFunctionSelectors",
+      "inputs": [
+        {
+          "name": "_facet",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "facetFunctionSelectors_",
+          "type": "bytes4[]",
+          "internalType": "bytes4[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "facets",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "facets_",
+          "type": "tuple[]",
+          "internalType": "struct IDiamondLoupe.Facet[]",
+          "components": [
+            {
+              "name": "facetAddress",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "functionSelectors",
+              "type": "bytes4[]",
+              "internalType": "bytes4[]"
+            }
+          ]
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getAgentVaults",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "_agentVaultIds",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "_agentVaultAddresses",
+          "type": "address[]",
+          "internalType": "address[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getDefaultInstructionFee",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getExecuteTimelockedCallTimestamp",
+      "inputs": [
+        {
+          "name": "_encodedCall",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "_allowedAfterTimestamp",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getExecutorInfo",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "_executor",
+          "type": "address",
+          "internalType": "address payable"
+        },
+        {
+          "name": "_executorFee",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getInstructionFee",
+      "inputs": [
+        {
+          "name": "_instructionId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getPaymentProofValidityDurationSeconds",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getPersonalAccount",
+      "inputs": [
+        {
+          "name": "_xrplOwner",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getSourceId",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getSwapParams",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "_uniswapV3Router",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "_usdt0",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "_wNatUsdt0PoolFeeTierPPM",
+          "type": "uint24",
+          "internalType": "uint24"
+        },
+        {
+          "name": "_usdt0FXrpPoolFeeTierPPM",
+          "type": "uint24",
+          "internalType": "uint24"
+        },
+        {
+          "name": "_maxSlippagePPM",
+          "type": "uint24",
+          "internalType": "uint24"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getTimelockDurationSeconds",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "_timelockDurationSeconds",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getTransactionIdForCollateralReservation",
+      "inputs": [
+        {
+          "name": "_collateralReservationId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "_transactionId",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getVaults",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "_vaultIds",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "_vaultAddresses",
+          "type": "address[]",
+          "internalType": "address[]"
+        },
+        {
+          "name": "_vaultTypes",
+          "type": "uint8[]",
+          "internalType": "uint8[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getXrplProviderWallets",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[]",
+          "internalType": "string[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "implementation",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "isTransactionIdUsed",
+      "inputs": [
+        {
+          "name": "_transactionId",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "owner_",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "reserveCollateral",
+      "inputs": [
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        },
+        {
+          "name": "_paymentReference",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        },
+        {
+          "name": "_transactionId",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "_collateralReservationId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "supportsInterface",
+      "inputs": [
+        {
+          "name": "interfaceId",
+          "type": "bytes4",
+          "internalType": "bytes4"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "swapUsdt0ForFAsset",
+      "inputs": [
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "swapWNatForUsdt0",
+      "inputs": [
+        {
+          "name": "_xrplAddress",
+          "type": "string",
+          "internalType": "string"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "transferOwnership",
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "event",
+      "name": "AgentVaultAdded",
+      "inputs": [
+        {
+          "name": "agentVaultId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "agentVaultAddress",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "AgentVaultRemoved",
+      "inputs": [
+        {
+          "name": "agentVaultId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "agentVaultAddress",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Approved",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "fxrp",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "CallTimelocked",
+      "inputs": [
+        {
+          "name": "encodedCall",
+          "type": "bytes",
+          "indexed": false,
+          "internalType": "bytes"
+        },
+        {
+          "name": "encodedCallHash",
+          "type": "bytes32",
+          "indexed": false,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "allowedAfterTimestamp",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Claimed",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "year",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "month",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "day",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "shares",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "CollateralReserved",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "transactionId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "paymentReference",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "xrplOwner",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        },
+        {
+          "name": "collateralReservationId",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "agentVault",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "lots",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "executor",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "executorFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "DefaultInstructionFeeSet",
+      "inputs": [
+        {
+          "name": "defaultInstructionFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Deposited",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "shares",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "DiamondCut",
+      "inputs": [
+        {
+          "name": "_diamondCut",
+          "type": "tuple[]",
+          "indexed": false,
+          "internalType": "struct IDiamond.FacetCut[]",
+          "components": [
+            {
+              "name": "facetAddress",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "action",
+              "type": "uint8",
+              "internalType": "enum IDiamond.FacetCutAction"
+            },
+            {
+              "name": "functionSelectors",
+              "type": "bytes4[]",
+              "internalType": "bytes4[]"
+            }
+          ]
+        },
+        {
+          "name": "_init",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "_calldata",
+          "type": "bytes",
+          "indexed": false,
+          "internalType": "bytes"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "ExecutorFeeSet",
+      "inputs": [
+        {
+          "name": "executorFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "ExecutorSet",
+      "inputs": [
+        {
+          "name": "executor",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "FXrpRedeemed",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "lots",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "executor",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "executorFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "FXrpTransferred",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "InstructionExecuted",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "transactionId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "paymentReference",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "xrplOwner",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        },
+        {
+          "name": "instructionId",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "InstructionFeeRemoved",
+      "inputs": [
+        {
+          "name": "instructionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "InstructionFeeSet",
+      "inputs": [
+        {
+          "name": "instructionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "instructionFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+        {
+          "name": "previousOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "newOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "PaymentProofValidityDurationSecondsSet",
+      "inputs": [
+        {
+          "name": "paymentProofValidityDurationSeconds",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "PersonalAccountCreated",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "xrplOwner",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "PersonalAccountImplementationSet",
+      "inputs": [
+        {
+          "name": "newImplementation",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "RedeemRequested",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "shares",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "claimableEpoch",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Redeemed",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "shares",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SwapExecuted",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "tokenIn",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "tokenOut",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "xrplOwner",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        },
+        {
+          "name": "amountIn",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amountOut",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SwapParamsSet",
+      "inputs": [
+        {
+          "name": "uniswapV3Router",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "usdt0",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "wNatUsdt0PoolFeeTierPPM",
+          "type": "uint24",
+          "indexed": false,
+          "internalType": "uint24"
+        },
+        {
+          "name": "usdt0FXrpPoolFeeTierPPM",
+          "type": "uint24",
+          "indexed": false,
+          "internalType": "uint24"
+        },
+        {
+          "name": "maxSlippagePPM",
+          "type": "uint24",
+          "indexed": false,
+          "internalType": "uint24"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "TimelockDurationSet",
+      "inputs": [
+        {
+          "name": "timelockDurationSeconds",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "TimelockedCallCanceled",
+      "inputs": [
+        {
+          "name": "encodedCallHash",
+          "type": "bytes32",
+          "indexed": false,
+          "internalType": "bytes32"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "TimelockedCallExecuted",
+      "inputs": [
+        {
+          "name": "encodedCallHash",
+          "type": "bytes32",
+          "indexed": false,
+          "internalType": "bytes32"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "VaultAdded",
+      "inputs": [
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "vaultAddress",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vaultType",
+          "type": "uint8",
+          "indexed": true,
+          "internalType": "uint8"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "WithdrawalClaimed",
+      "inputs": [
+        {
+          "name": "personalAccount",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "vault",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "period",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "XrplProviderWalletAdded",
+      "inputs": [
+        {
+          "name": "xrplProviderWallet",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "XrplProviderWalletRemoved",
+      "inputs": [
+        {
+          "name": "xrplProviderWallet",
+          "type": "string",
+          "indexed": false,
+          "internalType": "string"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "AddressZero",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "AgentNotAvailable",
+      "inputs": [
+        {
+          "name": "agentVault",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "AgentVaultAddressAlreadyAdded",
+      "inputs": [
+        {
+          "name": "agentVaultAddress",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "AgentVaultAddressZero",
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "AgentVaultIdAlreadyAdded",
+      "inputs": [
+        {
+          "name": "agentVaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "AgentVaultIdZero",
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "AgentsVaultsLengthsMismatch",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InstructionFeeNotSet",
+      "inputs": [
+        {
+          "name": "instructionId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InstructionFeesLengthsMismatch",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidAgentVault",
+      "inputs": [
+        {
+          "name": "agentVaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidAmount",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidExecutor",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidExecutorFee",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidInstruction",
+      "inputs": [
+        {
+          "name": "instructionType",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "instructionCommand",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidInstructionFee",
+      "inputs": [
+        {
+          "name": "instructionId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidInstructionType",
+      "inputs": [
+        {
+          "name": "instructionType",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidMaxSlippagePPM",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidMinter",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidPaymentAmount",
+      "inputs": [
+        {
+          "name": "requiredAmount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidPaymentProofValidityDuration",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidPersonalAccountImplementation",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidPoolFeeTierPPM",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidReceivingAddressHash",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidSourceId",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidTransactionId",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidTransactionProof",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidTransactionStatus",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidUniswapV3Router",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidUsdt0",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidVaultId",
+      "inputs": [
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidVaultType",
+      "inputs": [
+        {
+          "name": "vaultType",
+          "type": "uint8",
+          "internalType": "uint8"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "InvalidXrplProviderWallet",
+      "inputs": [
+        {
+          "name": "xrplProviderWallet",
+          "type": "string",
+          "internalType": "string"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "MintingNotCompleted",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "MismatchingSourceAndXrplAddr",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "PaymentProofExpired",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "PersonalAccountNotSuccessfullyDeployed",
+      "inputs": [
+        {
+          "name": "personalAccountAddress",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "TimelockDurationTooLong",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "TimelockInvalidSelector",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "TimelockNotAllowedYet",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "TransactionAlreadyExecuted",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "UnknownCollateralReservationId",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "ValueZero",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "VaultAddressAlreadyAdded",
+      "inputs": [
+        {
+          "name": "vaultAddress",
+          "type": "address",
+          "internalType": "address"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "VaultAddressZero",
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "VaultIdAlreadyAdded",
+      "inputs": [
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "VaultIdZero",
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "VaultsLengthsMismatch",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "XrplProviderWalletAlreadyExists",
+      "inputs": [
+        {
+          "name": "xrplProviderWallet",
+          "type": "string",
+          "internalType": "string"
+        }
+      ]
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "diamondCut((address,uint8,bytes4[])[],address,bytes)": "1f931c1c",
+    "executeDepositAfterMinting(uint256,(bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": "a01b2757",
+    "executeInstruction((bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": "6ac2d568",
+    "executeTimelockedCall(bytes)": "1f9da642",
+    "facetAddress(bytes4)": "cdffacc6",
+    "facetAddresses()": "52ef6b2c",
+    "facetFunctionSelectors(address)": "adfca15e",
+    "facets()": "7a0ed627",
+    "getAgentVaults()": "d105d49a",
+    "getDefaultInstructionFee()": "cc975fb8",
+    "getExecuteTimelockedCallTimestamp(bytes)": "b071614b",
+    "getExecutorInfo()": "11996f44",
+    "getInstructionFee(uint256)": "9c8ccb34",
+    "getPaymentProofValidityDurationSeconds()": "5b4b6aba",
+    "getPersonalAccount(string)": "d09318d4",
+    "getSourceId()": "231e721f",
+    "getSwapParams()": "9cdf9840",
+    "getTimelockDurationSeconds()": "f1dd663e",
+    "getTransactionIdForCollateralReservation(uint256)": "71110cc8",
+    "getVaults()": "44d00f82",
+    "getXrplProviderWallets()": "76a940e5",
+    "implementation()": "5c60da1b",
+    "isTransactionIdUsed(bytes32)": "8e103030",
+    "owner()": "8da5cb5b",
+    "reserveCollateral(string,bytes32,bytes32)": "1add812b",
+    "supportsInterface(bytes4)": "01ffc9a7",
+    "swapUsdt0ForFAsset(string)": "4d33f207",
+    "swapWNatForUsdt0(string)": "4c8d0a32",
+    "transferOwnership(address)": "f2fde38b"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"AddressZero\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"agentVault\",\"type\":\"address\"}],\"name\":\"AgentNotAvailable\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"agentVaultAddress\",\"type\":\"address\"}],\"name\":\"AgentVaultAddressAlreadyAdded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"AgentVaultAddressZero\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agentVaultId\",\"type\":\"uint256\"}],\"name\":\"AgentVaultIdAlreadyAdded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"AgentVaultIdZero\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AgentsVaultsLengthsMismatch\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"instructionId\",\"type\":\"uint256\"}],\"name\":\"InstructionFeeNotSet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InstructionFeesLengthsMismatch\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agentVaultId\",\"type\":\"uint256\"}],\"name\":\"InvalidAgentVault\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidAmount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidExecutor\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidExecutorFee\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"instructionType\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"instructionCommand\",\"type\":\"uint256\"}],\"name\":\"InvalidInstruction\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"instructionId\",\"type\":\"uint256\"}],\"name\":\"InvalidInstructionFee\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"instructionType\",\"type\":\"uint256\"}],\"name\":\"InvalidInstructionType\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidMaxSlippagePPM\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidMinter\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"requiredAmount\",\"type\":\"uint256\"}],\"name\":\"InvalidPaymentAmount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidPaymentProofValidityDuration\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidPersonalAccountImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidPoolFeeTierPPM\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidReceivingAddressHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSourceId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTransactionId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTransactionProof\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTransactionStatus\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidUniswapV3Router\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidUsdt0\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"vaultId\",\"type\":\"uint256\"}],\"name\":\"InvalidVaultId\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"vaultType\",\"type\":\"uint8\"}],\"name\":\"InvalidVaultType\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"xrplProviderWallet\",\"type\":\"string\"}],\"name\":\"InvalidXrplProviderWallet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"MintingNotCompleted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"MismatchingSourceAndXrplAddr\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PaymentProofExpired\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"personalAccountAddress\",\"type\":\"address\"}],\"name\":\"PersonalAccountNotSuccessfullyDeployed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TimelockDurationTooLong\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TimelockInvalidSelector\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TimelockNotAllowedYet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TransactionAlreadyExecuted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UnknownCollateralReservationId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ValueZero\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"vaultAddress\",\"type\":\"address\"}],\"name\":\"VaultAddressAlreadyAdded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"VaultAddressZero\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"vaultId\",\"type\":\"uint256\"}],\"name\":\"VaultIdAlreadyAdded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"VaultIdZero\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"VaultsLengthsMismatch\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"xrplProviderWallet\",\"type\":\"string\"}],\"name\":\"XrplProviderWalletAlreadyExists\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agentVaultId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agentVaultAddress\",\"type\":\"address\"}],\"name\":\"AgentVaultAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agentVaultId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agentVaultAddress\",\"type\":\"address\"}],\"name\":\"AgentVaultRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"fxrp\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Approved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"encodedCall\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"encodedCallHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"allowedAfterTimestamp\",\"type\":\"uint256\"}],\"name\":\"CallTimelocked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"year\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"month\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"day\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"transactionId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentReference\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplOwner\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"collateralReservationId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"agentVault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lots\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"executor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"executorFee\",\"type\":\"uint256\"}],\"name\":\"CollateralReserved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"defaultInstructionFee\",\"type\":\"uint256\"}],\"name\":\"DefaultInstructionFeeSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"facetAddress\",\"type\":\"address\"},{\"internalType\":\"enum IDiamond.FacetCutAction\",\"name\":\"action\",\"type\":\"uint8\"},{\"internalType\":\"bytes4[]\",\"name\":\"functionSelectors\",\"type\":\"bytes4[]\"}],\"indexed\":false,\"internalType\":\"struct IDiamond.FacetCut[]\",\"name\":\"_diamondCut\",\"type\":\"tuple[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_init\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"_calldata\",\"type\":\"bytes\"}],\"name\":\"DiamondCut\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"executorFee\",\"type\":\"uint256\"}],\"name\":\"ExecutorFeeSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"executor\",\"type\":\"address\"}],\"name\":\"ExecutorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lots\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"executor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"executorFee\",\"type\":\"uint256\"}],\"name\":\"FXrpRedeemed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"FXrpTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"transactionId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentReference\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplOwner\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"instructionId\",\"type\":\"uint256\"}],\"name\":\"InstructionExecuted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"instructionId\",\"type\":\"uint256\"}],\"name\":\"InstructionFeeRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"instructionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"instructionFee\",\"type\":\"uint256\"}],\"name\":\"InstructionFeeSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"paymentProofValidityDurationSeconds\",\"type\":\"uint256\"}],\"name\":\"PaymentProofValidityDurationSecondsSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplOwner\",\"type\":\"string\"}],\"name\":\"PersonalAccountCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"}],\"name\":\"PersonalAccountImplementationSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"claimableEpoch\",\"type\":\"uint256\"}],\"name\":\"RedeemRequested\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Redeemed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"tokenIn\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"tokenOut\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplOwner\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amountIn\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amountOut\",\"type\":\"uint256\"}],\"name\":\"SwapExecuted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"uniswapV3Router\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"usdt0\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint24\",\"name\":\"wNatUsdt0PoolFeeTierPPM\",\"type\":\"uint24\"},{\"indexed\":false,\"internalType\":\"uint24\",\"name\":\"usdt0FXrpPoolFeeTierPPM\",\"type\":\"uint24\"},{\"indexed\":false,\"internalType\":\"uint24\",\"name\":\"maxSlippagePPM\",\"type\":\"uint24\"}],\"name\":\"SwapParamsSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timelockDurationSeconds\",\"type\":\"uint256\"}],\"name\":\"TimelockDurationSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"encodedCallHash\",\"type\":\"bytes32\"}],\"name\":\"TimelockedCallCanceled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"encodedCallHash\",\"type\":\"bytes32\"}],\"name\":\"TimelockedCallExecuted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"vaultId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vaultAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint8\",\"name\":\"vaultType\",\"type\":\"uint8\"}],\"name\":\"VaultAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"personalAccount\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"period\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"WithdrawalClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplProviderWallet\",\"type\":\"string\"}],\"name\":\"XrplProviderWalletAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"xrplProviderWallet\",\"type\":\"string\"}],\"name\":\"XrplProviderWalletRemoved\",\"type\":\"event\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"facetAddress\",\"type\":\"address\"},{\"internalType\":\"enum IDiamond.FacetCutAction\",\"name\":\"action\",\"type\":\"uint8\"},{\"internalType\":\"bytes4[]\",\"name\":\"functionSelectors\",\"type\":\"bytes4[]\"}],\"internalType\":\"struct IDiamond.FacetCut[]\",\"name\":\"_diamondCut\",\"type\":\"tuple[]\"},{\"internalType\":\"address\",\"name\":\"_init\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_calldata\",\"type\":\"bytes\"}],\"name\":\"diamondCut\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_collateralReservationId\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"bytes32[]\",\"name\":\"merkleProof\",\"type\":\"bytes32[]\"},{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"attestationType\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"sourceId\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"votingRound\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"lowestUsedTimestamp\",\"type\":\"uint64\"},{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"transactionId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"inUtxo\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"utxo\",\"type\":\"uint256\"}],\"internalType\":\"struct IPayment.RequestBody\",\"name\":\"requestBody\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint64\",\"name\":\"blockNumber\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"blockTimestamp\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"sourceAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"sourceAddressesRoot\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"receivingAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"intendedReceivingAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"int256\",\"name\":\"spentAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"intendedSpentAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"receivedAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"intendedReceivedAmount\",\"type\":\"int256\"},{\"internalType\":\"bytes32\",\"name\":\"standardPaymentReference\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"oneToOne\",\"type\":\"bool\"},{\"internalType\":\"uint8\",\"name\":\"status\",\"type\":\"uint8\"}],\"internalType\":\"struct IPayment.ResponseBody\",\"name\":\"responseBody\",\"type\":\"tuple\"}],\"internalType\":\"struct IPayment.Response\",\"name\":\"data\",\"type\":\"tuple\"}],\"internalType\":\"struct IPayment.Proof\",\"name\":\"_proof\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"_xrplAddress\",\"type\":\"string\"}],\"name\":\"executeDepositAfterMinting\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32[]\",\"name\":\"merkleProof\",\"type\":\"bytes32[]\"},{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"attestationType\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"sourceId\",\"type\":\"bytes32\"},{\"internalType\":\"uint64\",\"name\":\"votingRound\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"lowestUsedTimestamp\",\"type\":\"uint64\"},{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"transactionId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"inUtxo\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"utxo\",\"type\":\"uint256\"}],\"internalType\":\"struct IPayment.RequestBody\",\"name\":\"requestBody\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint64\",\"name\":\"blockNumber\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"blockTimestamp\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"sourceAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"sourceAddressesRoot\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"receivingAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"intendedReceivingAddressHash\",\"type\":\"bytes32\"},{\"internalType\":\"int256\",\"name\":\"spentAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"intendedSpentAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"receivedAmount\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"intendedReceivedAmount\",\"type\":\"int256\"},{\"internalType\":\"bytes32\",\"name\":\"standardPaymentReference\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"oneToOne\",\"type\":\"bool\"},{\"internalType\":\"uint8\",\"name\":\"status\",\"type\":\"uint8\"}],\"internalType\":\"struct IPayment.ResponseBody\",\"name\":\"responseBody\",\"type\":\"tuple\"}],\"internalType\":\"struct IPayment.Response\",\"name\":\"data\",\"type\":\"tuple\"}],\"internalType\":\"struct IPayment.Proof\",\"name\":\"_proof\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"_xrplAddress\",\"type\":\"string\"}],\"name\":\"executeInstruction\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_encodedCall\",\"type\":\"bytes\"}],\"name\":\"executeTimelockedCall\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"_functionSelector\",\"type\":\"bytes4\"}],\"name\":\"facetAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"facetAddress_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"facetAddresses\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"facetAddresses_\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_facet\",\"type\":\"address\"}],\"name\":\"facetFunctionSelectors\",\"outputs\":[{\"internalType\":\"bytes4[]\",\"name\":\"facetFunctionSelectors_\",\"type\":\"bytes4[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"facets\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"facetAddress\",\"type\":\"address\"},{\"internalType\":\"bytes4[]\",\"name\":\"functionSelectors\",\"type\":\"bytes4[]\"}],\"internalType\":\"struct IDiamondLoupe.Facet[]\",\"name\":\"facets_\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAgentVaults\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"_agentVaultIds\",\"type\":\"uint256[]\"},{\"internalType\":\"address[]\",\"name\":\"_agentVaultAddresses\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getDefaultInstructionFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_encodedCall\",\"type\":\"bytes\"}],\"name\":\"getExecuteTimelockedCallTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_allowedAfterTimestamp\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getExecutorInfo\",\"outputs\":[{\"internalType\":\"address payable\",\"name\":\"_executor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_executorFee\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_instructionId\",\"type\":\"uint256\"}],\"name\":\"getInstructionFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPaymentProofValidityDurationSeconds\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_xrplOwner\",\"type\":\"string\"}],\"name\":\"getPersonalAccount\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSourceId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSwapParams\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"_uniswapV3Router\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_usdt0\",\"type\":\"address\"},{\"internalType\":\"uint24\",\"name\":\"_wNatUsdt0PoolFeeTierPPM\",\"type\":\"uint24\"},{\"internalType\":\"uint24\",\"name\":\"_usdt0FXrpPoolFeeTierPPM\",\"type\":\"uint24\"},{\"internalType\":\"uint24\",\"name\":\"_maxSlippagePPM\",\"type\":\"uint24\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTimelockDurationSeconds\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_timelockDurationSeconds\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_collateralReservationId\",\"type\":\"uint256\"}],\"name\":\"getTransactionIdForCollateralReservation\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"_transactionId\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getVaults\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"_vaultIds\",\"type\":\"uint256[]\"},{\"internalType\":\"address[]\",\"name\":\"_vaultAddresses\",\"type\":\"address[]\"},{\"internalType\":\"uint8[]\",\"name\":\"_vaultTypes\",\"type\":\"uint8[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getXrplProviderWallets\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"\",\"type\":\"string[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"implementation\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_transactionId\",\"type\":\"bytes32\"}],\"name\":\"isTransactionIdUsed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_xrplAddress\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"_paymentReference\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_transactionId\",\"type\":\"bytes32\"}],\"name\":\"reserveCollateral\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_collateralReservationId\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_xrplAddress\",\"type\":\"string\"}],\"name\":\"swapUsdt0ForFAsset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_xrplAddress\",\"type\":\"string\"}],\"name\":\"swapWNatForUsdt0\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"AgentNotAvailable(address)\":[{\"params\":{\"agentVault\":\"The agent vault address.\"}}],\"AgentVaultAddressAlreadyAdded(address)\":[{\"params\":{\"agentVaultAddress\":\"The agent vault address.\"}}],\"AgentVaultAddressZero(uint256)\":[{\"params\":{\"index\":\"The index in the input array.\"}}],\"AgentVaultIdAlreadyAdded(uint256)\":[{\"params\":{\"agentVaultId\":\"The agent vault ID.\"}}],\"AgentVaultIdZero(uint256)\":[{\"params\":{\"index\":\"The index in the input array.\"}}],\"InstructionFeeNotSet(uint256)\":[{\"params\":{\"instructionId\":\"The instruction ID.\"}}],\"InvalidAgentVault(uint256)\":[{\"params\":{\"agentVaultId\":\"The agent vault ID.\"}}],\"InvalidInstruction(uint256,uint256)\":[{\"params\":{\"instructionCommand\":\"The invalid instruction command.\",\"instructionType\":\"The invalid instruction type.\"}}],\"InvalidInstructionFee(uint256)\":[{\"params\":{\"instructionId\":\"The instruction ID.\"}}],\"InvalidInstructionType(uint256)\":[{\"params\":{\"instructionType\":\"The invalid instruction type.\"}}],\"InvalidPaymentAmount(uint256)\":[{\"params\":{\"requiredAmount\":\"The required payment amount.\"}}],\"InvalidVaultId(uint256)\":[{\"params\":{\"vaultId\":\"The vault ID.\"}}],\"InvalidVaultType(uint8)\":[{\"params\":{\"vaultType\":\"The vault type.\"}}],\"InvalidXrplProviderWallet(string)\":[{\"params\":{\"xrplProviderWallet\":\"The XRPL provider wallet address.\"}}],\"PersonalAccountNotSuccessfullyDeployed(address)\":[{\"params\":{\"personalAccountAddress\":\"The address of the personal account.\"}}],\"VaultAddressAlreadyAdded(address)\":[{\"params\":{\"vaultAddress\":\"The vault address.\"}}],\"VaultAddressZero(uint256)\":[{\"params\":{\"index\":\"The index in the input array.\"}}],\"VaultIdAlreadyAdded(uint256)\":[{\"params\":{\"vaultId\":\"The vault ID.\"}}],\"VaultIdZero(uint256)\":[{\"params\":{\"index\":\"The index in the input array.\"}}],\"XrplProviderWalletAlreadyExists(string)\":[{\"params\":{\"xrplProviderWallet\":\"The XRPL provider wallet address.\"}}]},\"events\":{\"AgentVaultAdded(uint256,address)\":{\"params\":{\"agentVaultAddress\":\"The agent vault address.\",\"agentVaultId\":\"The agent vault ID.\"}},\"AgentVaultRemoved(uint256,address)\":{\"params\":{\"agentVaultAddress\":\"The agent vault address.\",\"agentVaultId\":\"The agent vault ID.\"}},\"Approved(address,address,address,uint256)\":{\"params\":{\"amount\":\"The approved amount.\",\"fxrp\":\"The FXRP token address.\",\"personalAccount\":\"The personal account address.\",\"vault\":\"The vault address.\"}},\"CallTimelocked(bytes,bytes32,uint256)\":{\"params\":{\"allowedAfterTimestamp\":\"The earliest timestamp when the call can be executed.\",\"encodedCall\":\"The ABI encoded call data, to be used in `executeTimelockedCall`.\",\"encodedCallHash\":\"The hash of the encoded call data.\"}},\"Claimed(address,address,uint256,uint256,uint256,uint256,uint256)\":{\"params\":{\"amount\":\"The amount claimed.\",\"day\":\"The day of the claim.\",\"month\":\"The month of the claim.\",\"personalAccount\":\"The personal account address.\",\"shares\":\"The number of shares claimed.\",\"vault\":\"The vault address.\",\"year\":\"The year of the claim.\"}},\"CollateralReserved(address,bytes32,bytes32,string,uint256,address,uint256,address,uint256)\":{\"params\":{\"agentVault\":\"The agent vault address.\",\"collateralReservationId\":\"The collateral reservation ID.\",\"executor\":\"The executor address.\",\"executorFee\":\"The fee paid to the executor.\",\"lots\":\"The number of lots reserved.\",\"paymentReference\":\"The payment reference.\",\"personalAccount\":\"The personal account address.\",\"transactionId\":\"The transaction ID.\",\"xrplOwner\":\"The XRPL owner address.\"}},\"DefaultInstructionFeeSet(uint256)\":{\"params\":{\"defaultInstructionFee\":\"The new default instruction fee.\"}},\"Deposited(address,address,uint256,uint256)\":{\"params\":{\"amount\":\"The amount deposited.\",\"personalAccount\":\"The personal account address.\",\"shares\":\"The number of shares received.\",\"vault\":\"The vault address.\"}},\"ExecutorFeeSet(uint256)\":{\"params\":{\"executorFee\":\"The new executor fee.\"}},\"ExecutorSet(address)\":{\"params\":{\"executor\":\"The new executor address.\"}},\"FXrpRedeemed(address,uint256,uint256,address,uint256)\":{\"params\":{\"amount\":\"The amount redeemed.\",\"executor\":\"The executor address.\",\"executorFee\":\"The fee paid to the executor.\",\"lots\":\"The number of lots redeemed.\",\"personalAccount\":\"The personal account address.\"}},\"FXrpTransferred(address,address,uint256)\":{\"params\":{\"amount\":\"The amount of FXRP transferred.\",\"personalAccount\":\"The personal account address.\",\"to\":\"The recipient address.\"}},\"InstructionExecuted(address,bytes32,bytes32,string,uint256)\":{\"params\":{\"instructionId\":\"The instruction ID.\",\"paymentReference\":\"The payment reference.\",\"personalAccount\":\"The personal account address.\",\"transactionId\":\"The transaction ID.\",\"xrplOwner\":\"The XRPL owner address.\"}},\"InstructionFeeRemoved(uint256)\":{\"params\":{\"instructionId\":\"The instruction ID.\"}},\"InstructionFeeSet(uint256,uint256)\":{\"params\":{\"instructionFee\":\"The fee for the instruction.\",\"instructionId\":\"The instruction ID.\"}},\"OwnershipTransferred(address,address)\":{\"details\":\"This emits when ownership of a contract changes.\"},\"PaymentProofValidityDurationSecondsSet(uint256)\":{\"params\":{\"paymentProofValidityDurationSeconds\":\"Duration in seconds.\"}},\"PersonalAccountCreated(address,string)\":{\"params\":{\"personalAccount\":\"The deployed PersonalAccount contract address.\",\"xrplOwner\":\"The XRPL owner address.\"}},\"PersonalAccountImplementationSet(address)\":{\"params\":{\"newImplementation\":\"The new implementation address.\"}},\"RedeemRequested(address,address,uint256,uint256,uint256)\":{\"params\":{\"amount\":\"The amount to redeem.\",\"claimableEpoch\":\"The epoch when the claim becomes available.\",\"personalAccount\":\"The personal account address.\",\"shares\":\"The number of shares to redeem.\",\"vault\":\"The vault address.\"}},\"Redeemed(address,address,uint256,uint256)\":{\"params\":{\"amount\":\"The amount to redeem.\",\"personalAccount\":\"The personal account address.\",\"shares\":\"The number of shares to redeem.\",\"vault\":\"The vault address.\"}},\"SwapExecuted(address,address,address,string,uint256,uint256)\":{\"params\":{\"amountIn\":\"The amount of input tokens.\",\"amountOut\":\"The amount of output tokens received.\",\"personalAccount\":\"The personal account address.\",\"tokenIn\":\"The input token address.\",\"tokenOut\":\"The output token address.\",\"xrplOwner\":\"The XRPL owner address.\"}},\"SwapParamsSet(address,address,uint24,uint24,uint24)\":{\"params\":{\"maxSlippagePPM\":\"The maximum slippage allowed for swaps (in PPM).\",\"uniswapV3Router\":\"The Uniswap V3 router address.\",\"usdt0\":\"USDT0 token address.\",\"usdt0FXrpPoolFeeTierPPM\":\"The USDT0/FXRP pool fee tier (in PPM - supported values: 100, 500, 3000, 10000).\",\"wNatUsdt0PoolFeeTierPPM\":\"The WNAT/USDT0 pool fee tier (in PPM - supported values: 100, 500, 3000, 10000).\"}},\"TimelockDurationSet(uint256)\":{\"params\":{\"timelockDurationSeconds\":\"The new timelock duration in seconds.\"}},\"TimelockedCallCanceled(bytes32)\":{\"params\":{\"encodedCallHash\":\"The hash of the encoded call data.\"}},\"TimelockedCallExecuted(bytes32)\":{\"params\":{\"encodedCallHash\":\"The hash of the encoded call data.\"}},\"VaultAdded(uint256,address,uint8)\":{\"params\":{\"vaultAddress\":\"The vault address.\",\"vaultId\":\"The vault ID.\",\"vaultType\":\"The vault type (e.g., 1 = Firelight, 2 = Upshift).\"}},\"WithdrawalClaimed(address,address,uint256,uint256)\":{\"params\":{\"amount\":\"The amount claimed.\",\"period\":\"The period for which the claim is made.\",\"personalAccount\":\"The personal account address.\",\"vault\":\"The vault address.\"}},\"XrplProviderWalletAdded(string)\":{\"params\":{\"xrplProviderWallet\":\"The XRPL provider wallet address.\"}},\"XrplProviderWalletRemoved(string)\":{\"params\":{\"xrplProviderWallet\":\"The XRPL provider wallet address.\"}}},\"kind\":\"dev\",\"methods\":{\"diamondCut((address,uint8,bytes4[])[],address,bytes)\":{\"params\":{\"_calldata\":\"A function call, including function selector and arguments                  _calldata is executed with delegatecall on _init\",\"_diamondCut\":\"Contains the facet addresses and function selectors\",\"_init\":\"The address of the contract or facet to execute _calldata\"}},\"executeDepositAfterMinting(uint256,(bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)\":{\"params\":{\"_collateralReservationId\":\"The ID of the collateral reservation request returned by `reserveCollateral` call.\",\"_proof\":\"Proof of XRPL transaction.\",\"_xrplAddress\":\"The XRPL address requesting execution.\"}},\"executeInstruction((bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)\":{\"params\":{\"_proof\":\"Proof of XRPL transaction.\",\"_xrplAddress\":\"The XRPL address requesting execution.\"}},\"executeTimelockedCall(bytes)\":{\"details\":\"Anyone can call this method.\",\"params\":{\"_encodedCall\":\"ABI encoded call data (signature and parameters).\"}},\"facetAddress(bytes4)\":{\"details\":\"If facet is not found return address(0).\",\"params\":{\"_functionSelector\":\"The function selector.\"},\"returns\":{\"facetAddress_\":\"The facet address.\"}},\"facetAddresses()\":{\"returns\":{\"facetAddresses_\":\"facetAddresses_\"}},\"facetFunctionSelectors(address)\":{\"params\":{\"_facet\":\"The facet address.\"},\"returns\":{\"facetFunctionSelectors_\":\"facetFunctionSelectors_\"}},\"facets()\":{\"returns\":{\"facets_\":\"Facet\"}},\"getAgentVaults()\":{\"returns\":{\"_agentVaultAddresses\":\"The list of registered agent vault addresses.\",\"_agentVaultIds\":\"The list of registered agent vault IDs.\"}},\"getDefaultInstructionFee()\":{\"returns\":{\"_0\":\"The default instruction fee in underlying asset's smallest unit (e.g., drops for XRP).\"}},\"getExecuteTimelockedCallTimestamp(bytes)\":{\"params\":{\"_encodedCall\":\"ABI encoded call data (signature and parameters).\"},\"returns\":{\"_allowedAfterTimestamp\":\"The timestamp after which the call can be executed.\"}},\"getExecutorInfo()\":{\"returns\":{\"_executor\":\"The executor address.\",\"_executorFee\":\"The executor fee (in wei).\"}},\"getInstructionFee(uint256)\":{\"params\":{\"_instructionId\":\"The ID of the instruction.\"},\"returns\":{\"_0\":\"The instruction fee in underlying asset's smallest unit (e.g., drops for XRP).\"}},\"getPaymentProofValidityDurationSeconds()\":{\"returns\":{\"_0\":\"The payment proof validity duration in seconds.\"}},\"getPersonalAccount(string)\":{\"params\":{\"_xrplOwner\":\"The XRPL address of the owner.\"},\"returns\":{\"_0\":\"The PersonalAccount contract address associated with the XRPL owner or the computed address if not yet deployed.\"}},\"getSourceId()\":{\"returns\":{\"_0\":\"The source ID.\"}},\"getSwapParams()\":{\"returns\":{\"_maxSlippagePPM\":\"The maximum slippage allowed for swaps (in PPM).\",\"_uniswapV3Router\":\"The Uniswap V3 router address.\",\"_usdt0\":\"USDT0 token address.\",\"_usdt0FXrpPoolFeeTierPPM\":\"The USDT0/FXRP pool fee tier (in PPM).\",\"_wNatUsdt0PoolFeeTierPPM\":\"The WNAT/USDT0 pool fee tier (in PPM).\"}},\"getTimelockDurationSeconds()\":{\"returns\":{\"_timelockDurationSeconds\":\"The timelock duration in seconds.\"}},\"getTransactionIdForCollateralReservation(uint256)\":{\"params\":{\"_collateralReservationId\":\"The collateral reservation id.\"},\"returns\":{\"_transactionId\":\"The transaction id associated with the collateral reservation.\"}},\"getVaults()\":{\"returns\":{\"_vaultAddresses\":\"The list of vault addresses corresponding to the vault IDs.\",\"_vaultIds\":\"The list of registered vault IDs.\",\"_vaultTypes\":\"The list of vault types corresponding to the vault IDs.\"}},\"getXrplProviderWallets()\":{\"returns\":{\"_0\":\"The list of registered XRPL provider wallets.\"}},\"implementation()\":{\"details\":\"Must return an address that can be used as a delegate call target. {UpgradeableBeacon} will check that this address is a contract.\"},\"isTransactionIdUsed(bytes32)\":{\"params\":{\"_transactionId\":\"The transaction id to check.\"},\"returns\":{\"_0\":\"True if used, false otherwise.\"}},\"owner()\":{\"returns\":{\"owner_\":\"The address of the owner.\"}},\"reserveCollateral(string,bytes32,bytes32)\":{\"params\":{\"_paymentReference\":\"The payment reference associated with the request.\",\"_transactionId\":\"The unique transaction ID for tracking.\",\"_xrplAddress\":\"The XRPL address requesting the collateral reservation.\"},\"returns\":{\"_collateralReservationId\":\"The ID of the collateral reservation.\"}},\"supportsInterface(bytes4)\":{\"details\":\"Interface identification is specified in ERC-165. This function  uses less than 30,000 gas.\",\"params\":{\"interfaceId\":\"The interface identifier, as specified in ERC-165\"},\"returns\":{\"_0\":\"`true` if the contract implements `interfaceID` and  `interfaceID` is not 0xffffffff, `false` otherwise\"}},\"swapUsdt0ForFAsset(string)\":{\"params\":{\"_xrplAddress\":\"The XRPL address of the personal account.\"}},\"swapWNatForUsdt0(string)\":{\"params\":{\"_xrplAddress\":\"The XRPL address of the personal account.\"}},\"transferOwnership(address)\":{\"details\":\"Set _newOwner to address(0) to renounce any ownership.\",\"params\":{\"_newOwner\":\"The address of the new owner of the contract\"}}},\"title\":\"IMasterAccountController\",\"version\":1},\"userdoc\":{\"errors\":{\"AddressZero()\":[{\"notice\":\"Reverts if the address is zero.\"}],\"AgentNotAvailable(address)\":[{\"notice\":\"Reverts if the agent is not available.\"}],\"AgentVaultAddressAlreadyAdded(address)\":[{\"notice\":\"Reverts if the agent vault address is already added.\"}],\"AgentVaultAddressZero(uint256)\":[{\"notice\":\"Reverts if the agent vault address is zero.\"}],\"AgentVaultIdAlreadyAdded(uint256)\":[{\"notice\":\"Reverts if the agent vault ID is already added.\"}],\"AgentVaultIdZero(uint256)\":[{\"notice\":\"Reverts if the agent vault ID is zero.\"}],\"AgentsVaultsLengthsMismatch()\":[{\"notice\":\"Reverts if array lengths do not match.\"}],\"InstructionFeeNotSet(uint256)\":[{\"notice\":\"Reverts if the instruction fee is not set.\"}],\"InstructionFeesLengthsMismatch()\":[{\"notice\":\"Reverts if array lengths do not match.\"}],\"InvalidAgentVault(uint256)\":[{\"notice\":\"Reverts if the agent vault is invalid.\"}],\"InvalidAmount()\":[{\"notice\":\"Reverts if the amount is invalid.\"}],\"InvalidExecutor()\":[{\"notice\":\"Reverts if the executor address is invalid.\"}],\"InvalidExecutorFee()\":[{\"notice\":\"Reverts if the executor fee is invalid.\"}],\"InvalidInstruction(uint256,uint256)\":[{\"notice\":\"Reverts if the instruction is invalid.\"}],\"InvalidInstructionFee(uint256)\":[{\"notice\":\"Reverts if the instruction fee is invalid.\"}],\"InvalidInstructionType(uint256)\":[{\"notice\":\"Reverts if the instruction type is invalid.\"}],\"InvalidMaxSlippagePPM()\":[{\"notice\":\"Reverts if the maximum slippage in PPM is invalid (must be less than or equal to 1e6).\"}],\"InvalidMinter()\":[{\"notice\":\"Reverts if the minter is invalid.\"}],\"InvalidPaymentAmount(uint256)\":[{\"notice\":\"Reverts if the payment amount is invalid.\"}],\"InvalidPaymentProofValidityDuration()\":[{\"notice\":\"Reverts if the payment proof validity duration is invalid (must be greater than 0).\"}],\"InvalidPersonalAccountImplementation()\":[{\"notice\":\"Reverts if the personal account implementation address is invalid.\"}],\"InvalidPoolFeeTierPPM()\":[{\"notice\":\"Reverts if the pool fee tier in PPM is invalid (allowed values: 100, 500, 3000, 10000).\"}],\"InvalidReceivingAddressHash()\":[{\"notice\":\"Reverts if the receiving address hash is invalid.\"}],\"InvalidSourceId()\":[{\"notice\":\"Reverts if the source ID is invalid.\"}],\"InvalidTransactionId()\":[{\"notice\":\"Reverts if the transaction ID is invalid.\"}],\"InvalidTransactionProof()\":[{\"notice\":\"Reverts if the transaction proof is invalid.\"}],\"InvalidTransactionStatus()\":[{\"notice\":\"Reverts if the transaction status is invalid.\"}],\"InvalidUniswapV3Router()\":[{\"notice\":\"Reverts if the Uniswap V3 router address is invalid.\"}],\"InvalidUsdt0()\":[{\"notice\":\"Reverts if the USDT0 token address is invalid.\"}],\"InvalidVaultId(uint256)\":[{\"notice\":\"Reverts if the vault ID is invalid.\"}],\"InvalidVaultType(uint8)\":[{\"notice\":\"Reverts if the vault type is invalid.\"}],\"InvalidXrplProviderWallet(string)\":[{\"notice\":\"Reverts if the XRPL provider wallet is invalid.\"}],\"MintingNotCompleted()\":[{\"notice\":\"Reverts if minting is not completed.\"}],\"MismatchingSourceAndXrplAddr()\":[{\"notice\":\"Reverts if the source address and XRPL address do not match.\"}],\"PaymentProofExpired()\":[{\"notice\":\"Reverts if the payment proof has expired.\"}],\"PersonalAccountNotSuccessfullyDeployed(address)\":[{\"notice\":\"Reverts if the personal account was not successfully deployed.\"}],\"TimelockDurationTooLong()\":[{\"notice\":\"Reverts if the timelock duration is too long.\"}],\"TimelockInvalidSelector()\":[{\"notice\":\"Reverts if the timelocked call selector is invalid.\"}],\"TimelockNotAllowedYet()\":[{\"notice\":\"Reverts if the timelock period has not yet expired.\"}],\"TransactionAlreadyExecuted()\":[{\"notice\":\"Reverts if the transaction has already been executed.\"}],\"UnknownCollateralReservationId()\":[{\"notice\":\"Reverts if the collateral reservation ID is unknown.\"}],\"ValueZero()\":[{\"notice\":\"Reverts if the value is zero.\"}],\"VaultAddressAlreadyAdded(address)\":[{\"notice\":\"Reverts if the vault address is already added.\"}],\"VaultAddressZero(uint256)\":[{\"notice\":\"Reverts if the vault address is zero.\"}],\"VaultIdAlreadyAdded(uint256)\":[{\"notice\":\"Reverts if the vault ID is already added.\"}],\"VaultIdZero(uint256)\":[{\"notice\":\"Reverts if the vault ID is zero.\"}],\"VaultsLengthsMismatch()\":[{\"notice\":\"Reverts if array lengths do not match.\"}],\"XrplProviderWalletAlreadyExists(string)\":[{\"notice\":\"Reverts if the XRPL provider wallet already exists.\"}]},\"events\":{\"AgentVaultAdded(uint256,address)\":{\"notice\":\"Emitted when an agent vault is added.\"},\"AgentVaultRemoved(uint256,address)\":{\"notice\":\"Emitted when an agent vault is removed.\"},\"Approved(address,address,address,uint256)\":{\"notice\":\"Emitted when a token approval is made for a vault.\"},\"CallTimelocked(bytes,bytes32,uint256)\":{\"notice\":\"Emitted when a call is timelocked. It can be executed after the `allowedAfterTimestamp` timestamp.\"},\"Claimed(address,address,uint256,uint256,uint256,uint256,uint256)\":{\"notice\":\"Emitted when a claim is made for a specific date.\"},\"CollateralReserved(address,bytes32,bytes32,string,uint256,address,uint256,address,uint256)\":{\"notice\":\"Emitted when collateral is reserved for minting.\"},\"DefaultInstructionFeeSet(uint256)\":{\"notice\":\"Emitted when the default instruction fee is set.\"},\"Deposited(address,address,uint256,uint256)\":{\"notice\":\"Emitted when a deposit is made to a vault.\"},\"ExecutorFeeSet(uint256)\":{\"notice\":\"Emitted when the executor fee is set.\"},\"ExecutorSet(address)\":{\"notice\":\"Emitted when the executor address is set.\"},\"FXrpRedeemed(address,uint256,uint256,address,uint256)\":{\"notice\":\"Emitted when a FXRP redeem operation is performed.\"},\"FXrpTransferred(address,address,uint256)\":{\"notice\":\"Emitted when a transfer of FXRP is made.\"},\"InstructionExecuted(address,bytes32,bytes32,string,uint256)\":{\"notice\":\"Emitted when an instruction is executed.\"},\"InstructionFeeRemoved(uint256)\":{\"notice\":\"Emitted when an instruction-specific fee is removed.\"},\"InstructionFeeSet(uint256,uint256)\":{\"notice\":\"Emitted when an instruction-specific fee is set.\"},\"PaymentProofValidityDurationSecondsSet(uint256)\":{\"notice\":\"Emitted when the payment proof validity duration is set.\"},\"PersonalAccountCreated(address,string)\":{\"notice\":\"Emitted when a new PersonalAccount is created.\"},\"PersonalAccountImplementationSet(address)\":{\"notice\":\"Emitted when the PersonalAccount implementation address is set.\"},\"RedeemRequested(address,address,uint256,uint256,uint256)\":{\"notice\":\"Emitted when a redeem request is made.\"},\"Redeemed(address,address,uint256,uint256)\":{\"notice\":\"Emitted when a redeem is made from a vault.\"},\"SwapExecuted(address,address,address,string,uint256,uint256)\":{\"notice\":\"Emitted when a token swap is executed.\"},\"SwapParamsSet(address,address,uint24,uint24,uint24)\":{\"notice\":\"Emitted when swap parameters are set.\"},\"TimelockDurationSet(uint256)\":{\"notice\":\"Emitted when the timelock duration is set.\"},\"TimelockedCallCanceled(bytes32)\":{\"notice\":\"Emitted when a timelocked call is canceled.\"},\"TimelockedCallExecuted(bytes32)\":{\"notice\":\"Emitted when a timelocked call is executed.\"},\"VaultAdded(uint256,address,uint8)\":{\"notice\":\"Emitted when a vault is added.\"},\"WithdrawalClaimed(address,address,uint256,uint256)\":{\"notice\":\"Emitted when a withdrawal claim is made.\"},\"XrplProviderWalletAdded(string)\":{\"notice\":\"Emitted when an XRPL provider wallet is added.\"},\"XrplProviderWalletRemoved(string)\":{\"notice\":\"Emitted when an XRPL provider wallet is removed.\"}},\"kind\":\"user\",\"methods\":{\"diamondCut((address,uint8,bytes4[])[],address,bytes)\":{\"notice\":\"Add/replace/remove any number of functions and optionally execute         a function with delegatecall\"},\"executeDepositAfterMinting(uint256,(bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)\":{\"notice\":\"Execute deposit after successful minting for _collateralReservationId.\"},\"executeInstruction((bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)\":{\"notice\":\"Execute an XRPL instruction for a given XRPL address.\"},\"executeTimelockedCall(bytes)\":{\"notice\":\"Execute a timelocked call once the timelock period expires.\"},\"facetAddress(bytes4)\":{\"notice\":\"Gets the facet that supports the given selector.\"},\"facetAddresses()\":{\"notice\":\"Get all the facet addresses used by a diamond.\"},\"facetFunctionSelectors(address)\":{\"notice\":\"Gets all the function selectors supported by a specific facet.\"},\"facets()\":{\"notice\":\"Gets all facet addresses and their four byte function selectors.\"},\"getAgentVaults()\":{\"notice\":\"Returns the list of registered agent vault IDs and their corresponding addresses.\"},\"getDefaultInstructionFee()\":{\"notice\":\"Returns the default instruction fee.\"},\"getExecuteTimelockedCallTimestamp(bytes)\":{\"notice\":\"Returns the timestamp after which the timelocked call can be executed.\"},\"getExecutorInfo()\":{\"notice\":\"Returns the executor address and fee.\"},\"getInstructionFee(uint256)\":{\"notice\":\"Returns the instruction fee for a given instruction ID.\"},\"getPaymentProofValidityDurationSeconds()\":{\"notice\":\"Gets the payment proof validity duration in seconds.\"},\"getPersonalAccount(string)\":{\"notice\":\"Get the PersonalAccount contract for a given XRPL owner.\"},\"getSourceId()\":{\"notice\":\"Gets the source ID used for payment verification.\"},\"getSwapParams()\":{\"notice\":\"Returns the swap parameters.\"},\"getTimelockDurationSeconds()\":{\"notice\":\"Returns the timelock duration in seconds.\"},\"getTransactionIdForCollateralReservation(uint256)\":{\"notice\":\"Returns the transaction id for a given collateral reservation id.\"},\"getVaults()\":{\"notice\":\"Returns the list of registered vault IDs, their corresponding addresses and types.\"},\"getXrplProviderWallets()\":{\"notice\":\"Returns the list of registered XRPL provider wallets.\"},\"isTransactionIdUsed(bytes32)\":{\"notice\":\"Returns true if the transaction id has already been used.\"},\"owner()\":{\"notice\":\"Get the address of the owner\"},\"reserveCollateral(string,bytes32,bytes32)\":{\"notice\":\"Reserve collateral for minting operation.\"},\"supportsInterface(bytes4)\":{\"notice\":\"Query if a contract implements an interface\"},\"swapUsdt0ForFAsset(string)\":{\"notice\":\"Swaps USDT0 for FAsset for the personal account associated with the given XRPL address.\"},\"swapWNatForUsdt0(string)\":{\"notice\":\"Swaps WNAT for USDT0 for the personal account associated with the given XRPL address.\"},\"transferOwnership(address)\":{\"notice\":\"Set the address of the new owner of the contract\"}},\"notice\":\"Interface for the MasterAccountController contract, which manages personal accounts and executes XRPL instructions.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/userInterfaces/IMasterAccountController.sol\":\"IMasterAccountController\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@ensdomains/=node_modules/@ensdomains/\",\":@gnosis.pm/=node_modules/@gnosis.pm/\",\":@openzeppelin-contracts-5.2.0-rc.1/=dependencies/flare-periphery-0.1.38/dependencies/@openzeppelin-contracts-5.2.0-rc.1/\",\":@openzeppelin-contracts-5.2.0/=dependencies/@openzeppelin-contracts-5.2.0/\",\":@openzeppelin-contracts-5.5.0/=dependencies/@openzeppelin-contracts-5.5.0/\",\":@openzeppelin-contracts-upgradeable-5.5.0/=dependencies/@openzeppelin-contracts-upgradeable-5.5.0/\",\":@openzeppelin/contracts/=dependencies/@openzeppelin-contracts-5.5.0/\",\":@uniswap-v3-core-1.0.1/=dependencies/@uniswap-v3-core-1.0.1/contracts/\",\":@uniswap-v3-periphery-1.4.4/=dependencies/@uniswap-v3-periphery-1.4.4/contracts/\",\":@uniswap/v3-core/=dependencies/@uniswap-v3-core-1.0.1/\",\":@uniswap/v3-periphery/=dependencies/@uniswap-v3-periphery-1.4.4/\",\":flare-periphery-0.1.36/=dependencies/flare-periphery-0.1.36/src/\",\":flare-periphery-0.1.38/=dependencies/flare-periphery-0.1.38/src/\",\":flare-periphery/=dependencies/flare-periphery-0.1.38/\",\":forge-std-1.10.0/=dependencies/forge-std-1.10.0/src/\",\":forge-std/=dependencies/forge-std-1.10.0/src/\",\":hardhat/=node_modules/hardhat/\"],\"viaIR\":true},\"sources\":{\"contracts/diamond/interfaces/IDiamond.sol\":{\"keccak256\":\"0x30eb2322290bb2492a9f9d68fd124a5ac5bb3da59f12492b088d04f24f53f67c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://16dfd7236c87e7760a5d8ddbf9d31e94df0310a91837ad2d7ca5c1a2e105529a\",\"dweb:/ipfs/QmTpLiPbBHxia4NtQqNMc12BetVFL4tQVA6sM3GpRoPkgz\"]},\"contracts/diamond/interfaces/IDiamondCut.sol\":{\"keccak256\":\"0x6b6fc2baadc1eae6f612fb46ed9f66ebc1b448ca902422a074f52d9ab6bf3db6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://95861f9ecb9311875c8f70c9cbd62ac47a8fc2c991fba8db054e525b4b45620b\",\"dweb:/ipfs/QmUh4BqrWMJNtgCANrfkQqTwEvXVsE1pZD6ybqdfeTtxVS\"]},\"contracts/diamond/interfaces/IDiamondLoupe.sol\":{\"keccak256\":\"0x4dea0e8ce91351401e473b7c56ced571862ba561f6b99244ac86d10aeb2af024\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ecbdd839f10d41a8fe72addf6f6444d8e5d2972fc762e0d5b1191c506a4c696\",\"dweb:/ipfs/QmT12wVj4bfpFwvzPUoHBM3Z4E2KYJQUkoBFeQ1jipERsw\"]},\"contracts/diamond/interfaces/IERC165.sol\":{\"keccak256\":\"0x7541f7408d0f74162bc4664d5e012427f2ceaab2abadca0353269ef15ee03d8b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a8e7a34b3ea39f4c0dfa6f5ace5d9415e4d0c90cb3f4264e6946b808f2d4011c\",\"dweb:/ipfs/QmWdcRF4krMMb1ua3hmV8avdHKYa4XXt1iw7sxx1ntsEJa\"]},\"contracts/diamond/interfaces/IERC173.sol\":{\"keccak256\":\"0x001e07b0fbc894300b939d496ffb005abe398b5bc609802d319b8cdeafe5d36b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8e59f66879ef993892410cbe834b1d2dd34891f47066b7be601ff825b0748361\",\"dweb:/ipfs/QmZedQ668we8ohPPZF5tPP5gKpJ5n22h3FDFkoFT5VXpEu\"]},\"contracts/userInterfaces/IMasterAccountController.sol\":{\"keccak256\":\"0xd4564c5ca3bdf08d02b65622d711901bed3e150227fb80d0fc4d0eb7a0cf58fa\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ac03100f36619e8332124248e08e202abf3f9d196f8b5be1bbfb88cc275df7df\",\"dweb:/ipfs/QmaSfuAsAnKKucsPfxQNn3od6XcmR4yezGWso8rLdoQbxw\"]},\"contracts/userInterfaces/facets/IAgentVaultsFacet.sol\":{\"keccak256\":\"0x38d81dbf97f36f3c37c3835a8cabdb18e8d20f0c9380dd1bf8ecefe7ca56aa6c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2fddbbc6eb22553f3487c56d9be9b55958b914c48f678321f6a6116c9a5226ca\",\"dweb:/ipfs/QmZLiRVLc3TBddkvLuA7rQyZtiLC2qpJoq9Zg3FEqTw6kC\"]},\"contracts/userInterfaces/facets/IExecutorsFacet.sol\":{\"keccak256\":\"0x52fc14f26cff37e7ed2a0826f47ec2914851c1f9e5d8cc37ffc186f643e0f09d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cf1bdabd156586992ddc482e8e339019ae6acf8560ea58bef5390614009850d7\",\"dweb:/ipfs/QmSje4NyhafCAFgei5RbfPjAPA2oHcnAww3RVNHGYqKFRr\"]},\"contracts/userInterfaces/facets/IInstructionFeesFacet.sol\":{\"keccak256\":\"0x9c8110ee10c8e572abfee31fe668527554920f9580cfd25097f4664664593abf\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b83b412c90e09835fb41e1aab946154483d1c0b77554d9a3ec363107cc52fa0c\",\"dweb:/ipfs/QmaaVefTTZGsjvQurNyGZnqVkr27sNNmG1hEncNVoACKoH\"]},\"contracts/userInterfaces/facets/IInstructionsFacet.sol\":{\"keccak256\":\"0x4bb3e926ce64bbc1de0dfc33e6d533a7a6042d9d038155221795484e6cfd9054\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a9feedd705fc4d028f244de5576b8b1ab22498a708d7451540a975841782d52d\",\"dweb:/ipfs/QmSHATbNztvfSScxtbWAVaJ5EMXJyfQgTd4nRtsXR2yu64\"]},\"contracts/userInterfaces/facets/IPaymentProofsFacet.sol\":{\"keccak256\":\"0x54a8b87c26e996e7b7a47dda999d274156ead9ddd53e8a64d1ab6b162c89eafd\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://13c73f1eb6a58ad2fb39515b63eab31855322b65f87f14fad8abd0f5f6af36ec\",\"dweb:/ipfs/QmXjvVgasBc4ny1fAzM6EJN1D4a2BW6Ze9m4w1w7aGGHnb\"]},\"contracts/userInterfaces/facets/IPersonalAccountsFacet.sol\":{\"keccak256\":\"0xc5eb73097ad25383fb4d216de1fa30d38a268fcdb3558e11b5f6b8d5bce39ac5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a5fd92741427b7189efd9ab842a23e2703c197befc1ce06f39813c69975c9d2b\",\"dweb:/ipfs/Qmb1T6MsTtaWv1VixPui4Yq2szuKGZAC3NyTUjgn4JKtad\"]},\"contracts/userInterfaces/facets/ISwapFacet.sol\":{\"keccak256\":\"0xc38cb8f26c2a0471701c60c9ff4ea5bae3690ae5fb8f3d7f1668481481733399\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://37ce24adb496bd144f7b1b7dd2a67ce767fb46a563601ffdadfcb6e9dc3f0b47\",\"dweb:/ipfs/QmXSgjihs2fAGzLLhWJbos6LnHWfxvMkdegL87mFqCeyuA\"]},\"contracts/userInterfaces/facets/ITimelockFacet.sol\":{\"keccak256\":\"0x15e580455ce9f5e2b7847659f07998827331bb8fc54673ff599b4d07eb398cb4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ffbaad1468077a498260b5f58b994d7cadea2d19772e70c50116f3ffaf6eb3a\",\"dweb:/ipfs/QmWEVaqzG9A1q1MjAgojo8RaRYLH9dNqttjz8xJTc3VMyG\"]},\"contracts/userInterfaces/facets/IVaultsFacet.sol\":{\"keccak256\":\"0x6b9c446b79b5a004c473cafffc42fbec2e32d24534084ffab012a0feff39302b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d025da2b99347911e2b5a277c628f5dcec018be5b7e4f7f9dc68c8cdafb8fbaf\",\"dweb:/ipfs/QmSbNNDtmqGF6H3a1urKZcYnd71tXJnkofGUBpNGWkrWHC\"]},\"contracts/userInterfaces/facets/IXrplProviderWalletsFacet.sol\":{\"keccak256\":\"0x09a361374122d7803a08e7540a250407386e2a9afc7537877a2fe7f598a3059d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://510bbdcbd4f6edaa8fcc84a67e93a2f30469441d2ebdc22de2dded2e7884c107\",\"dweb:/ipfs/QmVUmuHdBJTqo4CuQi9ft9QFuc6gBeVJ8vXNwG51SCU4QD\"]},\"dependencies/@openzeppelin-contracts-5.5.0/proxy/beacon/IBeacon.sol\":{\"keccak256\":\"0x20462ddb2665e9521372c76b001d0ce196e59dbbd989de9af5576cad0bd5628b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f417fd12aeec8fbfaceaa30e3a08a0724c0bc39de363e2acf6773c897abbaf6d\",\"dweb:/ipfs/QmU4Hko6sApdweVM92CsiuLKkCk8HfyBeutF89PCTz5Tye\"]},\"dependencies/flare-periphery-0.1.38/src/flare/IPayment.sol\":{\"keccak256\":\"0x9f24ac36dce88e3c80307b47d7de628941e9877ddc2a935676532fadcb470104\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://78be9fd81d495cf52080c8e3f11e2ee0c17935845cb8346417658a1bdcbb9c1a\",\"dweb:/ipfs/QmTVQkXRvVcqDPBd9U8qokrzrBakQEzwvmyLr1axBZxJXz\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.30+commit.73712a01"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "AddressZero"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "agentVault",
+              "type": "address"
+            }
+          ],
+          "type": "error",
+          "name": "AgentNotAvailable"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "agentVaultAddress",
+              "type": "address"
+            }
+          ],
+          "type": "error",
+          "name": "AgentVaultAddressAlreadyAdded"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "AgentVaultAddressZero"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "agentVaultId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "AgentVaultIdAlreadyAdded"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "AgentVaultIdZero"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "AgentsVaultsLengthsMismatch"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InstructionFeeNotSet"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InstructionFeesLengthsMismatch"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "agentVaultId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidAgentVault"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidAmount"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidExecutor"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidExecutorFee"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionType",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "instructionCommand",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidInstruction"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidInstructionFee"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionType",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidInstructionType"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidMaxSlippagePPM"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidMinter"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "requiredAmount",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidPaymentAmount"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidPaymentProofValidityDuration"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidPersonalAccountImplementation"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidPoolFeeTierPPM"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidReceivingAddressHash"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidSourceId"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidTransactionId"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidTransactionProof"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidTransactionStatus"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidUniswapV3Router"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "InvalidUsdt0"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "vaultId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidVaultId"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint8",
+              "name": "vaultType",
+              "type": "uint8"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidVaultType"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "xrplProviderWallet",
+              "type": "string"
+            }
+          ],
+          "type": "error",
+          "name": "InvalidXrplProviderWallet"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "MintingNotCompleted"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "MismatchingSourceAndXrplAddr"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "PaymentProofExpired"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccountAddress",
+              "type": "address"
+            }
+          ],
+          "type": "error",
+          "name": "PersonalAccountNotSuccessfullyDeployed"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "TimelockDurationTooLong"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "TimelockInvalidSelector"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "TimelockNotAllowedYet"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "TransactionAlreadyExecuted"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "UnknownCollateralReservationId"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "ValueZero"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "vaultAddress",
+              "type": "address"
+            }
+          ],
+          "type": "error",
+          "name": "VaultAddressAlreadyAdded"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "VaultAddressZero"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "vaultId",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "VaultIdAlreadyAdded"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "type": "error",
+          "name": "VaultIdZero"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "VaultsLengthsMismatch"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "xrplProviderWallet",
+              "type": "string"
+            }
+          ],
+          "type": "error",
+          "name": "XrplProviderWalletAlreadyExists"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "agentVaultId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "agentVaultAddress",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "AgentVaultAdded",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "agentVaultId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "agentVaultAddress",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "AgentVaultRemoved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "fxrp",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Approved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes",
+              "name": "encodedCall",
+              "type": "bytes",
+              "indexed": false
+            },
+            {
+              "internalType": "bytes32",
+              "name": "encodedCallHash",
+              "type": "bytes32",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "allowedAfterTimestamp",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "CallTimelocked",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "year",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "month",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "day",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "shares",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Claimed",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "bytes32",
+              "name": "transactionId",
+              "type": "bytes32",
+              "indexed": true
+            },
+            {
+              "internalType": "bytes32",
+              "name": "paymentReference",
+              "type": "bytes32",
+              "indexed": true
+            },
+            {
+              "internalType": "string",
+              "name": "xrplOwner",
+              "type": "string",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateralReservationId",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "agentVault",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "lots",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "executor",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "executorFee",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "CollateralReserved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "defaultInstructionFee",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "DefaultInstructionFeeSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "shares",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Deposited",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "struct IDiamond.FacetCut[]",
+              "name": "_diamondCut",
+              "type": "tuple[]",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "facetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "enum IDiamond.FacetCutAction",
+                  "name": "action",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "bytes4[]",
+                  "name": "functionSelectors",
+                  "type": "bytes4[]"
+                }
+              ],
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "_init",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "bytes",
+              "name": "_calldata",
+              "type": "bytes",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "DiamondCut",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "executorFee",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ExecutorFeeSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "executor",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ExecutorSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "lots",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "executor",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "executorFee",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "FXrpRedeemed",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "FXrpTransferred",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "bytes32",
+              "name": "transactionId",
+              "type": "bytes32",
+              "indexed": true
+            },
+            {
+              "internalType": "bytes32",
+              "name": "paymentReference",
+              "type": "bytes32",
+              "indexed": true
+            },
+            {
+              "internalType": "string",
+              "name": "xrplOwner",
+              "type": "string",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "instructionId",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "InstructionExecuted",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionId",
+              "type": "uint256",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "InstructionFeeRemoved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "instructionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "instructionFee",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "InstructionFeeSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "OwnershipTransferred",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "paymentProofValidityDurationSeconds",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "PaymentProofValidityDurationSecondsSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "string",
+              "name": "xrplOwner",
+              "type": "string",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "PersonalAccountCreated",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "newImplementation",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "PersonalAccountImplementationSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "shares",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "claimableEpoch",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "RedeemRequested",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "shares",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Redeemed",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "tokenIn",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "tokenOut",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "string",
+              "name": "xrplOwner",
+              "type": "string",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amountIn",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amountOut",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SwapExecuted",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "uniswapV3Router",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "usdt0",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint24",
+              "name": "wNatUsdt0PoolFeeTierPPM",
+              "type": "uint24",
+              "indexed": false
+            },
+            {
+              "internalType": "uint24",
+              "name": "usdt0FXrpPoolFeeTierPPM",
+              "type": "uint24",
+              "indexed": false
+            },
+            {
+              "internalType": "uint24",
+              "name": "maxSlippagePPM",
+              "type": "uint24",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SwapParamsSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "timelockDurationSeconds",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "TimelockDurationSet",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "encodedCallHash",
+              "type": "bytes32",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "TimelockedCallCanceled",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "encodedCallHash",
+              "type": "bytes32",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "TimelockedCallExecuted",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "vaultId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vaultAddress",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint8",
+              "name": "vaultType",
+              "type": "uint8",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "VaultAdded",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "personalAccount",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "vault",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "period",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "WithdrawalClaimed",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "xrplProviderWallet",
+              "type": "string",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "XrplProviderWalletAdded",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "xrplProviderWallet",
+              "type": "string",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "XrplProviderWalletRemoved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "struct IDiamond.FacetCut[]",
+              "name": "_diamondCut",
+              "type": "tuple[]",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "facetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "enum IDiamond.FacetCutAction",
+                  "name": "action",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "bytes4[]",
+                  "name": "functionSelectors",
+                  "type": "bytes4[]"
+                }
+              ]
+            },
+            {
+              "internalType": "address",
+              "name": "_init",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes",
+              "name": "_calldata",
+              "type": "bytes"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "diamondCut"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_collateralReservationId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "struct IPayment.Proof",
+              "name": "_proof",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "bytes32[]",
+                  "name": "merkleProof",
+                  "type": "bytes32[]"
+                },
+                {
+                  "internalType": "struct IPayment.Response",
+                  "name": "data",
+                  "type": "tuple",
+                  "components": [
+                    {
+                      "internalType": "bytes32",
+                      "name": "attestationType",
+                      "type": "bytes32"
+                    },
+                    {
+                      "internalType": "bytes32",
+                      "name": "sourceId",
+                      "type": "bytes32"
+                    },
+                    {
+                      "internalType": "uint64",
+                      "name": "votingRound",
+                      "type": "uint64"
+                    },
+                    {
+                      "internalType": "uint64",
+                      "name": "lowestUsedTimestamp",
+                      "type": "uint64"
+                    },
+                    {
+                      "internalType": "struct IPayment.RequestBody",
+                      "name": "requestBody",
+                      "type": "tuple",
+                      "components": [
+                        {
+                          "internalType": "bytes32",
+                          "name": "transactionId",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "uint256",
+                          "name": "inUtxo",
+                          "type": "uint256"
+                        },
+                        {
+                          "internalType": "uint256",
+                          "name": "utxo",
+                          "type": "uint256"
+                        }
+                      ]
+                    },
+                    {
+                      "internalType": "struct IPayment.ResponseBody",
+                      "name": "responseBody",
+                      "type": "tuple",
+                      "components": [
+                        {
+                          "internalType": "uint64",
+                          "name": "blockNumber",
+                          "type": "uint64"
+                        },
+                        {
+                          "internalType": "uint64",
+                          "name": "blockTimestamp",
+                          "type": "uint64"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "sourceAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "sourceAddressesRoot",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "receivingAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "intendedReceivingAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "spentAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "intendedSpentAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "receivedAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "intendedReceivedAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "standardPaymentReference",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bool",
+                          "name": "oneToOne",
+                          "type": "bool"
+                        },
+                        {
+                          "internalType": "uint8",
+                          "name": "status",
+                          "type": "uint8"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "internalType": "string",
+              "name": "_xrplAddress",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "executeDepositAfterMinting"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "struct IPayment.Proof",
+              "name": "_proof",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "bytes32[]",
+                  "name": "merkleProof",
+                  "type": "bytes32[]"
+                },
+                {
+                  "internalType": "struct IPayment.Response",
+                  "name": "data",
+                  "type": "tuple",
+                  "components": [
+                    {
+                      "internalType": "bytes32",
+                      "name": "attestationType",
+                      "type": "bytes32"
+                    },
+                    {
+                      "internalType": "bytes32",
+                      "name": "sourceId",
+                      "type": "bytes32"
+                    },
+                    {
+                      "internalType": "uint64",
+                      "name": "votingRound",
+                      "type": "uint64"
+                    },
+                    {
+                      "internalType": "uint64",
+                      "name": "lowestUsedTimestamp",
+                      "type": "uint64"
+                    },
+                    {
+                      "internalType": "struct IPayment.RequestBody",
+                      "name": "requestBody",
+                      "type": "tuple",
+                      "components": [
+                        {
+                          "internalType": "bytes32",
+                          "name": "transactionId",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "uint256",
+                          "name": "inUtxo",
+                          "type": "uint256"
+                        },
+                        {
+                          "internalType": "uint256",
+                          "name": "utxo",
+                          "type": "uint256"
+                        }
+                      ]
+                    },
+                    {
+                      "internalType": "struct IPayment.ResponseBody",
+                      "name": "responseBody",
+                      "type": "tuple",
+                      "components": [
+                        {
+                          "internalType": "uint64",
+                          "name": "blockNumber",
+                          "type": "uint64"
+                        },
+                        {
+                          "internalType": "uint64",
+                          "name": "blockTimestamp",
+                          "type": "uint64"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "sourceAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "sourceAddressesRoot",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "receivingAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "intendedReceivingAddressHash",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "spentAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "intendedSpentAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "receivedAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "int256",
+                          "name": "intendedReceivedAmount",
+                          "type": "int256"
+                        },
+                        {
+                          "internalType": "bytes32",
+                          "name": "standardPaymentReference",
+                          "type": "bytes32"
+                        },
+                        {
+                          "internalType": "bool",
+                          "name": "oneToOne",
+                          "type": "bool"
+                        },
+                        {
+                          "internalType": "uint8",
+                          "name": "status",
+                          "type": "uint8"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "internalType": "string",
+              "name": "_xrplAddress",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "payable",
+          "type": "function",
+          "name": "executeInstruction"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes",
+              "name": "_encodedCall",
+              "type": "bytes"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "executeTimelockedCall"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes4",
+              "name": "_functionSelector",
+              "type": "bytes4"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "facetAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "facetAddress_",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "facetAddresses",
+          "outputs": [
+            {
+              "internalType": "address[]",
+              "name": "facetAddresses_",
+              "type": "address[]"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_facet",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "facetFunctionSelectors",
+          "outputs": [
+            {
+              "internalType": "bytes4[]",
+              "name": "facetFunctionSelectors_",
+              "type": "bytes4[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "facets",
+          "outputs": [
+            {
+              "internalType": "struct IDiamondLoupe.Facet[]",
+              "name": "facets_",
+              "type": "tuple[]",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "facetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes4[]",
+                  "name": "functionSelectors",
+                  "type": "bytes4[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getAgentVaults",
+          "outputs": [
+            {
+              "internalType": "uint256[]",
+              "name": "_agentVaultIds",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "address[]",
+              "name": "_agentVaultAddresses",
+              "type": "address[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getDefaultInstructionFee",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes",
+              "name": "_encodedCall",
+              "type": "bytes"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getExecuteTimelockedCallTimestamp",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_allowedAfterTimestamp",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getExecutorInfo",
+          "outputs": [
+            {
+              "internalType": "address payable",
+              "name": "_executor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_executorFee",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_instructionId",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getInstructionFee",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPaymentProofValidityDurationSeconds",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_xrplOwner",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPersonalAccount",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getSourceId",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getSwapParams",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "_uniswapV3Router",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_usdt0",
+              "type": "address"
+            },
+            {
+              "internalType": "uint24",
+              "name": "_wNatUsdt0PoolFeeTierPPM",
+              "type": "uint24"
+            },
+            {
+              "internalType": "uint24",
+              "name": "_usdt0FXrpPoolFeeTierPPM",
+              "type": "uint24"
+            },
+            {
+              "internalType": "uint24",
+              "name": "_maxSlippagePPM",
+              "type": "uint24"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getTimelockDurationSeconds",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_timelockDurationSeconds",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_collateralReservationId",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getTransactionIdForCollateralReservation",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "_transactionId",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getVaults",
+          "outputs": [
+            {
+              "internalType": "uint256[]",
+              "name": "_vaultIds",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "address[]",
+              "name": "_vaultAddresses",
+              "type": "address[]"
+            },
+            {
+              "internalType": "uint8[]",
+              "name": "_vaultTypes",
+              "type": "uint8[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getXrplProviderWallets",
+          "outputs": [
+            {
+              "internalType": "string[]",
+              "name": "",
+              "type": "string[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "implementation",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "_transactionId",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "isTransactionIdUsed",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "owner",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "owner_",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_xrplAddress",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "_paymentReference",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "_transactionId",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "payable",
+          "type": "function",
+          "name": "reserveCollateral",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_collateralReservationId",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes4",
+              "name": "interfaceId",
+              "type": "bytes4"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "supportsInterface",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_xrplAddress",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "swapUsdt0ForFAsset"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_xrplAddress",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "swapWNatForUsdt0"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_newOwner",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "transferOwnership"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "diamondCut((address,uint8,bytes4[])[],address,bytes)": {
+            "params": {
+              "_calldata": "A function call, including function selector and arguments                  _calldata is executed with delegatecall on _init",
+              "_diamondCut": "Contains the facet addresses and function selectors",
+              "_init": "The address of the contract or facet to execute _calldata"
+            }
+          },
+          "executeDepositAfterMinting(uint256,(bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": {
+            "params": {
+              "_collateralReservationId": "The ID of the collateral reservation request returned by `reserveCollateral` call.",
+              "_proof": "Proof of XRPL transaction.",
+              "_xrplAddress": "The XRPL address requesting execution."
+            }
+          },
+          "executeInstruction((bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": {
+            "params": {
+              "_proof": "Proof of XRPL transaction.",
+              "_xrplAddress": "The XRPL address requesting execution."
+            }
+          },
+          "executeTimelockedCall(bytes)": {
+            "details": "Anyone can call this method.",
+            "params": {
+              "_encodedCall": "ABI encoded call data (signature and parameters)."
+            }
+          },
+          "facetAddress(bytes4)": {
+            "details": "If facet is not found return address(0).",
+            "params": {
+              "_functionSelector": "The function selector."
+            },
+            "returns": {
+              "facetAddress_": "The facet address."
+            }
+          },
+          "facetAddresses()": {
+            "returns": {
+              "facetAddresses_": "facetAddresses_"
+            }
+          },
+          "facetFunctionSelectors(address)": {
+            "params": {
+              "_facet": "The facet address."
+            },
+            "returns": {
+              "facetFunctionSelectors_": "facetFunctionSelectors_"
+            }
+          },
+          "facets()": {
+            "returns": {
+              "facets_": "Facet"
+            }
+          },
+          "getAgentVaults()": {
+            "returns": {
+              "_agentVaultAddresses": "The list of registered agent vault addresses.",
+              "_agentVaultIds": "The list of registered agent vault IDs."
+            }
+          },
+          "getDefaultInstructionFee()": {
+            "returns": {
+              "_0": "The default instruction fee in underlying asset's smallest unit (e.g., drops for XRP)."
+            }
+          },
+          "getExecuteTimelockedCallTimestamp(bytes)": {
+            "params": {
+              "_encodedCall": "ABI encoded call data (signature and parameters)."
+            },
+            "returns": {
+              "_allowedAfterTimestamp": "The timestamp after which the call can be executed."
+            }
+          },
+          "getExecutorInfo()": {
+            "returns": {
+              "_executor": "The executor address.",
+              "_executorFee": "The executor fee (in wei)."
+            }
+          },
+          "getInstructionFee(uint256)": {
+            "params": {
+              "_instructionId": "The ID of the instruction."
+            },
+            "returns": {
+              "_0": "The instruction fee in underlying asset's smallest unit (e.g., drops for XRP)."
+            }
+          },
+          "getPaymentProofValidityDurationSeconds()": {
+            "returns": {
+              "_0": "The payment proof validity duration in seconds."
+            }
+          },
+          "getPersonalAccount(string)": {
+            "params": {
+              "_xrplOwner": "The XRPL address of the owner."
+            },
+            "returns": {
+              "_0": "The PersonalAccount contract address associated with the XRPL owner or the computed address if not yet deployed."
+            }
+          },
+          "getSourceId()": {
+            "returns": {
+              "_0": "The source ID."
+            }
+          },
+          "getSwapParams()": {
+            "returns": {
+              "_maxSlippagePPM": "The maximum slippage allowed for swaps (in PPM).",
+              "_uniswapV3Router": "The Uniswap V3 router address.",
+              "_usdt0": "USDT0 token address.",
+              "_usdt0FXrpPoolFeeTierPPM": "The USDT0/FXRP pool fee tier (in PPM).",
+              "_wNatUsdt0PoolFeeTierPPM": "The WNAT/USDT0 pool fee tier (in PPM)."
+            }
+          },
+          "getTimelockDurationSeconds()": {
+            "returns": {
+              "_timelockDurationSeconds": "The timelock duration in seconds."
+            }
+          },
+          "getTransactionIdForCollateralReservation(uint256)": {
+            "params": {
+              "_collateralReservationId": "The collateral reservation id."
+            },
+            "returns": {
+              "_transactionId": "The transaction id associated with the collateral reservation."
+            }
+          },
+          "getVaults()": {
+            "returns": {
+              "_vaultAddresses": "The list of vault addresses corresponding to the vault IDs.",
+              "_vaultIds": "The list of registered vault IDs.",
+              "_vaultTypes": "The list of vault types corresponding to the vault IDs."
+            }
+          },
+          "getXrplProviderWallets()": {
+            "returns": {
+              "_0": "The list of registered XRPL provider wallets."
+            }
+          },
+          "implementation()": {
+            "details": "Must return an address that can be used as a delegate call target. {UpgradeableBeacon} will check that this address is a contract."
+          },
+          "isTransactionIdUsed(bytes32)": {
+            "params": {
+              "_transactionId": "The transaction id to check."
+            },
+            "returns": {
+              "_0": "True if used, false otherwise."
+            }
+          },
+          "owner()": {
+            "returns": {
+              "owner_": "The address of the owner."
+            }
+          },
+          "reserveCollateral(string,bytes32,bytes32)": {
+            "params": {
+              "_paymentReference": "The payment reference associated with the request.",
+              "_transactionId": "The unique transaction ID for tracking.",
+              "_xrplAddress": "The XRPL address requesting the collateral reservation."
+            },
+            "returns": {
+              "_collateralReservationId": "The ID of the collateral reservation."
+            }
+          },
+          "supportsInterface(bytes4)": {
+            "details": "Interface identification is specified in ERC-165. This function  uses less than 30,000 gas.",
+            "params": {
+              "interfaceId": "The interface identifier, as specified in ERC-165"
+            },
+            "returns": {
+              "_0": "`true` if the contract implements `interfaceID` and  `interfaceID` is not 0xffffffff, `false` otherwise"
+            }
+          },
+          "swapUsdt0ForFAsset(string)": {
+            "params": {
+              "_xrplAddress": "The XRPL address of the personal account."
+            }
+          },
+          "swapWNatForUsdt0(string)": {
+            "params": {
+              "_xrplAddress": "The XRPL address of the personal account."
+            }
+          },
+          "transferOwnership(address)": {
+            "details": "Set _newOwner to address(0) to renounce any ownership.",
+            "params": {
+              "_newOwner": "The address of the new owner of the contract"
+            }
+          }
+        },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "diamondCut((address,uint8,bytes4[])[],address,bytes)": {
+            "notice": "Add/replace/remove any number of functions and optionally execute         a function with delegatecall"
+          },
+          "executeDepositAfterMinting(uint256,(bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": {
+            "notice": "Execute deposit after successful minting for _collateralReservationId."
+          },
+          "executeInstruction((bytes32[],(bytes32,bytes32,uint64,uint64,(bytes32,uint256,uint256),(uint64,uint64,bytes32,bytes32,bytes32,bytes32,int256,int256,int256,int256,bytes32,bool,uint8))),string)": {
+            "notice": "Execute an XRPL instruction for a given XRPL address."
+          },
+          "executeTimelockedCall(bytes)": {
+            "notice": "Execute a timelocked call once the timelock period expires."
+          },
+          "facetAddress(bytes4)": {
+            "notice": "Gets the facet that supports the given selector."
+          },
+          "facetAddresses()": {
+            "notice": "Get all the facet addresses used by a diamond."
+          },
+          "facetFunctionSelectors(address)": {
+            "notice": "Gets all the function selectors supported by a specific facet."
+          },
+          "facets()": {
+            "notice": "Gets all facet addresses and their four byte function selectors."
+          },
+          "getAgentVaults()": {
+            "notice": "Returns the list of registered agent vault IDs and their corresponding addresses."
+          },
+          "getDefaultInstructionFee()": {
+            "notice": "Returns the default instruction fee."
+          },
+          "getExecuteTimelockedCallTimestamp(bytes)": {
+            "notice": "Returns the timestamp after which the timelocked call can be executed."
+          },
+          "getExecutorInfo()": {
+            "notice": "Returns the executor address and fee."
+          },
+          "getInstructionFee(uint256)": {
+            "notice": "Returns the instruction fee for a given instruction ID."
+          },
+          "getPaymentProofValidityDurationSeconds()": {
+            "notice": "Gets the payment proof validity duration in seconds."
+          },
+          "getPersonalAccount(string)": {
+            "notice": "Get the PersonalAccount contract for a given XRPL owner."
+          },
+          "getSourceId()": {
+            "notice": "Gets the source ID used for payment verification."
+          },
+          "getSwapParams()": {
+            "notice": "Returns the swap parameters."
+          },
+          "getTimelockDurationSeconds()": {
+            "notice": "Returns the timelock duration in seconds."
+          },
+          "getTransactionIdForCollateralReservation(uint256)": {
+            "notice": "Returns the transaction id for a given collateral reservation id."
+          },
+          "getVaults()": {
+            "notice": "Returns the list of registered vault IDs, their corresponding addresses and types."
+          },
+          "getXrplProviderWallets()": {
+            "notice": "Returns the list of registered XRPL provider wallets."
+          },
+          "isTransactionIdUsed(bytes32)": {
+            "notice": "Returns true if the transaction id has already been used."
+          },
+          "owner()": {
+            "notice": "Get the address of the owner"
+          },
+          "reserveCollateral(string,bytes32,bytes32)": {
+            "notice": "Reserve collateral for minting operation."
+          },
+          "supportsInterface(bytes4)": {
+            "notice": "Query if a contract implements an interface"
+          },
+          "swapUsdt0ForFAsset(string)": {
+            "notice": "Swaps USDT0 for FAsset for the personal account associated with the given XRPL address."
+          },
+          "swapWNatForUsdt0(string)": {
+            "notice": "Swaps WNAT for USDT0 for the personal account associated with the given XRPL address."
+          },
+          "transferOwnership(address)": {
+            "notice": "Set the address of the new owner of the contract"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@ensdomains/=node_modules/@ensdomains/",
+        "@gnosis.pm/=node_modules/@gnosis.pm/",
+        "@openzeppelin-contracts-5.2.0-rc.1/=dependencies/flare-periphery-0.1.38/dependencies/@openzeppelin-contracts-5.2.0-rc.1/",
+        "@openzeppelin-contracts-5.2.0/=dependencies/@openzeppelin-contracts-5.2.0/",
+        "@openzeppelin-contracts-5.5.0/=dependencies/@openzeppelin-contracts-5.5.0/",
+        "@openzeppelin-contracts-upgradeable-5.5.0/=dependencies/@openzeppelin-contracts-upgradeable-5.5.0/",
+        "@openzeppelin/contracts/=dependencies/@openzeppelin-contracts-5.5.0/",
+        "@uniswap-v3-core-1.0.1/=dependencies/@uniswap-v3-core-1.0.1/contracts/",
+        "@uniswap-v3-periphery-1.4.4/=dependencies/@uniswap-v3-periphery-1.4.4/contracts/",
+        "@uniswap/v3-core/=dependencies/@uniswap-v3-core-1.0.1/",
+        "@uniswap/v3-periphery/=dependencies/@uniswap-v3-periphery-1.4.4/",
+        "flare-periphery-0.1.36/=dependencies/flare-periphery-0.1.36/src/",
+        "flare-periphery-0.1.38/=dependencies/flare-periphery-0.1.38/src/",
+        "flare-periphery/=dependencies/flare-periphery-0.1.38/",
+        "forge-std-1.10.0/=dependencies/forge-std-1.10.0/src/",
+        "forge-std/=dependencies/forge-std-1.10.0/src/",
+        "hardhat/=node_modules/hardhat/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/userInterfaces/IMasterAccountController.sol": "IMasterAccountController"
+      },
+      "evmVersion": "cancun",
+      "libraries": {},
+      "viaIR": true
+    },
+    "sources": {
+      "contracts/diamond/interfaces/IDiamond.sol": {
+        "keccak256": "0x30eb2322290bb2492a9f9d68fd124a5ac5bb3da59f12492b088d04f24f53f67c",
+        "urls": [
+          "bzz-raw://16dfd7236c87e7760a5d8ddbf9d31e94df0310a91837ad2d7ca5c1a2e105529a",
+          "dweb:/ipfs/QmTpLiPbBHxia4NtQqNMc12BetVFL4tQVA6sM3GpRoPkgz"
+        ],
+        "license": "MIT"
+      },
+      "contracts/diamond/interfaces/IDiamondCut.sol": {
+        "keccak256": "0x6b6fc2baadc1eae6f612fb46ed9f66ebc1b448ca902422a074f52d9ab6bf3db6",
+        "urls": [
+          "bzz-raw://95861f9ecb9311875c8f70c9cbd62ac47a8fc2c991fba8db054e525b4b45620b",
+          "dweb:/ipfs/QmUh4BqrWMJNtgCANrfkQqTwEvXVsE1pZD6ybqdfeTtxVS"
+        ],
+        "license": "MIT"
+      },
+      "contracts/diamond/interfaces/IDiamondLoupe.sol": {
+        "keccak256": "0x4dea0e8ce91351401e473b7c56ced571862ba561f6b99244ac86d10aeb2af024",
+        "urls": [
+          "bzz-raw://8ecbdd839f10d41a8fe72addf6f6444d8e5d2972fc762e0d5b1191c506a4c696",
+          "dweb:/ipfs/QmT12wVj4bfpFwvzPUoHBM3Z4E2KYJQUkoBFeQ1jipERsw"
+        ],
+        "license": "MIT"
+      },
+      "contracts/diamond/interfaces/IERC165.sol": {
+        "keccak256": "0x7541f7408d0f74162bc4664d5e012427f2ceaab2abadca0353269ef15ee03d8b",
+        "urls": [
+          "bzz-raw://a8e7a34b3ea39f4c0dfa6f5ace5d9415e4d0c90cb3f4264e6946b808f2d4011c",
+          "dweb:/ipfs/QmWdcRF4krMMb1ua3hmV8avdHKYa4XXt1iw7sxx1ntsEJa"
+        ],
+        "license": "MIT"
+      },
+      "contracts/diamond/interfaces/IERC173.sol": {
+        "keccak256": "0x001e07b0fbc894300b939d496ffb005abe398b5bc609802d319b8cdeafe5d36b",
+        "urls": [
+          "bzz-raw://8e59f66879ef993892410cbe834b1d2dd34891f47066b7be601ff825b0748361",
+          "dweb:/ipfs/QmZedQ668we8ohPPZF5tPP5gKpJ5n22h3FDFkoFT5VXpEu"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/IMasterAccountController.sol": {
+        "keccak256": "0xd4564c5ca3bdf08d02b65622d711901bed3e150227fb80d0fc4d0eb7a0cf58fa",
+        "urls": [
+          "bzz-raw://ac03100f36619e8332124248e08e202abf3f9d196f8b5be1bbfb88cc275df7df",
+          "dweb:/ipfs/QmaSfuAsAnKKucsPfxQNn3od6XcmR4yezGWso8rLdoQbxw"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IAgentVaultsFacet.sol": {
+        "keccak256": "0x38d81dbf97f36f3c37c3835a8cabdb18e8d20f0c9380dd1bf8ecefe7ca56aa6c",
+        "urls": [
+          "bzz-raw://2fddbbc6eb22553f3487c56d9be9b55958b914c48f678321f6a6116c9a5226ca",
+          "dweb:/ipfs/QmZLiRVLc3TBddkvLuA7rQyZtiLC2qpJoq9Zg3FEqTw6kC"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IExecutorsFacet.sol": {
+        "keccak256": "0x52fc14f26cff37e7ed2a0826f47ec2914851c1f9e5d8cc37ffc186f643e0f09d",
+        "urls": [
+          "bzz-raw://cf1bdabd156586992ddc482e8e339019ae6acf8560ea58bef5390614009850d7",
+          "dweb:/ipfs/QmSje4NyhafCAFgei5RbfPjAPA2oHcnAww3RVNHGYqKFRr"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IInstructionFeesFacet.sol": {
+        "keccak256": "0x9c8110ee10c8e572abfee31fe668527554920f9580cfd25097f4664664593abf",
+        "urls": [
+          "bzz-raw://b83b412c90e09835fb41e1aab946154483d1c0b77554d9a3ec363107cc52fa0c",
+          "dweb:/ipfs/QmaaVefTTZGsjvQurNyGZnqVkr27sNNmG1hEncNVoACKoH"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IInstructionsFacet.sol": {
+        "keccak256": "0x4bb3e926ce64bbc1de0dfc33e6d533a7a6042d9d038155221795484e6cfd9054",
+        "urls": [
+          "bzz-raw://a9feedd705fc4d028f244de5576b8b1ab22498a708d7451540a975841782d52d",
+          "dweb:/ipfs/QmSHATbNztvfSScxtbWAVaJ5EMXJyfQgTd4nRtsXR2yu64"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IPaymentProofsFacet.sol": {
+        "keccak256": "0x54a8b87c26e996e7b7a47dda999d274156ead9ddd53e8a64d1ab6b162c89eafd",
+        "urls": [
+          "bzz-raw://13c73f1eb6a58ad2fb39515b63eab31855322b65f87f14fad8abd0f5f6af36ec",
+          "dweb:/ipfs/QmXjvVgasBc4ny1fAzM6EJN1D4a2BW6Ze9m4w1w7aGGHnb"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IPersonalAccountsFacet.sol": {
+        "keccak256": "0xc5eb73097ad25383fb4d216de1fa30d38a268fcdb3558e11b5f6b8d5bce39ac5",
+        "urls": [
+          "bzz-raw://a5fd92741427b7189efd9ab842a23e2703c197befc1ce06f39813c69975c9d2b",
+          "dweb:/ipfs/Qmb1T6MsTtaWv1VixPui4Yq2szuKGZAC3NyTUjgn4JKtad"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/ISwapFacet.sol": {
+        "keccak256": "0xc38cb8f26c2a0471701c60c9ff4ea5bae3690ae5fb8f3d7f1668481481733399",
+        "urls": [
+          "bzz-raw://37ce24adb496bd144f7b1b7dd2a67ce767fb46a563601ffdadfcb6e9dc3f0b47",
+          "dweb:/ipfs/QmXSgjihs2fAGzLLhWJbos6LnHWfxvMkdegL87mFqCeyuA"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/ITimelockFacet.sol": {
+        "keccak256": "0x15e580455ce9f5e2b7847659f07998827331bb8fc54673ff599b4d07eb398cb4",
+        "urls": [
+          "bzz-raw://8ffbaad1468077a498260b5f58b994d7cadea2d19772e70c50116f3ffaf6eb3a",
+          "dweb:/ipfs/QmWEVaqzG9A1q1MjAgojo8RaRYLH9dNqttjz8xJTc3VMyG"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IVaultsFacet.sol": {
+        "keccak256": "0x6b9c446b79b5a004c473cafffc42fbec2e32d24534084ffab012a0feff39302b",
+        "urls": [
+          "bzz-raw://d025da2b99347911e2b5a277c628f5dcec018be5b7e4f7f9dc68c8cdafb8fbaf",
+          "dweb:/ipfs/QmSbNNDtmqGF6H3a1urKZcYnd71tXJnkofGUBpNGWkrWHC"
+        ],
+        "license": "MIT"
+      },
+      "contracts/userInterfaces/facets/IXrplProviderWalletsFacet.sol": {
+        "keccak256": "0x09a361374122d7803a08e7540a250407386e2a9afc7537877a2fe7f598a3059d",
+        "urls": [
+          "bzz-raw://510bbdcbd4f6edaa8fcc84a67e93a2f30469441d2ebdc22de2dded2e7884c107",
+          "dweb:/ipfs/QmVUmuHdBJTqo4CuQi9ft9QFuc6gBeVJ8vXNwG51SCU4QD"
+        ],
+        "license": "MIT"
+      },
+      "dependencies/@openzeppelin-contracts-5.5.0/proxy/beacon/IBeacon.sol": {
+        "keccak256": "0x20462ddb2665e9521372c76b001d0ce196e59dbbd989de9af5576cad0bd5628b",
+        "urls": [
+          "bzz-raw://f417fd12aeec8fbfaceaa30e3a08a0724c0bc39de363e2acf6773c897abbaf6d",
+          "dweb:/ipfs/QmU4Hko6sApdweVM92CsiuLKkCk8HfyBeutF89PCTz5Tye"
+        ],
+        "license": "MIT"
+      },
+      "dependencies/flare-periphery-0.1.38/src/flare/IPayment.sol": {
+        "keccak256": "0x9f24ac36dce88e3c80307b47d7de628941e9877ddc2a935676532fadcb470104",
+        "urls": [
+          "bzz-raw://78be9fd81d495cf52080c8e3f11e2ee0c17935845cb8346417658a1bdcbb9c1a",
+          "dweb:/ipfs/QmTVQkXRvVcqDPBd9U8qokrzrBakQEzwvmyLr1axBZxJXz"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "id": 60
+}

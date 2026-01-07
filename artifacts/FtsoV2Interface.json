@@ -1,0 +1,283 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "FtsoV2Interface",
+  "sourceName": "contracts/userInterfaces/LTS/FtsoV2Interface.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes21",
+          "name": "oldFeedId",
+          "type": "bytes21"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes21",
+          "name": "newFeedId",
+          "type": "bytes21"
+        }
+      ],
+      "name": "FeedIdChanged",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21",
+          "name": "_feedId",
+          "type": "bytes21"
+        }
+      ],
+      "name": "calculateFeeById",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_fee",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21[]",
+          "name": "_feedIds",
+          "type": "bytes21[]"
+        }
+      ],
+      "name": "calculateFeeByIds",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_fee",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21",
+          "name": "_feedId",
+          "type": "bytes21"
+        }
+      ],
+      "name": "getFeedById",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "int8",
+          "name": "_decimals",
+          "type": "int8"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_timestamp",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21",
+          "name": "_feedId",
+          "type": "bytes21"
+        }
+      ],
+      "name": "getFeedByIdInWei",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_timestamp",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFeedIdChanges",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes21",
+              "name": "oldFeedId",
+              "type": "bytes21"
+            },
+            {
+              "internalType": "bytes21",
+              "name": "newFeedId",
+              "type": "bytes21"
+            }
+          ],
+          "internalType": "struct FtsoV2Interface.FeedIdChange[]",
+          "name": "_feedIdChanges",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21[]",
+          "name": "_feedIds",
+          "type": "bytes21[]"
+        }
+      ],
+      "name": "getFeedsById",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "_values",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "int8[]",
+          "name": "_decimals",
+          "type": "int8[]"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_timestamp",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes21[]",
+          "name": "_feedIds",
+          "type": "bytes21[]"
+        }
+      ],
+      "name": "getFeedsByIdInWei",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "_values",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_timestamp",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFtsoProtocolId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSupportedFeedIds",
+      "outputs": [
+        {
+          "internalType": "bytes21[]",
+          "name": "_feedIds",
+          "type": "bytes21[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32[]",
+              "name": "proof",
+              "type": "bytes32[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint32",
+                  "name": "votingRoundId",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "bytes21",
+                  "name": "id",
+                  "type": "bytes21"
+                },
+                {
+                  "internalType": "int32",
+                  "name": "value",
+                  "type": "int32"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "turnoutBIPS",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "int8",
+                  "name": "decimals",
+                  "type": "int8"
+                }
+              ],
+              "internalType": "struct FtsoV2Interface.FeedData",
+              "name": "body",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct FtsoV2Interface.FeedDataWithProof",
+          "name": "_feedData",
+          "type": "tuple"
+        }
+      ],
+      "name": "verifyFeedData",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
