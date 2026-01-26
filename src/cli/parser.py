@@ -4,6 +4,7 @@ import datetime
 import attrs
 
 from src.cli.types import (
+    EncodeCustomInstruction,
     EncodeFirelightClaimWithdraw,
     EncodeFirelightCrDeposit,
     EncodeFirelightDeposit,
@@ -119,6 +120,11 @@ def get_parser() -> argparse.ArgumentParser:
     )
     _apply_arguments(e_upshiftclaim, EncodeUpshiftClaim)
 
+    e_custominstruction = e_subcli.add_parser(
+        "custom-instruction", help="send custom instruction"
+    )
+    _apply_arguments(e_custominstruction, EncodeCustomInstruction)
+
     d_cli = subcli.add_parser("decode", help="decode instructions")
     d_cli.add_argument(
         "instruction", type=str, help="hex encoded instruction to decode or - for stdin"
@@ -149,6 +155,18 @@ def get_parser() -> argparse.ArgumentParser:
         "xrpl_hash",
         type=str,
         help="hex encoded bridge transaction to mint for or - for stdin",
+    )
+
+    # custom
+    c_cli = subcli.add_parser("custom", help="custom instruction related commands")
+
+    c_subcli = c_cli.add_subparsers(required=True, dest="subcommand", metavar="")
+
+    c_register = c_subcli.add_parser("register", help="register custom instruction")
+    c_register.add_argument(
+        "custom_instruction",
+        type=str,
+        help="custom instruction json to send or - for stdin",
     )
 
     return cli

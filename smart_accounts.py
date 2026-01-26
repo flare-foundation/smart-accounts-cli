@@ -50,11 +50,18 @@ def smart_accounts() -> None:
                 handlers.encode.encode_omni,
             ),
             "upshift-claim": (ct.EncodeUpshiftClaim, handlers.encode.encode_omni),
+            "custom-instruction": (
+                ct.EncodeCustomInstruction,
+                handlers.encode.encode_omni,
+            ),
         },
         "decode": (ct.DecodeInstruction, handlers.decode.decode_instruction),
         "bridge": {
             "instruction": (ct.BridgeInstruction, handlers.bridge.bridge_instruction),
             "mint-tx": (ct.BridgeMintTx, handlers.bridge.bridge_mint_tx),
+        },
+        "custom": {
+            "register": (ct.CustomRegister, handlers.custom.custom_register),
         },
     }
 
