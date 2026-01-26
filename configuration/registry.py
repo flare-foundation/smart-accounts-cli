@@ -1,6 +1,5 @@
 import json
-from collections.abc import Callable
-from typing import Self, cast
+from typing import Self
 
 import attrs
 from attrs import field, frozen
@@ -9,7 +8,8 @@ from eth_utils.address import to_checksum_address
 from web3 import Web3
 from web3.middleware.proof_of_authority import ExtraDataToPOAMiddleware
 
-from src.settings import settings
+import configuration.utils
+from configuration.settings import settings
 
 
 def abi_from_file_location(file_location: str):
@@ -130,16 +130,18 @@ class Registry:
     master_account_controller: Contract
 
     # asset manager
-    asset_manager_events: Contract
     asset_manager: Contract
 
     # ftso
     ftso_v2: Contract
 
+    # wnat
+    wnat: Contract
+
     @classmethod
     def default(cls) -> Self:
         client = Web3(
-            provider=Web3.HTTPProvider(settings.env.flr_rpc_url),
+            provider=Web3.HTTPProvider(settings.flr_rpc_url),
             middleware=(ExtraDataToPOAMiddleware,),
         )
 
@@ -175,7 +177,7 @@ class Registry:
             master_account_controller=Contract(
                 name="MasterAccountController",
                 address=to_checksum_address(
-                    "0x3ab31E2d943d1E8F47B275605E50Ff107f2F8393"
+                    settings.chain_config.master_account_controller
                 ),
                 abi="./artifacts/IMasterAccountController.json",
             ),
@@ -183,12 +185,7 @@ class Registry:
             asset_manager=Contract(
                 name="AssetManagerFXRP",
                 address=get_address_by_name("AssetManagerFXRP"),
-                abi="./artifacts/AssetManager.json",
-            ),
-            asset_manager_events=Contract(
-                name="AssetManagerFXRP",
-                address=get_address_by_name("AssetManagerFXRP"),
-                abi="./artifacts/IAssetManagerEvents.json",
+                abi="./artifacts/IIAssetManager.json",
             ),
             # ftso
             ftso_v2=Contract(
@@ -196,19 +193,12 @@ class Registry:
                 address=get_address_by_name("FtsoV2"),
                 abi="./artifacts/FtsoV2Interface.json",
             ),
+            wnat=Contract(
+                name="WNat",
+                address=get_address_by_name("WNat"),
+                abi="./artifacts/IWNat.json",
+            ),
         )
 
 
-class RegistryWrapper:
-    def __init__(self, factory: Callable[[], Registry]) -> None:
-        self.factory = factory
-        self.wrapped: Registry | None = None
-
-    def __getattr__(self, *args, **kwargs):
-        if self.wrapped is None:
-            self.wrapped = self.factory()
-
-        return getattr(self.wrapped, *args, **kwargs)
-
-
-registry = cast(Registry, RegistryWrapper(Registry.default))
+registry = configuration.utils.wrap_singleton(Registry.default)
