@@ -1,18 +1,18 @@
 import sys
 import time
 
+from py_flare_common.smart_accounts.encoder import decoder
 from xrpl.utils import ripple_time_to_posix
 
+from clients.singleton import clients as c
 from src.cli.types import BridgeInstruction, BridgeMintTx
-from src.clients import asset_manager, flare, master_account_controller, xrpl
-from src.encoder import Instruction
 
 
 def bridge_instruction(args: BridgeInstruction):
-    mac = master_account_controller.Client.default()
-    x = xrpl.Client.default()
+    mac = c.master_account_controller
+    x = c.xrpl
 
-    instruction_cls = Instruction.decode(args.instruction)
+    instruction_cls = decoder.Decoder.with_all_instructions().decode(args.instruction)
     instruction_cls.decode(args.instruction)
 
     fee = mac.get_instruction_fee(instruction_cls.INSTRUCTION_ID)
@@ -29,10 +29,10 @@ def bridge_instruction(args: BridgeInstruction):
 
 
 def bridge_mint_tx(args: BridgeMintTx):
-    mac = master_account_controller.Client.default()
-    am = asset_manager.Client.default()
-    f = flare.Client.default()
-    x = xrpl.Client.default()
+    mac = c.master_account_controller
+    am = c.asset_manager
+    f = c.flare
+    x = c.xrpl
 
     xrpl_tx = x.get_tx(args.xrpl_hash.removeprefix("0x")).result
 
@@ -47,13 +47,13 @@ def bridge_mint_tx(args: BridgeMintTx):
     )
 
     crt = None
-    for c in crts:
+    for _c in crts:
         mapped_hash = mac.get_transaction_id_for_collateral_reservation(
-            c.collateral_reservation_id
+            _c.collateral_reservation_id
         ).upper()
 
         if mapped_hash.upper() == args.xrpl_hash.upper():
-            crt = c
+            crt = _c
             break
 
     if crt is None and args.wait:
@@ -62,13 +62,13 @@ def bridge_mint_tx(args: BridgeMintTx):
             crts = am.find_collateral_reserved_events(
                 minter, flare_block, flare_block + 10 * 60
             )
-            for c in crts:
+            for _c in crts:
                 mapped_hash = mac.get_transaction_id_for_collateral_reservation(
-                    c.collateral_reservation_id
+                    _c.collateral_reservation_id
                 ).upper()
 
                 if mapped_hash.upper() == args.xrpl_hash.upper():
-                    crt = c
+                    crt = _c
                     break
 
             if crt is not None:

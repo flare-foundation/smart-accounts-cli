@@ -5,9 +5,8 @@ from collections.abc import Callable
 from typing import Any, Self, TypeVar
 
 import attrs
+from py_flare_common.smart_accounts import encoder
 from web3.types import Wei
-
-from src import encoder
 
 
 def value_parser(value: str | Wei) -> Wei:
@@ -146,6 +145,11 @@ class EncodeUpshiftRequestRedeem(
 
 
 @attrs.frozen(kw_only=True)
+class EncodeCustomInstruction(Encode, encoder.CustomInstruction, NamespaceSerializer):
+    call_hash: str = attrs.field(converter=str_or_stdin)
+
+
+@attrs.frozen(kw_only=True)
 class EncodeUpshiftClaim(Encode, encoder.UpshiftClaim, NamespaceSerializer):
     pass
 
@@ -182,3 +186,13 @@ class BridgeInstruction(Bridge, NamespaceSerializer):
 class BridgeMintTx(Bridge, NamespaceSerializer):
     wait: bool
     xrpl_hash: str = attrs.field(validator=hexstr_validator, converter=str_or_stdin)
+
+
+@attrs.frozen(kw_only=True)
+class Custom:
+    pass
+
+
+@attrs.frozen(kw_only=True)
+class CustomRegister(Custom, NamespaceSerializer):
+    custom_instruction: str = attrs.field(converter=str_or_stdin)
