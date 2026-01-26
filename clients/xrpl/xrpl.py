@@ -8,7 +8,7 @@ from xrpl.models.requests import AccountInfo
 from xrpl.transaction import sign, submit_and_wait
 from xrpl.wallet import Wallet
 
-from src.settings import settings
+from configuration.settings import settings
 
 
 class Client:
@@ -17,7 +17,7 @@ class Client:
 
     @classmethod
     def default(cls) -> Self:
-        return cls(settings.env.xrpl_rpc_url)
+        return cls(settings.xrpl_rpc_url)
 
     def get_balance(self, xrpl_address: str) -> int:
         response = self.client.request(AccountInfo(account=xrpl_address))
@@ -27,7 +27,7 @@ class Client:
         return self.client.request(Tx(transaction=tx_hash))
 
     def _get_wallet(self) -> Wallet:
-        return Wallet.from_seed(seed=settings.env.xrpl_seed)
+        return Wallet.from_seed(seed=settings.xrpl_seed)
 
     def send_tx(
         self,
@@ -37,10 +37,10 @@ class Client:
         memos: str | list[str] | None,
         last_ledger_sequence: int | None = None,
     ) -> Response:
-        client = settings.xrpl
-
         if last_ledger_sequence is None:
-            last_ledger_sequence = get_latest_validated_ledger_sequence(client) + 20
+            last_ledger_sequence = (
+                get_latest_validated_ledger_sequence(self.client) + 20
+            )
 
         wallet = self._get_wallet()
 
@@ -57,9 +57,9 @@ class Client:
             destination=destination,
             memos=built_memos,
             last_ledger_sequence=last_ledger_sequence,
-            sequence=get_next_valid_seq_number(wallet.address, client),
+            sequence=get_next_valid_seq_number(wallet.address, self.client),
             fee=str(fee),
         )
 
-        payment_response = submit_and_wait(sign(payment_tx, wallet), client)
+        payment_response = submit_and_wait(sign(payment_tx, wallet), self.client)
         return self.get_tx(payment_response.result["hash"])
