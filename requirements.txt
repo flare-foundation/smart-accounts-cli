@@ -2,3 +2,4 @@ attrs==25.4.0
 python-dotenv==1.2.1
 web3==7.14.0
 xrpl-py==4.3.1
+py-flare-common==0.1.10
