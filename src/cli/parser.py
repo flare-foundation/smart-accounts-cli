@@ -47,7 +47,7 @@ def _apply_arguments(argp: argparse.ArgumentParser, acls: type[NamespaceSerializ
             return
 
         if type in [datetime.date]:
-            type = str
+            type = int
 
         argp.add_argument(
             *args,
