@@ -13,6 +13,7 @@ import configuration.utils
 @attrs.frozen(kw_only=True)
 class ChainConfig:
     master_account_controller: ChecksumAddress
+    wallet_id: int
 
     @classmethod
     def from_chain_id(cls, chain_id: int, deployment_name: str | None) -> Self:
@@ -22,6 +23,7 @@ class ChainConfig:
                     master_account_controller=to_checksum_address(
                         "0x434936d47503353f06750Db1A444DBDC5F0AD37c"
                     ),
+                    wallet_id=120,
                 )
 
             case (114, None) | (114, "production"):
@@ -29,6 +31,7 @@ class ChainConfig:
                     master_account_controller=to_checksum_address(
                         "0x434936d47503353f06750Db1A444DBDC5F0AD37c"
                     ),
+                    wallet_id=248,
                 )
 
             case (114, "staging"):
@@ -36,6 +39,7 @@ class ChainConfig:
                     master_account_controller=to_checksum_address(
                         "0x32F662C63c1E24bB59B908249962F00B61C6638f"
                     ),
+                    wallet_id=248,
                 )
 
         raise ValueError(
