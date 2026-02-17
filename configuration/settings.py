@@ -17,6 +17,13 @@ class ChainConfig:
     @classmethod
     def from_chain_id(cls, chain_id: int, deployment_name: str | None) -> Self:
         match (chain_id, deployment_name):
+            case (14, None) | (14, "production"):
+                return cls(
+                    master_account_controller=to_checksum_address(
+                        "0x434936d47503353f06750Db1A444DBDC5F0AD37c"
+                    ),
+                )
+
             case (114, None) | (114, "production"):
                 return cls(
                     master_account_controller=to_checksum_address(
