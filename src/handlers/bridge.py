@@ -1,11 +1,31 @@
 import sys
 import time
 
-from py_flare_common.smart_accounts.encoder import decoder
+from py_flare_common.smart_accounts.encoder import decoder, instructions
 from xrpl.utils import ripple_time_to_posix
 
 from clients.singleton import clients as c
 from src.cli.types import BridgeInstruction, BridgeMintTx
+
+CR_INSTRUCTIONS = (
+    instructions.FxrpCollateralReservation,
+    instructions.FirelightCollateralReservationAndDeposit,
+    instructions.UpshiftCollateralReservationAndDeposit,
+)
+
+
+def _cr_fee_drops(lots: int) -> int:
+    am = c.asset_manager
+    ftso = c.ftso_v2
+
+    cr_fee_wei = am.collateral_reservation_fee(lots)
+    xrp_usd = ftso.get_feed_xrp_usd()
+    flr_usd = ftso.get_feed_flr_usd()
+    xrp_usd_rate = xrp_usd.value / (10**xrp_usd.decimals)
+    flr_usd_rate = flr_usd.value / (10**flr_usd.decimals)
+    return int(
+        (cr_fee_wei / 10**18) * flr_usd_rate / xrp_usd_rate * 10**xrp_usd.decimals
+    )
 
 
 def bridge_instruction(args: BridgeInstruction):
@@ -13,9 +33,13 @@ def bridge_instruction(args: BridgeInstruction):
     x = c.xrpl
 
     instruction_cls = decoder.Decoder.with_all_instructions().decode(args.instruction)
-    instruction_cls.decode(args.instruction)
+    instruction = instruction_cls.decode(args.instruction)
 
     fee = mac.get_instruction_fee(instruction_cls.INSTRUCTION_ID)
+
+    if isinstance(instruction, CR_INSTRUCTIONS):
+        # pay 2x cr fee to absorb ftso rate drift between cli and operator
+        fee += 2 * _cr_fee_drops(instruction.value)
 
     tx = x.send_tx(
         amount=fee,
