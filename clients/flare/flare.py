@@ -30,11 +30,16 @@ class Client(base.BaseClient):
             b["timestamp"] - p_sample["timestamp"]
         )
 
-        a = self._client.eth.get_block(
-            b["number"] - int((b["timestamp"] - timestamp) * production_per_s) * 2
-        )
-        assert "timestamp" in a and "number" in a
-        assert timestamp > a["timestamp"]
+        # the rate estimate is only a seed; keep doubling the lookback until the
+        # block is genuinely older than the target, so a stale average can't
+        # land the seed on or after the target timestamp
+        back = max(1, int((b["timestamp"] - timestamp) * production_per_s) * 2)
+        while True:
+            a = self._client.eth.get_block(max(0, b["number"] - back))
+            assert "timestamp" in a and "number" in a
+            if a["timestamp"] < timestamp or a["number"] == 0:
+                break
+            back *= 2
 
         while True:
             c_block = (b["number"] + a["number"]) // 2
